@@ -1,2 +1,0 @@
-#put this file into /usr/bin
-urxvt -e vifm $1 &
