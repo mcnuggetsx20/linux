@@ -1,0 +1,2 @@
+cat ~/.config/terminal/color-schemes/$1 > ~/.config/terminal/current_scheme
+term_fill

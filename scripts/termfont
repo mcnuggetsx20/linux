@@ -1,0 +1,2 @@
+echo URxvt.font: xft:$1:size=$2 > ~/.config/terminal/font_default
+term_fill

@@ -1,0 +1,5 @@
+cat ~/.config/terminal/font_default > ~/.Xresources
+cat ~/.config/terminal/terminal_settings >> ~/.Xresources
+cat ~/.config/terminal/current_scheme >> ~/.Xresources
+xrdb ~/.Xresources
+exit
