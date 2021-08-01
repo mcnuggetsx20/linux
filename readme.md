@@ -1,1 +1,1 @@
-elo
+btw i use arch
