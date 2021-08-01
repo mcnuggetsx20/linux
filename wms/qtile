@@ -1,0 +1,7 @@
+xrdb ~/.Xresources
+nitrogen --restore &
+nm-applet &
+xset s off
+xset s 0 0
+xset -dpms
+/usr/bin/qtile start
