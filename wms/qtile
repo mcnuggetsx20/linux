@@ -1,7 +1,10 @@
 xrdb ~/.Xresources
 nitrogen --restore &
 nm-applet &
+volumeicon &
+xsetroot -cursor_name left_ptr &
 xset s off
 xset s 0 0
 xset -dpms
+xset r rate 200 45
 /usr/bin/qtile start
