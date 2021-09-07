@@ -1,0 +1,2 @@
+def remtext(text):
+    return ''
