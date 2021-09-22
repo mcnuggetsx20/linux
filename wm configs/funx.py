@@ -1,2 +1,3 @@
 def remtext(text):
     return ''
+

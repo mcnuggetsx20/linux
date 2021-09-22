@@ -1,7 +1,7 @@
 from typing import List  # noqa: F401
-from libqtile import bar, layout, widget
+from libqtile import bar, layout, widget, qtile
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
-from libqtile.lazy import lazy
+from libqtile.command import lazy
 import funx
 import lib
 
@@ -17,7 +17,10 @@ keys = [
     Key([sup], 'm', lazy.spawn('urxvt -e htop')),
     Key([mod], 'e', lazy.to_screen(0)),
     Key([mod], 'w', lazy.to_screen(1)),
+    Key([sup], 'p', lazy.spawn('feh /mnt/hdd/zdjecia/plan_lekcji.png')),
+    Key([sup], 'q', lazy.spawn('alacritty -e python /mnt/hdd/stuff/poweroff.py')),
     Key([mod, 'shift'], 's', lazy.spawn('sh /usr/bin/screenshot')),
+    Key([sup],  'v', lazy.spawn('pavucontrol')),
     Key([],    'XF86AudioRaiseVolume', lazy.spawn('pulsemixer --change-volume +5')),
     Key([],    'XF86AudioLowerVolume', lazy.spawn('pulsemixer --change-volume -5')),
     Key([],    'XF86AudioMute', lazy.spawn('pulsemixer --toggle-mute')),
@@ -74,8 +77,8 @@ keys = [
 ]
 
 all_layouts = [
+    layout.MonadTall(border_focus='#F0AF16', border_width=2, margin=5, new_client_position='before_current'),
     layout.Columns(border_focus='#F0AF16', border_normal='#000000',  border_width=2, margin=3, grow_amount=5),
-    layout.MonadTall(border_focus='#F0AF16', border_width=2, single_margin=0, margin=5, new_client_position='before_current'),
     layout.Matrix(border_focus='#F0AF16', border_width = 2, margin=5),
     layout.Max(border_width=0, border_focus='#000000'),
     # Try more layouts by unleashing below layouts.
@@ -88,24 +91,36 @@ all_layouts = [
     # layout.VerticalTile(),
     # layout.Zoomy(),
 ]
-float_layout = [layout.Floating(border_width=0,border_focus='#000000')]
+floating_layout = layout.Floating(border_width=0,float_rules=[
+    # Run the utility of `xprop` to see the wm class and name of an X client.
+    *layout.Floating.default_float_rules,
+    Match(wm_class='confirmreset'),  # gitk
+    Match(wm_class='makebranch'),  # gitk
+    Match(wm_class='maketag'),  # gitk
+    Match(wm_class='ssh-askpass'),  # ssh-askpass
+    Match(wm_class='polo'),  # ssh-askpass
+    Match(title='branchdialog'),  # gitk
+    Match(title='pinentry'),  # GPG key password entry
+    Match(wm_class='feh'),
+    Match(wm_class='pavucontrol'),
+    Match(wm_class='Alacritty'),
+])
 
 groups = [
-        Group('1', layouts=all_layouts),
-        Group('2', layouts=all_layouts),
-        Group('3', layouts=all_layouts),
-        Group('4', layouts=float_layout)
+        Group(name='1', position=1, layouts=all_layouts),
+        Group(name='2', position=2, layouts=all_layouts),
+        Group(name='3', position=3, layouts=all_layouts),
+        Group(name='4', position=4, layouts=all_layouts),
+        Group(name='5', position=5, layouts=all_layouts),
+        Group(name='FLT', position=6, layouts=[floating_layout], matches = [Match(wm_class='Steam')]),
         ]
 
 for i in groups:
     keys.extend([
         # mod1 + letter of group = switch to group
-        Key([mod], i.name, lazy.group[i.name].toscreen(),
-            desc="Switch to group {}".format(i.name)),
-
+        Key([mod], str(i.position), lazy.group[i.name].toscreen()),
         # mod1 + shift + letter of group = switch to & move focused window to group
-        Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
-            desc="Switch to & move focused window to group {}".format(i.name)),
+        Key([mod, "shift"], str(i.position), lazy.window.togroup(i.name)),
         # Or, use below if you prefer not to switch to that group.
         # # mod1 + shift + letter of group = move focused window to group
         # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
@@ -116,8 +131,6 @@ widget_defaults = dict(
     font='Ubuntu',
     fontsize=14,
     padding=1,
-    #foreground='#000000',
-    #background='#fdf6e3'
     inactive='#FFFFFF',
 )
 extension_defaults = widget_defaults.copy()
@@ -126,19 +139,17 @@ janek = [('system shutdown', 'shutdown now', 'calkiem niezle')]
 
 screens = [
     Screen(
-        bottom=bar.Bar(lib.widgset1, 24)
+        bottom=bar.Bar(lib.widgset1, 19)
     ),
     Screen(
-        bottom=bar.Bar(lib.widgset2, 24)
+        bottom=bar.Bar(lib.widgset2, 19)
     ),
 ]
 
 # Drag floating layouts.
 mouse = [
-    Drag([mod], "Button1", lazy.window.set_position_floating(),
-         start=lazy.window.get_position()),
-    Drag([mod], "Button3", lazy.window.set_size_floating(),
-         start=lazy.window.get_size()),
+    Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
+    Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
     Click([mod], "Button2", lazy.window.bring_to_front())
 ]
 
@@ -147,17 +158,6 @@ dgroups_app_rules = []  # type: List
 follow_mouse_focus = True
 bring_front_click = False
 cursor_warp = False
-floating_layout = layout.Floating(float_rules=[
-    # Run the utility of `xprop` to see the wm class and name of an X client.
-    *layout.Floating.default_float_rules,
-    Match(wm_class='confirmreset'),  # gitk
-    Match(wm_class='makebranch'),  # gitk
-    Match(wm_class='maketag'),  # gitk
-    Match(wm_class='ssh-askpass'),  # ssh-askpass
-    Match(wm_class='polo'),  # ssh-askpass
-    Match(title='branchdialog'),  # gitk
-    Match(title='pinentry'),  # GPG key password entry
-])
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 reconfigure_screens = True
