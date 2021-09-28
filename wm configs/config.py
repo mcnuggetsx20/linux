@@ -1,3 +1,14 @@
+#figlet
+#                                             _            ____   ___  
+# _ __ ___   ___ _ __  _   _  __ _  __ _  ___| |_ _____  _|___ \ / _ \ 
+#| '_ ` _ \ / __| '_ \| | | |/ _` |/ _` |/ _ \ __/ __\ \/ / __) | | | |
+#| | | | | | (__| | | | |_| | (_| | (_| |  __/ |_\__ \>  < / __/| |_| |
+#|_| |_| |_|\___|_| |_|\__,_|\__, |\__, |\___|\__|___/_/\_\_____|\___/ 
+#                            |___/ |___/                               
+
+
+
+
 from typing import List  # noqa: F401
 from libqtile import bar, layout, widget, qtile
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
@@ -14,11 +25,9 @@ def vol1():
     com = os.popen('pamixer --get-volume').read().split()
     #   =====|----
     seg1 = (int(com[0]) // 15 -1) * '='
-    #qtile.widgets_map['volumebox2'].update(seg1)
     return seg1
 
 def vol2():
-    #qtile.widgets_map['volumebox2'].update((10 - len(vol1()) - 1) * '-')
     return (10 - len(vol1()) - 1) * '-'
 
 def volumechange(ok):
