@@ -3,11 +3,36 @@ from libqtile import bar, layout, widget, qtile
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.command import lazy
 import funx
-import lib
+from lib import *
+import os
 
 mod = "mod1"
 sup = "mod4"
 terminal = "urxvt"
+
+def vol1():
+    com = os.popen('pamixer --get-volume').read().split()
+    #   =====|----
+    seg1 = (int(com[0]) // 15 -1) * '='
+    #qtile.widgets_map['volumebox2'].update(seg1)
+    return seg1
+
+def vol2():
+    #qtile.widgets_map['volumebox2'].update((10 - len(vol1()) - 1) * '-')
+    return (10 - len(vol1()) - 1) * '-'
+
+def volumechange(ok):
+    def a(qtile):
+        if ok:
+            val = 5
+        else:
+            val = -5
+
+        os.popen('pulsemixer --change-volume ' + str(val)) #change
+
+        qtile.widgets_map['volumebox1'].update(vol1())
+        qtile.widgets_map['volumebox2'].update(vol2())
+    return a
 
 keys = [
     #My stuff
@@ -19,10 +44,11 @@ keys = [
     Key([mod], 'w', lazy.to_screen(1)),
     Key([sup], 'p', lazy.spawn('feh /mnt/hdd/zdjecia/plan_lekcji.png')),
     Key([sup], 'q', lazy.spawn('alacritty -e python /mnt/hdd/stuff/poweroff.py')),
+    #Key([sup], 'y', lazy.widget["textbox"].update(func())),
     Key([mod, 'shift'], 's', lazy.spawn('sh /usr/bin/screenshot')),
     Key([sup],  'v', lazy.spawn('pavucontrol')),
-    Key([],    'XF86AudioRaiseVolume', lazy.spawn('pulsemixer --change-volume +5')),
-    Key([],    'XF86AudioLowerVolume', lazy.spawn('pulsemixer --change-volume -5')),
+    Key([],    'XF86AudioRaiseVolume', lazy.function(volumechange(True))),
+    Key([],    'XF86AudioLowerVolume', lazy.function(volumechange(False))),
     Key([],    'XF86AudioMute', lazy.spawn('pulsemixer --toggle-mute')),
     Key([],    'XF86HomePage', lazy.spawn('brave')),
     Key([mod], 't', lazy.window.toggle_floating()),
@@ -77,8 +103,8 @@ keys = [
 ]
 
 all_layouts = [
-    layout.MonadTall(border_focus='#F0AF16', border_width=2, margin=5, new_client_position='before_current'),
-    layout.Columns(border_focus='#F0AF16', border_normal='#000000',  border_width=2, margin=3, grow_amount=5),
+    layout.MonadTall(border_focus='#F0AF16', border_width=2, single_border_width=0, margin=5, new_client_position='before_current'),
+    #layout.Columns(border_focus='#F0AF16', border_normal='#000000',  border_width=2, margin=3, grow_amount=5),
     layout.Matrix(border_focus='#F0AF16', border_width = 2, margin=5),
     layout.Max(border_width=0, border_focus='#000000'),
     # Try more layouts by unleashing below layouts.
@@ -107,12 +133,12 @@ floating_layout = layout.Floating(border_width=0,float_rules=[
 ])
 
 groups = [
-        Group(name='1', position=1, layouts=all_layouts),
-        Group(name='2', position=2, layouts=all_layouts),
-        Group(name='3', position=3, layouts=all_layouts),
-        Group(name='4', position=4, layouts=all_layouts),
-        Group(name='5', position=5, layouts=all_layouts),
-        Group(name='FLT', position=6, layouts=[floating_layout], matches = [Match(wm_class='Steam')]),
+        Group(name='', position=1, layouts=all_layouts),
+        Group(name='', position=2, layouts=all_layouts),
+        Group(name='', position=3, layouts=all_layouts),
+        Group(name='', position=4, layouts=all_layouts),
+        Group(name='', position=5, layouts=all_layouts),
+        Group(name='', position=6, layouts=[floating_layout], matches = [Match(wm_class='Steam')]),
         ]
 
 for i in groups:
@@ -139,10 +165,115 @@ janek = [('system shutdown', 'shutdown now', 'calkiem niezle')]
 
 screens = [
     Screen(
-        bottom=bar.Bar(lib.widgset1, 19)
+        bottom=bar.Bar(
+            widgets=[
+
+                widget.LaunchBar(
+                    default_icon = '/home/mcnuggetsx20/.config/qtile/arch_icon_orange.png', 
+                    progs=janek,
+                ),
+
+                widget.Spacer(
+                    length=3,
+                ),
+
+                widget.GroupBox(
+                    font='Font Awesome 5 Brand Bold', 
+                    highlight_method='line', 
+                    this_current_screen_border='#F0AF16', 
+                    this_screen_border='#F0AF16',
+                ),
+
+                widget.TextBox(' | '),
+                widget.TaskList(
+                    parse_text=funx.remtext, 
+                    borderwidth=0, 
+                    margin_x=0, 
+                    margin_y=0, 
+                    icon_size=18, 
+                    txt_floating='',
+                ),
+
+                widget.Spacer(
+                    length=bar.STRETCH,
+                ),
+
+                widget.Systray(),
+                widget.TextBox(' | '),
+                widget.CPU(
+                    background=colors['black'], 
+                    foreground=colors['orange'], 
+                    font='SauceCodePro NF Bold', 
+                    format='CPU {load_percent}%', 
+                    update_interval=3.0,
+                ),
+
+                widget.TextBox(
+                    text = ' | ',
+                    #foreground=colors['orange'],
+                    ),
+
+                widget.NvidiaSensors(
+                    background=colors['black'], 
+                    foreground=colors['orange'], 
+                    font='SauceCodePro NF Bold', 
+                    format='GPU {temp}°C',
+                    update_interval = 4,
+                ),
+
+                widget.TextBox(
+                    text = ' | ',
+                    #foreground=colors['orange'],
+                    ),
+
+                widget.CurrentLayout(
+                    background=colors['black'], 
+                    foreground=colors['orange'], 
+                    font='SauceCodePro NF Bold',
+                ),
+
+                widget.TextBox(
+                        text = ' | ',
+                ),
+
+                widget.TextBox(
+                        text = ' ',
+                        foreground = colors['ored'],
+                ),
+
+                widget.VolumeBox1(
+                        text=vol1(),
+                        foreground=colors['swamp'],
+                        font = 'mononoki',
+                ),
+
+                widget.TextBox(
+                        foreground=colors['ored'],
+                        font = 'mononoki',
+                        text = '|',
+                ),
+
+                widget.VolumeBox2(
+                        text=vol2(),
+                        font = 'mononoki',
+                        func = funx.vol2,
+                ),
+
+                widget.TextBox(
+                        text = ' | ',
+                ),
+
+                widget.Clock(
+                    background=colors['black'], 
+                    foreground=colors['orange'], 
+                    font='SauceCodePro NF Bold', 
+                    format="%d.%m.'%y %a %H:%M:%S",
+                ),
+            ],    
+            size=19)
     ),
     Screen(
-        bottom=bar.Bar(lib.widgset2, 19)
+        bottom=bar.Bar(widgset2, 19)
     ),
 ]
 
@@ -165,5 +296,6 @@ reconfigure_screens = True
 # If things like steam games want to auto-minimize themselves when losing
 # focus, should we respect this or not?
 auto_minimize = False
+
 
 wmname = "QTile"
