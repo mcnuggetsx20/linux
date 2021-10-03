@@ -6,9 +6,6 @@
 #|_| |_| |_|\___|_| |_|\__,_|\__, |\__, |\___|\__|___/_/\_\_____|\___/ 
 #                            |___/ |___/                               
 
-
-
-
 from typing import List  # noqa: F401
 from libqtile import bar, layout, widget, qtile
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
@@ -43,6 +40,23 @@ def volumechange(ok):
         qtile.widgets_map['volumebox2'].update(vol2())
     return a
 
+def ChangeAudioDevice(init = False):
+    global devices, device_indicators
+
+    curr = ''.join(os.popen('pactl get-default-sink').read().split())
+    desired = devices[(devices.index(curr) + 1) * int(devices.index(curr) != len(devices)-1)]
+
+    os.popen('pactl set-default-sink ' + desired)
+
+    if init:
+        qtile.widgets_map['volumebox1'].update(vol1())
+        qtile.widgets_map['volumebox2'].update(vol2())
+        qtile.widgets_map['AudioDeviceIndicator'].update(device_indicators[devices.index(desired)])
+
+    else:
+        return str(device_indicators[devices.index(desired)])
+
+
 keys = [
     #My stuff
     Key([sup], 'b', lazy.spawn('brave')),
@@ -53,7 +67,8 @@ keys = [
     Key([mod], 'w', lazy.to_screen(1)),
     Key([sup], 'p', lazy.spawn('feh /mnt/hdd/zdjecia/plan_lekcji.png')),
     Key([sup], 'q', lazy.spawn('alacritty -e python /mnt/hdd/stuff/poweroff.py')),
-    #Key([sup], 'y', lazy.widget["textbox"].update(func())),
+    Key([sup], 'a', lazy.function(ChangeAudioDevice)),
+    #Key([sup], 'y', lazy.function(test)),
     Key([mod, 'shift'], 's', lazy.spawn('sh /usr/bin/screenshot')),
     Key([sup],  'v', lazy.spawn('pavucontrol')),
     Key([],    'XF86AudioRaiseVolume', lazy.function(volumechange(True))),
@@ -147,7 +162,7 @@ groups = [
         Group(name='', position=3, layouts=all_layouts),
         Group(name='', position=4, layouts=all_layouts),
         Group(name='', position=5, layouts=all_layouts),
-        Group(name='', position=6, layouts=[floating_layout], matches = [Match(wm_class='Steam')]),
+        Group(name='', position=6, layouts=[floating_layout], matches = [Match(wm_class='Steam'), Match(wm_class='csgo_linux64')]),
         ]
 
 for i in groups:
@@ -214,7 +229,7 @@ screens = [
                     foreground=colors['orange'], 
                     font='SauceCodePro NF Bold', 
                     format='CPU {load_percent}%', 
-                    update_interval=3.0,
+                    update_interval=1.0,
                 ),
 
                 widget.TextBox(
@@ -246,11 +261,13 @@ screens = [
                 ),
 
                 widget.TextBox(
-                        text = ' ',
+                        text = ChangeAudioDevice(False),
+                        name = 'AudioDeviceIndicator',
                         foreground = colors['ored'],
                 ),
 
-                widget.VolumeBox1(
+                widget.TextBox(
+                        name = 'volumebox1',
                         text=vol1(),
                         foreground=colors['swamp'],
                         font = 'mononoki',
@@ -262,7 +279,8 @@ screens = [
                         text = '|',
                 ),
 
-                widget.VolumeBox2(
+                widget.TextBox(
+                        name = 'volumebox2',
                         text=vol2(),
                         font = 'mononoki',
                         func = funx.vol2,
