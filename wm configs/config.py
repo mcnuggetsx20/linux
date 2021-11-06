@@ -12,20 +12,20 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.command import lazy
 import funx
 from lib import *
-import os
+import subprocess
 
 mod = "mod1"
 sup = "mod4"
-terminal = "urxvt"
+terminal = "urxvt -lsp 4"
 
 def vol1():
-    com = os.popen('pamixer --get-volume').read().split()
+    com = subprocess.check_output('pamixer --get-volume', shell=True, encoding='utf-8').split()
     #   =====|----
     seg1 = (int(com[0]) // 15 -1) * '='
-    return seg1
+    return [seg1, com[0]]
 
 def vol2():
-    return (10 - len(vol1()) - 1) * '-'
+    return (10 - len(vol1()[0]) - 1) * '-'
 
 def volumechange(ok):
     def a(qtile):
@@ -34,27 +34,43 @@ def volumechange(ok):
         else:
             val = -5
 
-        os.popen('pulsemixer --change-volume ' + str(val)) #change
+        subprocess.run('pulsemixer --change-volume ' + str(val), shell=True) #change
 
-        qtile.widgets_map['volumebox1'].update(vol1())
-        qtile.widgets_map['volumebox2'].update(vol2())
+        a = vol1()
+        b = vol2()
+
+        qtile.widgets_map['volumebox1'].update(a[0])
+        qtile.widgets_map['volumebox2'].update(b)
+        qtile.widgets_map['volumebox3'].update(a[1])
+
+        qtile.widgets_map['volumebox12'].update(a[0])
+        qtile.widgets_map['volumebox22'].update(b)
+        qtile.widgets_map['volumebox32'].update(a[1])
     return a
 
 def ChangeAudioDevice(init = False):
     global devices, device_indicators
 
-    curr = ''.join(os.popen('pactl get-default-sink').read().split())
-    desired = devices[(devices.index(curr) + 1) * int(devices.index(curr) != len(devices)-1)]
-
-    os.popen('pactl set-default-sink ' + desired)
+    curr = ''.join(subprocess.check_output('pactl get-default-sink', shell=True, encoding='utf-8').split())
 
     if init:
-        qtile.widgets_map['volumebox1'].update(vol1())
-        qtile.widgets_map['volumebox2'].update(vol2())
+        desired = devices[(devices.index(curr) + 1) * int(devices.index(curr) != len(devices)-1)]
+
+        subprocess.run('pactl set-default-sink ' + desired, shell=True)
+
+        a = vol1()
+        b=vol2()
+
+        qtile.widgets_map['volumebox1'].update(a[0])
+        qtile.widgets_map['volumebox2'].update(b)
         qtile.widgets_map['AudioDeviceIndicator'].update(device_indicators[devices.index(desired)])
 
+        qtile.widgets_map['volumebox12'].update(a[0])
+        qtile.widgets_map['volumebox22'].update(b)
+        qtile.widgets_map['AudioDeviceIndicator2'].update(device_indicators[devices.index(desired)])
+
     else:
-        return str(device_indicators[devices.index(desired)])
+        return str(device_indicators[devices.index(curr)])
 
 
 keys = [
@@ -66,7 +82,7 @@ keys = [
     Key([mod], 'e', lazy.to_screen(0)),
     Key([mod], 'w', lazy.to_screen(1)),
     Key([sup], 'p', lazy.spawn('feh /mnt/hdd/zdjecia/plan_lekcji.png')),
-    Key([sup], 'q', lazy.spawn('alacritty -e python /mnt/hdd/stuff/poweroff.py')),
+    Key([sup], 'q', lazy.spawn('sh power_menu')),
     Key([sup], 'a', lazy.function(ChangeAudioDevice)),
     #Key([sup], 'y', lazy.function(test)),
     Key([mod, 'shift'], 's', lazy.spawn('sh /usr/bin/screenshot')),
@@ -127,8 +143,8 @@ keys = [
 ]
 
 all_layouts = [
-    layout.MonadTall(border_focus='#F0AF16', border_width=2, single_border_width=0, margin=5, new_client_position='before_current'),
-    #layout.Columns(border_focus='#F0AF16', border_normal='#000000',  border_width=2, margin=3, grow_amount=5),
+    layout.MonadTall(border_focus=colors['swamp'], border_width=2, single_border_width=0, margin=5, new_client_position='before_current'),
+    layout.Columns(border_focus=colors['swamp'], border_normal='#000000',  border_width=2, margin=3, grow_amount=5, fair=True),
     layout.Matrix(border_focus='#F0AF16', border_width = 2, margin=5),
     layout.Max(border_width=0, border_focus='#000000'),
     # Try more layouts by unleashing below layouts.
@@ -161,7 +177,7 @@ groups = [
         Group(name='', position=2, layouts=all_layouts),
         Group(name='', position=3, layouts=all_layouts),
         Group(name='', position=4, layouts=all_layouts),
-        Group(name='', position=5, layouts=all_layouts),
+        Group(name='', position=5, layouts=all_layouts),
         Group(name='', position=6, layouts=[floating_layout], matches = [Match(wm_class='Steam'), Match(wm_class='csgo_linux64')]),
         ]
 
@@ -191,7 +207,6 @@ screens = [
     Screen(
         bottom=bar.Bar(
             widgets=[
-
                 widget.LaunchBar(
                     default_icon = '/home/mcnuggetsx20/.config/qtile/arch_icon_orange.png', 
                     progs=janek,
@@ -268,7 +283,7 @@ screens = [
 
                 widget.TextBox(
                         name = 'volumebox1',
-                        text=vol1(),
+                        text=vol1()[0],
                         foreground=colors['swamp'],
                         font = 'mononoki',
                 ),
@@ -287,6 +302,156 @@ screens = [
                 ),
 
                 widget.TextBox(
+                        text='(',
+                        foreground=colors['swamp'],
+                        font='SauceCodePro NF Bold',
+                ),
+
+                widget.TextBox(
+                        name='volumebox3',
+                        text = vol1()[1],
+                        font = 'SauceCodePro NF Bold',
+                        foreground=colors['ored'],
+                ),
+
+                widget.TextBox(
+                        text='%',
+                        foreground=colors['ored'],
+                        font='SauceCodePro NF Bold',
+                ),
+
+                widget.TextBox(
+                        text=')',
+                        foreground=colors['swamp'],
+                        font='SauceCodePro NF Bold',
+                ),
+
+
+                widget.TextBox(
+                        text = ' | ',
+                ),
+
+                widget.Clock(
+                    BACKGround=colors['black'], 
+                    foreground=colors['orange'], 
+                    font='SauceCodePro NF Bold', 
+                    padding=0,
+                    format="%d.%m.'%y %a %H:%M:%S",
+                ),
+            ],    
+            size=19)
+    ),
+    Screen(
+        bottom=bar.Bar(
+            widgets=[
+
+                widget.LaunchBar(
+                    default_icon = '/home/mcnuggetsx20/.config/qtile/arch_icon_orange.png', 
+                    progs=janek,
+                ),
+
+                widget.Spacer(
+                    length=3,
+                ),
+
+                widget.GroupBox(
+                    font='Font Awesome 5 Brand Bold', 
+                    highlight_method='line', 
+                    this_current_screen_border='#F0AF16', 
+                    this_screen_border='#F0AF16',
+                ),
+
+                widget.TextBox(' | '),
+                widget.TaskList(
+                    parse_text=funx.remtext, 
+                    borderwidth=0, 
+                    margin_x=0, 
+                    margin_y=0, 
+                    icon_size=18, 
+                    txt_floating='',
+                ),
+
+                widget.Spacer(
+                    length=bar.STRETCH,
+                ),
+
+                widget.NvidiaSensors(
+                    background=colors['black'], 
+                    foreground=colors['orange'], 
+                    font='SauceCodePro NF Bold', 
+                    format='GPU {temp}°C',
+                    update_interval = 4,
+                ),
+
+                widget.TextBox(
+                    text = ' | ',
+                    #foreground=colors['orange'],
+                    ),
+
+                widget.CurrentLayout(
+                    background=colors['black'], 
+                    foreground=colors['orange'], 
+                    font='SauceCodePro NF Bold',
+                ),
+
+
+                widget.TextBox(
+                        text = ' | ',
+                ),
+
+                widget.TextBox(
+                        text = ChangeAudioDevice(False),
+                        name = 'AudioDeviceIndicator2',
+                        foreground = colors['ored'],
+                ),
+
+                widget.TextBox(
+                        name = 'volumebox12',
+                        text=vol1()[0],
+                        foreground=colors['swamp'],
+                        font = 'mononoki',
+                ),
+
+                widget.TextBox(
+                        foreground=colors['ored'],
+                        font = 'mononoki',
+                        text = '|',
+                ),
+
+                widget.TextBox(
+                        name = 'volumebox22',
+                        text=vol2(),
+                        font = 'mononoki',
+                        func = funx.vol2,
+                ),
+
+                widget.TextBox(
+                        text='(',
+                        foreground=colors['swamp'],
+                        font='SauceCodePro NF Bold',
+                ),
+
+                widget.TextBox(
+                        name='volumebox32',
+                        text = vol1()[1],
+                        font = 'SauceCodePro NF Bold',
+                        foreground=colors['ored'],
+                ),
+
+                widget.TextBox(
+                        text='%',
+                        foreground=colors['ored'],
+                        font='SauceCodePro NF Bold',
+                ),
+
+                widget.TextBox(
+                        text=')',
+                        foreground=colors['swamp'],
+                        font='SauceCodePro NF Bold',
+                ),
+
+
+                widget.TextBox(
                         text = ' | ',
                 ),
 
@@ -297,10 +462,9 @@ screens = [
                     format="%d.%m.'%y %a %H:%M:%S",
                 ),
             ],    
-            size=19)
-    ),
-    Screen(
-        bottom=bar.Bar(widgset2, 19)
+            size = 19),
+
+            #top=bar.Bar(widgets=[widget.TextBox(text='', background=colors['black'])], size=50),
     ),
 ]
 
@@ -314,7 +478,7 @@ mouse = [
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: List
 follow_mouse_focus = True
-bring_front_click = False
+bring_front_click = True
 cursor_warp = False
 auto_fullscreen = True
 focus_on_window_activation = "smart"
