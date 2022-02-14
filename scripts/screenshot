@@ -1,0 +1,2 @@
+python /mnt/hdd/stuff/screenshot.py $1 $2
+
