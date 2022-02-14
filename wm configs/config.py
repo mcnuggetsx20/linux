@@ -7,16 +7,23 @@
 #                            |___/ |___/                               
 
 from typing import List  # noqa: F401
-from libqtile import bar, layout, widget, qtile
+from libqtile import bar, layout, widget, qtile, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.command import lazy
 import funx
 from lib import *
 import subprocess
+import os
+
+@hook.subscribe.client_new
+def func(new_window):
+    if new_window.name=='QPanel':
+        new_window.cmd_static(screen=1) #The number of the xscreen you want to put QPanel on goes here
 
 mod = "mod1"
 sup = "mod4"
-terminal = "urxvt -lsp 4"
+terminal = "alacritty"
+#terminal = "urxvt -lsp 4"
 
 def vol1():
     com = subprocess.check_output('pamixer --get-volume', shell=True, encoding='utf-8').split()
@@ -41,11 +48,11 @@ def volumechange(ok):
 
         qtile.widgets_map['volumebox1'].update(a[0])
         qtile.widgets_map['volumebox2'].update(b)
-        qtile.widgets_map['volumebox3'].update(a[1])
+        qtile.widgets_map['volumebox3'].update(a[1]+'%')
 
         qtile.widgets_map['volumebox12'].update(a[0])
         qtile.widgets_map['volumebox22'].update(b)
-        qtile.widgets_map['volumebox32'].update(a[1])
+        qtile.widgets_map['volumebox32'].update(a[1]+'%')
     return a
 
 def ChangeAudioDevice(init = False):
@@ -63,29 +70,48 @@ def ChangeAudioDevice(init = False):
 
         qtile.widgets_map['volumebox1'].update(a[0])
         qtile.widgets_map['volumebox2'].update(b)
+        qtile.widgets_map['volumebox3'].update(a[1]+'%')
         qtile.widgets_map['AudioDeviceIndicator'].update(device_indicators[devices.index(desired)])
 
         qtile.widgets_map['volumebox12'].update(a[0])
         qtile.widgets_map['volumebox22'].update(b)
+        qtile.widgets_map['volumebox32'].update(a[1]+'%')
         qtile.widgets_map['AudioDeviceIndicator2'].update(device_indicators[devices.index(desired)])
 
     else:
         return str(device_indicators[devices.index(curr)])
 
+def TogglePicom(qtile):
+    try:
+        status = ''.join(subprocess.check_output('killall picom', shell=True, encoding='utf-8').split())
+    except subprocess.CalledProcessError:
+        subprocess.run('picom &', shell=True)
+
+def ToggleBox(qtile):
+    qtile.widgets_map['wbox'].toggle()
+
 
 keys = [
     #My stuff
     Key([sup], 'b', lazy.spawn('brave')),
-    Key([mod], 'p', lazy.spawn('dmenu_run')),
+    Key([mod], 'p', lazy.spawn("dmenu_run -sb '#335D03' -nf '#F77B53'")),
     Key([sup], 'f', lazy.spawn('pcmanfm')),
-    Key([sup], 'm', lazy.spawn('urxvt -e htop')),
+    Key([sup], 'm', lazy.spawn(terminal + ' -e htop')),
     Key([mod], 'e', lazy.to_screen(0)),
     Key([mod], 'w', lazy.to_screen(1)),
     Key([sup], 'p', lazy.spawn('feh /mnt/hdd/zdjecia/plan_lekcji.png')),
     Key([sup], 'q', lazy.spawn('sh power_menu')),
+    Key([sup], 'c', lazy.function(ToggleBox)),
+
+    Key([sup], 't', lazy.spawn('sh qpanel')),
+    Key([sup], 'k', lazy.spawn('pkill -f QPanel')),
+    #Key([sup], 'c', lazy.function(TogglePicom)),
+
     Key([sup], 'a', lazy.function(ChangeAudioDevice)),
     #Key([sup], 'y', lazy.function(test)),
-    Key([mod, 'shift'], 's', lazy.spawn('sh /usr/bin/screenshot')),
+    Key([mod, 'shift'], 's', lazy.spawn('sh screenshot -s')),
+    Key([mod, 'shift'], 'e', lazy.spawn('sh screenshot -m 2')),
+    Key([mod, 'shift'], 'w', lazy.spawn('sh screenshot -m 1')),
     Key([sup],  'v', lazy.spawn('pavucontrol')),
     Key([],    'XF86AudioRaiseVolume', lazy.function(volumechange(True))),
     Key([],    'XF86AudioLowerVolume', lazy.function(volumechange(False))),
@@ -123,6 +149,8 @@ keys = [
         desc="Grow window down"),
     Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
     Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
+    Key([mod], 'i', lazy.layout.grow()),
+    Key([mod], 'm', lazy.layout.shrink()),
 
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
@@ -143,7 +171,16 @@ keys = [
 ]
 
 all_layouts = [
-    layout.MonadTall(border_focus=colors['swamp'], border_width=2, single_border_width=0, margin=5, new_client_position='before_current'),
+    layout.MonadTall(
+        border_focus=colors['swamp'], 
+        border_width=2, 
+        single_border_width=0, 
+        margin=5, 
+        new_client_position='before_current', 
+        change_ratio=0.025,
+        min_ratio=0,
+    ),
+
     layout.Columns(border_focus=colors['swamp'], border_normal='#000000',  border_width=2, margin=3, grow_amount=5, fair=True),
     layout.Matrix(border_focus='#F0AF16', border_width = 2, margin=5),
     layout.Max(border_width=0, border_focus='#000000'),
@@ -169,17 +206,56 @@ floating_layout = layout.Floating(border_width=0,float_rules=[
     Match(title='pinentry'),  # GPG key password entry
     Match(wm_class='feh'),
     Match(wm_class='pavucontrol'),
-    Match(wm_class='Alacritty'),
 ])
 
 groups = [
-        Group(name='', position=1, layouts=all_layouts),
-        Group(name='', position=2, layouts=all_layouts),
-        Group(name='', position=3, layouts=all_layouts),
-        Group(name='', position=4, layouts=all_layouts),
-        Group(name='', position=5, layouts=all_layouts),
-        Group(name='', position=6, layouts=[floating_layout], matches = [Match(wm_class='Steam'), Match(wm_class='csgo_linux64')]),
+    Group(
+        name='', 
+        position=1, 
+        layouts=all_layouts
+    ),
+
+    Group(
+        name='', 
+        position=2, 
+        layouts=all_layouts
+    ),
+
+    Group(
+        name='', 
+        position=3, 
+        layouts=all_layouts
+    ),
+
+    Group(
+        name='',
+        position=4, 
+        layouts=all_layouts, 
+        matches = [
+            Match(wm_class='discord')
         ]
+    ),
+        
+    Group(
+        name='', 
+        position=5, 
+        layouts=all_layouts, 
+        matches = [
+            Match(wm_class='teams')
+        ]
+    ),
+
+    Group(
+        name='', 
+        position=6, 
+        layouts=[floating_layout], 
+        matches = [
+            Match(wm_class='Steam'), 
+            Match(wm_class='csgo_linux64'),
+            Match(wm_class='hl2_linux'),
+        ]
+    ),
+]
 
 for i in groups:
     keys.extend([
@@ -194,7 +270,7 @@ for i in groups:
     ])
 
 widget_defaults = dict(
-    font='Ubuntu',
+    font='SauceCodePro NF Bold',
     fontsize=14,
     padding=1,
     inactive='#FFFFFF',
@@ -205,11 +281,12 @@ janek = [('system shutdown', 'shutdown now', 'calkiem niezle')]
 
 screens = [
     Screen(
+        #left=bar.Bar(widgets=[widget.GroupBox()], size = 19),
         bottom=bar.Bar(
+            background='#000000.70',
             widgets=[
-                widget.LaunchBar(
-                    default_icon = '/home/mcnuggetsx20/.config/qtile/arch_icon_orange.png', 
-                    progs=janek,
+                widget.Image(
+                    filename= '/home/mcnuggetsx20/.config/qtile/arch_icon_orange.png', 
                 ),
 
                 widget.Spacer(
@@ -217,13 +294,15 @@ screens = [
                 ),
 
                 widget.GroupBox(
-                    font='Font Awesome 5 Brand Bold', 
+                    font='SauceCodePro NF', 
+                    fontsize=14,
                     highlight_method='line', 
                     this_current_screen_border='#F0AF16', 
                     this_screen_border='#F0AF16',
+                    use_mouse_wheel=False,
                 ),
 
-                widget.TextBox(' | '),
+                widget.TextBox('|'),
                 widget.TaskList(
                     parse_text=funx.remtext, 
                     borderwidth=0, 
@@ -237,48 +316,56 @@ screens = [
                     length=bar.STRETCH,
                 ),
 
-                widget.Systray(),
-                widget.TextBox(' | '),
                 widget.CPU(
-                    background=colors['black'], 
+                    #background=colors['black'], 
                     foreground=colors['orange'], 
-                    font='SauceCodePro NF Bold', 
                     format='CPU {load_percent}%', 
                     update_interval=1.0,
                 ),
 
                 widget.TextBox(
-                    text = ' | ',
+                    text = '|',
                     #foreground=colors['orange'],
                     ),
 
                 widget.NvidiaSensors(
-                    background=colors['black'], 
+                    #background=colors['black'], 
                     foreground=colors['orange'], 
-                    font='SauceCodePro NF Bold', 
                     format='GPU {temp}°C',
                     update_interval = 4,
                 ),
 
                 widget.TextBox(
-                    text = ' | ',
+                    text = '|',
                     #foreground=colors['orange'],
                     ),
 
                 widget.CurrentLayout(
-                    background=colors['black'], 
+                    #background=colors['black'], 
                     foreground=colors['orange'], 
-                    font='SauceCodePro NF Bold',
                 ),
 
                 widget.TextBox(
-                        text = ' | ',
+                        text = '|',
                 ),
+
+                widget.WidgetBox(
+                    widgets=[
+                        widget.Systray(),
+                    ],
+                    text_closed='[<=]',
+                    text_open='[=>]',
+                    foreground=colors['orange'],
+                    name='wbox',
+                ),
+
+                widget.TextBox('|'),
 
                 widget.TextBox(
                         text = ChangeAudioDevice(False),
                         name = 'AudioDeviceIndicator',
                         foreground = colors['ored'],
+                        font = 'SauceCodePro NF Bold',
                 ),
 
                 widget.TextBox(
@@ -304,37 +391,26 @@ screens = [
                 widget.TextBox(
                         text='(',
                         foreground=colors['swamp'],
-                        font='SauceCodePro NF Bold',
                 ),
 
                 widget.TextBox(
                         name='volumebox3',
-                        text = vol1()[1],
-                        font = 'SauceCodePro NF Bold',
+                        text = vol1()[1]+'%',
                         foreground=colors['ored'],
-                ),
-
-                widget.TextBox(
-                        text='%',
-                        foreground=colors['ored'],
-                        font='SauceCodePro NF Bold',
                 ),
 
                 widget.TextBox(
                         text=')',
                         foreground=colors['swamp'],
-                        font='SauceCodePro NF Bold',
                 ),
 
-
                 widget.TextBox(
-                        text = ' | ',
+                        text = '|',
                 ),
 
                 widget.Clock(
                     BACKGround=colors['black'], 
                     foreground=colors['orange'], 
-                    font='SauceCodePro NF Bold', 
                     padding=0,
                     format="%d.%m.'%y %a %H:%M:%S",
                 ),
@@ -343,11 +419,11 @@ screens = [
     ),
     Screen(
         bottom=bar.Bar(
+            background='#000000.70',
             widgets=[
 
-                widget.LaunchBar(
-                    default_icon = '/home/mcnuggetsx20/.config/qtile/arch_icon_orange.png', 
-                    progs=janek,
+                widget.Image(
+                    filename= '/home/mcnuggetsx20/.config/qtile/arch_icon_orange.png', 
                 ),
 
                 widget.Spacer(
@@ -356,12 +432,14 @@ screens = [
 
                 widget.GroupBox(
                     font='Font Awesome 5 Brand Bold', 
+                    fontsize=26,
                     highlight_method='line', 
                     this_current_screen_border='#F0AF16', 
                     this_screen_border='#F0AF16',
+                    use_mouse_wheel=False,
                 ),
 
-                widget.TextBox(' | '),
+                widget.TextBox('|'),
                 widget.TaskList(
                     parse_text=funx.remtext, 
                     borderwidth=0, 
@@ -376,27 +454,25 @@ screens = [
                 ),
 
                 widget.NvidiaSensors(
-                    background=colors['black'], 
+                    #background=colors['black'], 
                     foreground=colors['orange'], 
-                    font='SauceCodePro NF Bold', 
                     format='GPU {temp}°C',
                     update_interval = 4,
                 ),
 
                 widget.TextBox(
-                    text = ' | ',
+                    text = '|',
                     #foreground=colors['orange'],
                     ),
 
                 widget.CurrentLayout(
-                    background=colors['black'], 
+                    #background=colors['black'], 
                     foreground=colors['orange'], 
-                    font='SauceCodePro NF Bold',
                 ),
 
 
                 widget.TextBox(
-                        text = ' | ',
+                        text = '|',
                 ),
 
                 widget.TextBox(
@@ -428,37 +504,27 @@ screens = [
                 widget.TextBox(
                         text='(',
                         foreground=colors['swamp'],
-                        font='SauceCodePro NF Bold',
                 ),
 
                 widget.TextBox(
                         name='volumebox32',
-                        text = vol1()[1],
-                        font = 'SauceCodePro NF Bold',
+                        text = vol1()[1]+'%',
                         foreground=colors['ored'],
-                ),
-
-                widget.TextBox(
-                        text='%',
-                        foreground=colors['ored'],
-                        font='SauceCodePro NF Bold',
                 ),
 
                 widget.TextBox(
                         text=')',
                         foreground=colors['swamp'],
-                        font='SauceCodePro NF Bold',
                 ),
 
 
                 widget.TextBox(
-                        text = ' | ',
+                        text = '|',
                 ),
 
                 widget.Clock(
-                    background=colors['black'], 
+                    #background=colors['black'], 
                     foreground=colors['orange'], 
-                    font='SauceCodePro NF Bold', 
                     format="%d.%m.'%y %a %H:%M:%S",
                 ),
             ],    
