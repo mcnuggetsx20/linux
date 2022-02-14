@@ -1,18 +1,29 @@
-URxvt*background: #fdf6e3
-URxvt*foreground: #657b83
-URxvt*color0:   #eee8d5
-URxvt*color1:   #dc322f
-URxvt*color2:   #859900
-URxvt*color3:   #b58900
-URxvt*color4:   #268bd2
-URxvt*color5:   #d33682
-URxvt*color6:   #2aa198
-URxvt*color7:   #073642
-URxvt*color8:   #fdf6e3
-URxvt*color9:   #cb4b16
-URxvt*color10:   #93a1a1
-URxvt*color11:   #839496
-URxvt*color12:   #657b83
-URxvt*color13:   #6c71c4
-URxvt*color14:   #586e75
-URxvt*color15:   #002b36
+colors:
+  primary:
+    background: '#000000' # base3
+    foreground: '#C5B381' # base00
+
+  cursor:
+    text:   '#fdf6e3' # base3
+    cursor: '#46DA14' # base00
+
+  normal:
+    black:   '#a49f82' # base2
+    red:     '#E50400' # red
+    green:   '#46DA14' # green
+    yellow:  '#EFAD08' # yellow
+    blue:    '#1D72AE' # blue
+    magenta: '#c678dd' # magenta
+    cyan:    '#F0AF16' # cyan
+    white:   '#FDF2CF' # base02
+
+  bright:
+    black:   '#5b6268' # base03
+    red:     '#da8548' # orange
+    green:   '#4db5bd' # base01
+    yellow:  '#ecbe7b' # base00
+    blue:    '#D88A00' # base0
+    magenta: '#a9a1e1' # violet
+    cyan:    '#28E8DD' # base1
+    white:   '#dfdfdf' # base3
+background_opacity: 0.8
