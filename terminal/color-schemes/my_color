@@ -1,36 +1,29 @@
-*.foreground:   #bbc2cf
-*.background:   #282c34
-*.cursorColor:  #bbc2cf
+colors:
+  primary:
+    background: '#000000' # base3
+    foreground: '#C5B381' # base00
 
-! black
-*.color0:       #a49f82
-*.color8:       #5b6268
+  cursor:
+    text:   '#fdf6e3' # base3
+    cursor: '#46DA14' # base00
 
-! red
-*.color1:       #ff6c6b
-*.color9:       #da8548
+  normal:
+    black:   '#a49f82' # base2
+    red:     '#E50400' # red
+    green:   '#46DA14' # green
+    yellow:  '#EFAD08' # yellow
+    blue:    '#1D72AE' # blue
+    magenta: '#c678dd' # magenta
+    cyan:    '#F0AF16' # cyan
+    white:   '#FDF2CF' # base02
 
-! green
-*.color2:       #000000
-*.color10:      #4db5bd
-
-! yellow
-*.color3:       #da8548
-*.color11:      #ecbe7b
-
-! blue
-*.color4:       #EE5116
-*.color12:      #D88A00
-
-! magenta
-*.color5:       #c678dd
-*.color13:      #a9a1e1
-
-! cyan
-*.color6:       #F77B53
-*.color14:      #F0AF16
-
-! white
-*.color7:       #202328
-*.color15:      #dfdfdf
-
+  bright:
+    black:   '#5b6268' # base03
+    red:     '#da8548' # orange
+    green:   '#4db5bd' # base01
+    yellow:  '#ecbe7b' # base00
+    blue:    '#D88A00' # base0
+    magenta: '#a9a1e1' # violet
+    cyan:    '#28E8DD' # base1
+    white:   '#dfdfdf' # base3
+background_opacity: 0.8
