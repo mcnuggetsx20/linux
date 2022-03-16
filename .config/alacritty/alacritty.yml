@@ -1,0 +1,54 @@
+window:
+  opacity: 0.86 
+
+font:
+  normal:
+    family: mononoki
+    style: Regular
+
+  bold:
+    family: mononoki
+    style: Bold
+
+  italic:
+    family: mononoki
+    style: Italic
+
+  bold_italic:
+    family: mononoki
+    style: Bold Italic
+
+  offset:
+    x: 0
+    y: 1
+
+  size: 13 
+
+colors:
+  primary:
+    background: '#312D2D' # base3
+    foreground: '#D0D0D0' # base00
+
+  cursor:
+    text:   '#fdf6e3' # base3
+    cursor: '#A9DC76' # base00
+
+  normal:
+    black:   '#a49f82' # base2
+    red:     '#C61717' # red
+    green:   '#A9DC76' # green
+    yellow:  '#EFAD08' # yellow
+    blue:    '#1D72AE' # blue
+    magenta: '#C53AF0' # magenta
+    cyan:    '#C76BFA' # cyan
+    white:   '#FDF2CF' # base02
+
+  bright:
+    black:   '#5b6268' # base03
+    red:     '#da8548' # orange
+    green:   '#4db5bd' # base01
+    yellow:  '#ecbe7b' # base00
+    blue:    '#D88A00' # base0
+    magenta: '#a9a1e1' # violet
+    cyan:    '#28E8DD' # base1
+    white:   '#dfdfdf' # base3
