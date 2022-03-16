@@ -1,8 +1,9 @@
-from subprocess import check_output, run
+from subprocess import check_output, run, Popen
 from lib import *
 
 def remtext(text):
     return ''
+
 
 def network_current():
     st = check_output("nmcli connection show --active | awk -F '  ' 'FNR>1 {print $1}'", shell=True, encoding='utf-8').split('\n')[0]

@@ -12,7 +12,7 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.command import lazy
 from funx import *
 from lib import *
-from subprocess import call
+from subprocess import call 
 import os
 
 orange = '#F0Af16'
@@ -34,6 +34,11 @@ def func(new_window):
     if new_window.name=='QPanel':
         new_window.cmd_static(screen=1) #The number of the xscreen you want to put QPanel on goes here
 
+def wifi_list_update():
+    target = '/home/mcnuggetsx20/.config/qpanel/wifi_list'
+    Popen("nmcli device wifi list > " + target, shell=True)
+    return ''
+
 mod = "mod1"
 sup = "mod4"
 terminal = "alacritty"
@@ -51,6 +56,7 @@ keys = [
     Key([sup], 'p', lazy.spawn('feh /mnt/hdd/zdjecia/plan_lekcji.png')),
     Key([sup], 'q', lazy.spawn('sh power_menu')),
 
+    Key([sup], 'bracketleft', lazy.spawn('sh qpanel -c ~/home/mcnuggetsx20/.config/qpanel/qnetwork.py')),
     Key([sup], 't', lazy.spawn('sh qpanel')),
     Key([sup], 'k', lazy.spawn('pkill -f QPanel')),
 
@@ -155,6 +161,7 @@ floating_layout = layout.Floating(
             Match(title='pinentry'),  # GPG key password entry
             Match(wm_class='feh'),
             Match(wm_class='pavucontrol'),
+            Match(title='QNetwork'),
         ]
 )
 
@@ -234,7 +241,7 @@ screens = [
         wallpaper='/mnt/hdd/zdjecia/wallpaper/img20.jpg',
         wallpaper_mode='fill',
         bottom=bar.Bar(
-            margin=[0, 35, 2, 35],
+            margin=[0, 35, 2, 35], #[N, E, S, W]
             background=bar_color,
             widgets=[
 
@@ -308,6 +315,7 @@ screens = [
                     foreground=green, 
                     format='GPU {temp}°C',
                     update_interval = 4,
+                    threshold=75,
                 ),
 
                 widget.TextBox(
@@ -338,7 +346,6 @@ screens = [
                 widget.WidgetBox(
                     widgets=[
                         widget.Systray(
-                            foreground=bar_color,
                         ),
                     ],
                     text_closed='[<=]',
@@ -426,6 +433,11 @@ screens = [
                     format="%H:%M:%S",
                 ),
 
+                widget.GenPollText(
+                    func=wifi_list_update,
+                    update_interval=3,
+                ),
+
                 widget.Spacer(
                     length=bar_indent,
                 ),
@@ -510,6 +522,7 @@ screens = [
                     foreground=green, 
                     format='GPU {temp}°C',
                     update_interval = 4,
+                    threshold=75,
                 ),
 
                 widget.TextBox(
