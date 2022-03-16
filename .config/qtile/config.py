@@ -239,7 +239,7 @@ screens = [
         wallpaper_mode='fill',
         bottom=bar.Bar(
             margin=[0, 35, 2, 35],
-            background=dgray,
+            background=dgray+'.91',
             widgets=[
 
                 widget.Spacer(
@@ -256,12 +256,13 @@ screens = [
 
                 widget.GroupBox(
                     font='SauceCodePro NF', 
-                    foreground=gray,
                     fontsize=14,
                     highlight_method='line', 
                     this_current_screen_border=violet, 
                     this_screen_border=violet,
                     block_highlight_text_color=green,
+                    inactive=gray,
+                    active=gray,
                     disable_drag=True,
                     use_mouse_wheel=False,
                 ),
@@ -404,7 +405,7 @@ screens = [
         wallpaper_mode='fill',
         bottom=bar.Bar(
             margin=[0, 35, 2, 35],
-            background=dgray,
+            background=dgray+'.91',
             widgets=[
 
                 widget.Spacer(
@@ -421,12 +422,13 @@ screens = [
 
                 widget.GroupBox(
                     font='SauceCodePro NF', 
-                    foreground=gray,
                     fontsize=14,
                     highlight_method='line', 
                     this_current_screen_border=violet, 
                     this_screen_border=violet,
                     block_highlight_text_color=green,
+                    inactive=gray,
+                    active=gray,
                     disable_drag=True,
                     use_mouse_wheel=False,
                 ),
