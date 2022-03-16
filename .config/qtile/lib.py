@@ -6,6 +6,12 @@ devices = [
 
 device_indicators = [' ', ' ']
 
+network_devices={
+        'ethernet' : '',
+        'wifi'     : '',
+        'none'     : '',
+        }
+
 colors = {
         'orange' : '#F0Af16',
         'ored'   : '#F77B53',

@@ -40,12 +40,6 @@ terminal = "alacritty"
 bar_indent=7
 #terminal = "urxvt -lsp 4"
 
-def dziwne():
-    return network_current()
-
-def ChangeAudioDevice(init):
-    return changeaudiodevice(init)
-
 keys = [
     #My stuff
     Key([sup], 'b', lazy.spawn('brave')),
@@ -60,7 +54,7 @@ keys = [
     Key([sup], 't', lazy.spawn('sh qpanel')),
     Key([sup], 'k', lazy.spawn('pkill -f QPanel')),
 
-    Key([sup], 'a', lazy.function(changeaudiodevice(False))),
+    Key([sup], 'a', lazy.function(ChangeAudioDevice(False))),
     Key([mod, 'shift'], 's', lazy.spawn('sh screenshot -s')),
     Key([mod, 'shift'], 'e', lazy.spawn('sh screenshot -m 2')),
     Key([mod, 'shift'], 'w', lazy.spawn('sh screenshot -m 1')),
@@ -178,7 +172,7 @@ groups = [
     ),
 
     Group(
-        name='', 
+        name='',
         position=3, 
         layouts=all_layouts
     ),
@@ -233,13 +227,15 @@ widget_defaults = dict(
 )
 extension_defaults = widget_defaults.copy()
 
+bar_color=dgray+'.91'
+
 screens = [
     Screen(
         wallpaper='/mnt/hdd/zdjecia/wallpaper/img20.jpg',
         wallpaper_mode='fill',
         bottom=bar.Bar(
             margin=[0, 35, 2, 35],
-            background=dgray+'.91',
+            background=bar_color,
             widgets=[
 
                 widget.Spacer(
@@ -285,6 +281,12 @@ screens = [
                     length=bar.STRETCH,
                 ),
 
+                widget.TextBox(
+                    text='',
+                    font='mononoki',
+                    foreground=green,
+                ),
+
                 widget.CPU(
                     foreground=green, 
                     format='CPU {load_percent}%', 
@@ -294,7 +296,13 @@ screens = [
                 widget.TextBox(
                     foreground=black,
                     text = '|',
-                    ),
+                ),
+
+                widget.TextBox(
+                    text=' ',
+                    font='mononoki',
+                    foreground=green,
+                ),
 
                 widget.NvidiaSensors(
                     foreground=green, 
@@ -308,8 +316,17 @@ screens = [
                 ),
 
                 widget.GenPollText(
+                    name='network_device',
                     foreground=gray,
-                    func=dziwne,
+                    font='Font Awesome 6 Free Solid',
+                    func=network_dev,
+                    update_interval=1,
+                ),
+
+                widget.GenPollText(
+                    name='network_name',
+                    foreground=gray,
+                    func=network_current,
                     update_interval=1,
                 ),
 
@@ -320,11 +337,14 @@ screens = [
 
                 widget.WidgetBox(
                     widgets=[
-                        widget.Systray(),
+                        widget.Systray(
+                            foreground=bar_color,
+                        ),
                     ],
                     text_closed='[<=]',
                     text_open='[=>]',
                     foreground=green,
+                    backround=bar_color,
                     name='wbox',
                 ),
 
@@ -382,10 +402,22 @@ screens = [
                     foreground=black,
                 ),
 
+                widget.TextBox(
+                        text=' ',
+                        font='mononoki',
+                        foreground=green,
+                ),
+
                 widget.Clock(
                     foreground=green, 
                     padding=0,
-                    format="%d.%m.'%y %a ",
+                    format="%d.%m.'%y %a",
+                ),
+
+                widget.TextBox(
+                        text='  ',
+                        font='mononoki',
+                        foreground=gray,
                 ),
 
                 widget.Clock(
@@ -405,7 +437,7 @@ screens = [
         wallpaper_mode='fill',
         bottom=bar.Bar(
             margin=[0, 35, 2, 35],
-            background=dgray+'.91',
+            background=bar_color,
             widgets=[
 
                 widget.Spacer(
@@ -433,7 +465,11 @@ screens = [
                     use_mouse_wheel=False,
                 ),
 
-                widget.TextBox('|'),
+                widget.TextBox(
+                    text='|',
+                    foreground=black,
+                ),
+
                 widget.TaskList(
                     parse_text=remtext, 
                     borderwidth=0, 
@@ -447,8 +483,31 @@ screens = [
                     length=bar.STRETCH,
                 ),
 
-                widget.NvidiaSensors(
+                widget.TextBox(
+                    text='',
+                    font='mononoki',
                     foreground=green,
+                ),
+
+                widget.CPU(
+                    foreground=green, 
+                    format='CPU {load_percent}%', 
+                    update_interval=1.0,
+                ),
+
+                widget.TextBox(
+                    foreground=black,
+                    text = '|',
+                ),
+
+                widget.TextBox(
+                    text=' ',
+                    font='mononoki',
+                    foreground=green,
+                ),
+
+                widget.NvidiaSensors(
+                    foreground=green, 
                     format='GPU {temp}°C',
                     update_interval = 4,
                 ),
@@ -458,10 +517,20 @@ screens = [
                     foreground=black, 
                     ),
 
-                widget.CurrentLayout(
-                    foreground=gray, 
+                widget.GenPollText(
+                    name='network_device2',
+                    foreground=gray,
+                    font='Font Awesome 6 Free Solid',
+                    func=network_dev,
+                    update_interval=1,
                 ),
 
+                widget.GenPollText(
+                    name='network_name2',
+                    foreground=gray,
+                    func=network_current,
+                    update_interval=1,
+                ),
 
                 widget.TextBox(
                     text = '|',
@@ -516,7 +585,25 @@ screens = [
                     text = '|',
                     foreground=black, 
                 ),
-widget.Clock( foreground=green, format="%d.%m.'%y %a ",), widget.Clock(
+
+                widget.TextBox(
+                        text=' ',
+                        font='mononoki',
+                        foreground=green,
+                ),
+
+                widget.Clock( 
+                    foreground=green, 
+                    format="%d.%m.'%y %a",
+                ), 
+
+                widget.TextBox(
+                        text='  ',
+                        font='mononoki',
+                        foreground=gray,
+                ),
+
+                widget.Clock(
                     foreground=gray, 
                     padding=0,
                     format="%H:%M:%S",

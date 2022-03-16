@@ -8,6 +8,11 @@ def network_current():
     st = check_output("nmcli connection show --active | awk -F '  ' 'FNR>1 {print $1}'", shell=True, encoding='utf-8').split('\n')[0]
     return [st, 'None'][int(st=='')]
 
+def network_dev():
+    dev = check_output("nmcli connection show --active | awk 'FNR>1 {print $(NF-1)}'", shell=True, encoding='utf-8').split()
+    dev.append('none')
+    return network_devices[dev[0]] + ' '
+
 def vol1():
     com = check_output('pamixer --get-volume', shell=True, encoding='utf-8').split()
     #   =====|----
@@ -38,7 +43,7 @@ def volumechange(ok):
         qtile.widgets_map['vol_number2'].update(a[1]+'%')
     return a
 
-def changeaudiodevice(init=False):
+def ChangeAudioDevice(init=False):
     global devices, device_indicators
 
 
@@ -67,8 +72,4 @@ def changeaudiodevice(init=False):
     else:
         curr = ''.join(check_output('pactl get-default-sink', shell=True, encoding='utf-8').split())
         return str(device_indicators[devices.index(curr)])
-
-
-
-
 
