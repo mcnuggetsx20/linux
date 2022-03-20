@@ -4,7 +4,6 @@ from lib import *
 def remtext(text):
     return ''
 
-
 def network_current():
     st = check_output("nmcli connection show --active | awk -F '  ' 'FNR>1 {print $1}'", shell=True, encoding='utf-8').split('\n')[0]
     return [st, 'None'][int(st=='')]

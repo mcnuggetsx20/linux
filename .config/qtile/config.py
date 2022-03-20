@@ -29,6 +29,11 @@ dgray  = '#312D2D'
 gray   = '#D0D0D0'
 red    = '#C61717'
 
+@hook.subscribe.startup_once
+def autostart():
+    home = os.path.expanduser('~')
+    call([home + '/.config/qtile/autostart.sh'])
+
 @hook.subscribe.client_new
 def func(new_window):
     if new_window.name=='QPanel':
@@ -39,10 +44,15 @@ def wifi_list_update():
     Popen("nmcli device wifi list > " + target, shell=True)
     return ''
 
+
 mod = "mod1"
 sup = "mod4"
 terminal = "alacritty"
 bar_indent=7
+this_dir = '/home/mcnuggetsx20/.config/qtile/'
+
+upgrade_size = check_output("cat " + this_dir + "up_size", shell=True, encoding='utf-8')
+upgrade_size = ['0', upgrade_size][int(bool(len(upgrade_size)))] + ' MB'
 #terminal = "urxvt -lsp 4"
 
 keys = [
@@ -56,7 +66,7 @@ keys = [
     Key([sup], 'p', lazy.spawn('feh /mnt/hdd/zdjecia/plan_lekcji.png')),
     Key([sup], 'q', lazy.spawn('sh power_menu')),
 
-    Key([sup], 'bracketleft', lazy.spawn('sh qpanel -c ~/home/mcnuggetsx20/.config/qpanel/qnetwork.py')),
+    Key([sup], 'bracketleft', lazy.spawn('sh qnetwork')),
     Key([sup], 't', lazy.spawn('sh qpanel')),
     Key([sup], 'k', lazy.spawn('pkill -f QPanel')),
 
@@ -290,7 +300,7 @@ screens = [
 
                 widget.TextBox(
                     text='',
-                    font='mononoki',
+                    font='Font Awesome 6 Free Solid',
                     foreground=green,
                 ),
 
@@ -316,6 +326,17 @@ screens = [
                     format='GPU {temp}°C',
                     update_interval = 4,
                     threshold=75,
+                ),
+
+                widget.TextBox(
+                    text = '|',
+                    foreground=black,
+                ),
+
+                widget.TextBox(
+                    name='upgrade',
+                    text=upgrade_size,
+                    foreground=gray,
                 ),
 
                 widget.TextBox(
@@ -433,10 +454,10 @@ screens = [
                     format="%H:%M:%S",
                 ),
 
-                widget.GenPollText(
-                    func=wifi_list_update,
-                    update_interval=3,
-                ),
+                #widget.GenPollText(
+                #    func=wifi_list_update,
+                #    update_interval=3,
+                #),
 
                 widget.Spacer(
                     length=bar_indent,
@@ -495,22 +516,22 @@ screens = [
                     length=bar.STRETCH,
                 ),
 
-                widget.TextBox(
-                    text='',
-                    font='mononoki',
-                    foreground=green,
-                ),
+                #widget.TextBox(
+                #    text='',
+                #    font='Font Awesome 6 Free Solid',
+                #    foreground=green,
+                #),
 
-                widget.CPU(
-                    foreground=green, 
-                    format='CPU {load_percent}%', 
-                    update_interval=1.0,
-                ),
+                #widget.CPU(
+                #    foreground=green, 
+                #    format='CPU {load_percent}%', 
+                #    update_interval=1.0,
+                #),
 
-                widget.TextBox(
-                    foreground=black,
-                    text = '|',
-                ),
+                #widget.TextBox(
+                #    foreground=black,
+                #    text = '|',
+                #),
 
                 widget.TextBox(
                     text=' ',
@@ -650,10 +671,5 @@ reconfigure_screens = True
 # If things like steam games want to auto-minimize themselves when losing
 # focus, should we respect this or not?
 auto_minimize = False
-
-@hook.subscribe.startup_once
-def autostart():
-    home = os.path.expanduser('~')
-    call([home + '/.config/qtile/autostart.sh'])
 
 wmname = "QTile"

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+readarray -t sizes <<< "$(echo n | sudo pacman -Su | awk '{print $6}' | awk 'FNR>6{if($1 != "n" && $1 != "") {print $1}}')"
+sum=0
+
+for (( i=0; i<${#sizes[@]}; ++i))
+do
+    sum="$(echo ${sizes[$i]} + ${sum} | bc -l)"
+done
+
+printf "$sum"
+
