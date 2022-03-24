@@ -4,9 +4,9 @@ from lib import *
 def remtext(text):
     return ''
 
-def network_current():
-    st = check_output("nmcli connection show --active | awk -F '  ' 'FNR>1 {print $1}'", shell=True, encoding='utf-8').split('\n')[0]
-    return [st, 'None'][int(st=='')]
+current_net='net'
+current_net_dev='dev'
+    
 
 def network_dev():
     dev = check_output("nmcli connection show --active | awk 'FNR>1 {print $(NF-1)}'", shell=True, encoding='utf-8').split()

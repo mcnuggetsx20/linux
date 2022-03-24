@@ -10,6 +10,7 @@ from typing import List  # noqa: F401
 from libqtile import bar, layout, widget, qtile, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.command import lazy
+from libqtile.command.client import InteractiveCommandClient
 from funx import *
 from lib import *
 from subprocess import call 
@@ -28,6 +29,10 @@ white  = '#FFFFFF'
 dgray  = '#312D2D'
 gray   = '#D0D0D0'
 red    = '#C61717'
+dred   = '#6b1015'
+solar  = '#fdf6e3'
+
+Popen('qpanel -c /home/mcnuggetsx20/.config/panel/qlauncher.py &',shell=True)
 
 @hook.subscribe.startup_once
 def autostart():
@@ -36,13 +41,13 @@ def autostart():
 
 @hook.subscribe.client_new
 def func(new_window):
+    #currentScreen = check_output("qtile cmd-obj -o screen -f info | awk -F ', ' '{print $2}' | awk '{print $2}'", shell=True, encoding='utf-8')
     if new_window.name=='QPanel':
         new_window.cmd_static(screen=1) #The number of the xscreen you want to put QPanel on goes here
-
-def wifi_list_update():
-    target = '/home/mcnuggetsx20/.config/qpanel/wifi_list'
-    Popen("nmcli device wifi list > " + target, shell=True)
-    return ''
+    elif new_window.name=='QNetwork':
+        new_window.cmd_focus()
+    elif new_window.name=='QLauncher':
+        new_window.cmd_static(screen=0, x = 0, y = 0)
 
 
 mod = "mod1"
@@ -55,7 +60,16 @@ upgrade_size = check_output("cat " + this_dir + "up_size", shell=True, encoding=
 upgrade_size = ['0', upgrade_size][int(bool(len(upgrade_size)))] + ' MB'
 #terminal = "urxvt -lsp 4"
 
+def qnetwork(qtile):
+    screen = qtile.current_screen.index
+    x = 1250 
+    y = 910
+
+    x += 1920 * int(not bool(screen))
+    Popen('qnetwork ' + str(x) + ' ' + str(y), shell=True)
+
 keys = [
+    Key([sup], 'z', lazy.function(qnetwork)),
     #My stuff
     Key([sup], 'b', lazy.spawn('brave')),
     Key([mod], 'p', lazy.spawn("dmenu_run -sb '" + green + "' -nf '" + violet + "' -sf '" + black + "'")),
@@ -68,7 +82,7 @@ keys = [
 
     Key([sup], 'bracketleft', lazy.spawn('sh qnetwork')),
     Key([sup], 't', lazy.spawn('sh qpanel')),
-    Key([sup], 'k', lazy.spawn('pkill -f QPanel')),
+    Key([sup], 'k', lazy.spawn('pkill -f qpanel')),
 
     Key([sup], 'a', lazy.function(ChangeAudioDevice(False))),
     Key([mod, 'shift'], 's', lazy.spawn('sh screenshot -s')),
@@ -90,6 +104,8 @@ keys = [
     Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
     Key([mod], "space", lazy.layout.next(),
         desc="Move window focus to other window"),
+    Key([mod], "s", lazy.group.prev_window()),
+    Key([mod], "d", lazy.group.next_window()),
 
     # Move windows between left/right columns or move up/down in current stack.
     # Moving out of range in Columns layout will create new column.
@@ -137,7 +153,7 @@ all_layouts = [
         border_focus=green, 
         border_width=2, 
         single_border_width=2, 
-        margin=10, 
+        margin=6, 
         new_client_position='before_current', 
         change_ratio=0.025,
         min_ratio=0,
@@ -172,12 +188,13 @@ floating_layout = layout.Floating(
             Match(wm_class='feh'),
             Match(wm_class='pavucontrol'),
             Match(title='QNetwork'),
+            Match(title='QLauncher'),
         ]
 )
 
 groups = [
     Group(
-        name='', 
+        name='', 
         position=1, 
         layouts=all_layouts
     ),
@@ -246,10 +263,59 @@ extension_defaults = widget_defaults.copy()
 
 bar_color=dgray+'.91'
 
+current_net_dev =''
+current_net = 'Searching...'
+
+def _dev():
+    global current_net_dev
+    return current_net_dev
+
+def _net():
+    global current_net, this_dir
+    return ' ' + current_net
+
+def network_current():
+    global current_net_dev, current_net
+    st = check_output("nmcli -t connection show --active | awk -F ':' '{print $1 " + '"\\n"' + " $(NF-1)}'", shell=True, encoding='utf-8').split('\n')[:-1]
+    st.append('None')
+    st.append('None')
+
+    current_net_dev = network_devices[st[1].split('-')[-1]]
+    current_net = st[0]
+    return ''
+
 screens = [
     Screen(
         wallpaper='/mnt/hdd/zdjecia/wallpaper/img20.jpg',
         wallpaper_mode='fill',
+
+        top=bar.Bar(
+            margin=[0, 880, 0, 880], #[N, E, S, W]
+            background = bar_color,
+            widgets=[
+                widget.Spacer(
+                    length=bar_indent,
+                ),
+                widget.GroupBox(
+                    font='SauceCodePro NF', 
+                    fontsize=14,
+                    highlight_method='line', 
+                    this_current_screen_border=violet, 
+                    this_screen_border=violet,
+                    block_highlight_text_color=green,
+                    inactive=gray,
+                    active=gray,
+                    disable_drag=True,
+                    use_mouse_wheel=False,
+                ),
+
+                widget.Spacer(
+                    length=bar_indent,
+                ),
+            ], 
+            size=18
+        ),
+
         bottom=bar.Bar(
             margin=[0, 35, 2, 35], #[N, E, S, W]
             background=bar_color,
@@ -263,21 +329,80 @@ screens = [
                     filename= '/home/mcnuggetsx20/.config/qtile/arch_icon_purple.png', 
                 ),
 
+                widget.TextBox(
+                    text = ' ' + check_output('uname -r', shell=True, encoding='utf-8').split()[0],
+                    foreground=gray,
+                ),
+
                 widget.Spacer(
                     length=3,
                 ),
 
-                widget.GroupBox(
-                    font='SauceCodePro NF', 
-                    fontsize=14,
-                    highlight_method='line', 
-                    this_current_screen_border=violet, 
-                    this_screen_border=violet,
-                    block_highlight_text_color=green,
-                    inactive=gray,
-                    active=gray,
-                    disable_drag=True,
-                    use_mouse_wheel=False,
+                widget.TextBox(
+                    text = '|',
+                    foreground=black,
+                ),
+
+                widget.TextBox(
+                    text='',
+                    font='Font Awesome 6 Free Solid',
+                    foreground=violet,
+                ),
+
+                widget.TextBox(
+                    text='CPU ',
+                    foreground=green,
+                ),
+
+                widget.CPU(
+                    foreground=gray, 
+                    format='{load_percent}%', 
+                    update_interval=1.0,
+                ),
+
+                widget.TextBox(
+                    foreground=black,
+                    text = '|',
+                ),
+
+                widget.TextBox(
+                    text=' ',
+                    font='mononoki',
+                    foreground=violet,
+                ),
+
+                widget.TextBox(
+                    text='GPU ',
+                    foreground=green,
+                ),
+
+                widget.NvidiaSensors(
+                    foreground=gray, 
+                    format='{temp}°C',
+                    update_interval = 4,
+                    threshold=75,
+                ),
+
+                widget.TextBox(
+                    text = '|',
+                    foreground=black,
+                ),
+
+                widget.TextBox(
+                    text='',
+                    font='Font Awesome 6 Free Solid',
+                    foreground=violet,
+                ),
+                widget.TextBox(
+                    text='',
+                    font='Font Awesome 6 Free Solid',
+                    foreground=green,
+                ),
+
+                widget.TextBox(
+                    name='upgrade',
+                    text=upgrade_size,
+                    foreground=gray,
                 ),
 
                 widget.TextBox(
@@ -298,64 +423,19 @@ screens = [
                     length=bar.STRETCH,
                 ),
 
-                widget.TextBox(
-                    text='',
-                    font='Font Awesome 6 Free Solid',
-                    foreground=green,
-                ),
-
-                widget.CPU(
-                    foreground=green, 
-                    format='CPU {load_percent}%', 
-                    update_interval=1.0,
-                ),
-
-                widget.TextBox(
-                    foreground=black,
-                    text = '|',
-                ),
-
-                widget.TextBox(
-                    text=' ',
-                    font='mononoki',
-                    foreground=green,
-                ),
-
-                widget.NvidiaSensors(
-                    foreground=green, 
-                    format='GPU {temp}°C',
-                    update_interval = 4,
-                    threshold=75,
-                ),
-
-                widget.TextBox(
-                    text = '|',
-                    foreground=black,
-                ),
-
-                widget.TextBox(
-                    name='upgrade',
-                    text=upgrade_size,
-                    foreground=gray,
-                ),
-
-                widget.TextBox(
-                    text = '|',
-                    foreground=black,
-                ),
 
                 widget.GenPollText(
-                    name='network_device',
-                    foreground=gray,
+                    name='network_device1',
+                    func=_dev,
+                    foreground=green,
                     font='Font Awesome 6 Free Solid',
-                    func=network_dev,
                     update_interval=1,
                 ),
 
                 widget.GenPollText(
-                    name='network_name',
+                    name='network_name1',
                     foreground=gray,
-                    func=network_current,
+                    func=_net,
                     update_interval=1,
                 ),
 
@@ -430,22 +510,11 @@ screens = [
                     foreground=black,
                 ),
 
+
                 widget.TextBox(
-                        text=' ',
+                        text=' ',
                         font='mononoki',
                         foreground=green,
-                ),
-
-                widget.Clock(
-                    foreground=green, 
-                    padding=0,
-                    format="%d.%m.'%y %a",
-                ),
-
-                widget.TextBox(
-                        text='  ',
-                        font='mononoki',
-                        foreground=gray,
                 ),
 
                 widget.Clock(
@@ -454,10 +523,27 @@ screens = [
                     format="%H:%M:%S",
                 ),
 
-                #widget.GenPollText(
-                #    func=wifi_list_update,
-                #    update_interval=3,
-                #),
+                widget.TextBox(
+                    text = '|',
+                    foreground=black,
+                ),
+
+                widget.TextBox(
+                        text=' ',
+                        font='mononoki',
+                        foreground=violet,
+                ),
+
+                widget.Clock(
+                    foreground=green, 
+                    padding=0,
+                    format="%d.%m.'%y %a",
+                ),
+
+                widget.GenPollText(
+                    func=network_current,
+                    update_interval=2,
+                ),
 
                 widget.Spacer(
                     length=bar_indent,
@@ -468,23 +554,13 @@ screens = [
     Screen(
         wallpaper='/mnt/hdd/zdjecia/wallpaper/img23.jpg',
         wallpaper_mode='fill',
-        bottom=bar.Bar(
-            margin=[0, 35, 2, 35],
-            background=bar_color,
+        top=bar.Bar(
+            margin=[0, 880, 0, 880], #[N, E, S, W]
+            background = bar_color,
             widgets=[
-
                 widget.Spacer(
                     length=bar_indent,
                 ),
-
-                widget.Image(
-                    filename= '/home/mcnuggetsx20/.config/qtile/arch_icon_purple.png', 
-                ),
-
-                widget.Spacer(
-                    length=3,
-                ),
-
                 widget.GroupBox(
                     font='SauceCodePro NF', 
                     fontsize=14,
@@ -498,8 +574,82 @@ screens = [
                     use_mouse_wheel=False,
                 ),
 
+                widget.Spacer(
+                    length=bar_indent,
+                ),
+            ], 
+            size=18
+        ),
+
+        bottom=bar.Bar(
+            margin=[0, 35, 2, 35], #[N, E, S, W]
+            background=bar_color,
+            widgets=[
+
+                widget.Spacer(
+                    length=bar_indent,
+                ),
+
+                widget.Image(
+                    filename= '/home/mcnuggetsx20/.config/qtile/arch_icon_purple.png', 
+                ),
+
                 widget.TextBox(
-                    text='|',
+                    text = ' ' + check_output('uname -r', shell=True, encoding='utf-8').split()[0],
+                    foreground=gray,
+                ),
+
+                widget.Spacer(
+                    length=3,
+                ),
+
+                widget.TextBox(
+                    text = '|',
+                    foreground=black,
+                ),
+
+                widget.TextBox(
+                    text=' ',
+                    font='mononoki',
+                    foreground=violet,
+                ),
+
+                widget.TextBox(
+                    text='GPU ',
+                    foreground=green,
+                ),
+
+                widget.NvidiaSensors(
+                    foreground=gray, 
+                    format='{temp}°C',
+                    update_interval = 4,
+                    threshold=75,
+                ),
+
+                widget.TextBox(
+                    text = '|',
+                    foreground=black,
+                ),
+
+                widget.TextBox(
+                    text='',
+                    font='Font Awesome 6 Free Solid',
+                    foreground=violet,
+                ),
+                widget.TextBox(
+                    text='',
+                    font='Font Awesome 6 Free Solid',
+                    foreground=green,
+                ),
+
+                widget.TextBox(
+                    name='upgrade',
+                    text=upgrade_size,
+                    foreground=gray,
+                ),
+
+                widget.TextBox(
+                    text = '|',
                     foreground=black,
                 ),
 
@@ -516,125 +666,81 @@ screens = [
                     length=bar.STRETCH,
                 ),
 
-                #widget.TextBox(
-                #    text='',
-                #    font='Font Awesome 6 Free Solid',
-                #    foreground=green,
-                #),
-
-                #widget.CPU(
-                #    foreground=green, 
-                #    format='CPU {load_percent}%', 
-                #    update_interval=1.0,
-                #),
-
-                #widget.TextBox(
-                #    foreground=black,
-                #    text = '|',
-                #),
-
-                widget.TextBox(
-                    text=' ',
-                    font='mononoki',
-                    foreground=green,
-                ),
-
-                widget.NvidiaSensors(
-                    foreground=green, 
-                    format='GPU {temp}°C',
-                    update_interval = 4,
-                    threshold=75,
-                ),
-
-                widget.TextBox(
-                    text = '|',
-                    foreground=black, 
-                    ),
 
                 widget.GenPollText(
-                    name='network_device2',
-                    foreground=gray,
+                    name='network_device1',
+                    func=_dev,
+                    foreground=green,
                     font='Font Awesome 6 Free Solid',
-                    func=network_dev,
                     update_interval=1,
                 ),
 
                 widget.GenPollText(
-                    name='network_name2',
+                    name='network_name1',
                     foreground=gray,
-                    func=network_current,
+                    func=_net,
                     update_interval=1,
                 ),
 
                 widget.TextBox(
                     text = '|',
-                    foreground=black, 
+                    foreground=black,
                 ),
 
                 widget.TextBox(
-                    text = ChangeAudioDevice(True),
-                    name = 'AudioDeviceIndicator2',
-                    font = 'SauceCodePro NF Bold',
-                    foreground = violet,
+                        text = ChangeAudioDevice(True),
+                        name = 'AudioDeviceIndicator1',
+                        foreground = violet,
+                        font = 'SauceCodePro NF Bold',
                 ),
 
                 widget.TextBox(
-                    name = 'vol_level2',
-                    text=vol1()[0],
-                    foreground=green,
-                    font = 'mononoki',
+                        name = 'vol_level1',
+                        text=vol1()[0],
+                        foreground=green,
+                        font = 'mononoki',
                 ),
 
                 widget.TextBox(
-                    foreground=violet,
-                    font = 'mononoki',
-                    text = '|',
+                        foreground=violet,
+                        font = 'mononoki',
+                        text = '|',
                 ),
 
                 widget.TextBox(
-                    name = 'vol_rest2',
-                    text=vol2(),
-                    font = 'mononoki',
-                    func = vol2,
-                    foreground=gray,
+                        name = 'vol_rest1',
+                        text=vol2(),
+                        font = 'mononoki',
+                        func = vol2,
+                        foreground=gray,
                 ),
 
                 widget.TextBox(
-                    text='(',
-                    foreground=green,
-                ),
-
-                widget.TextBox(
-                    name='vol_number2',
-                    text = vol1()[1]+'%',
-                    foreground=violet,
-                ),
-
-                widget.TextBox(
-                    text=')',
-                    foreground=green, 
-                ),
-
-                widget.TextBox(
-                    text = '|',
-                    foreground=black, 
-                ),
-
-                widget.TextBox(
-                        text=' ',
-                        font='mononoki',
+                        text='(',
                         foreground=green,
                 ),
 
-                widget.Clock( 
-                    foreground=green, 
-                    format="%d.%m.'%y %a",
-                ), 
+                widget.TextBox(
+                        name='vol_number1',
+                        text = vol1()[1]+'%',
+                        foreground=violet,
+                ),
 
                 widget.TextBox(
-                        text='  ',
+                        text=')',
+                        foreground=green,
+                ),
+
+                widget.TextBox(
+                    text = '|',
+                    foreground=black,
+                ),
+
+
+                widget.TextBox(
+                        text=' ',
                         font='mononoki',
-                        foreground=gray,
+                        foreground=green,
                 ),
 
                 widget.Clock(
@@ -643,11 +749,28 @@ screens = [
                     format="%H:%M:%S",
                 ),
 
+                widget.TextBox(
+                    text = '|',
+                    foreground=black,
+                ),
+
+                widget.TextBox(
+                        text=' ',
+                        font='mononoki',
+                        foreground=violet,
+                ),
+
+                widget.Clock(
+                    foreground=green, 
+                    padding=0,
+                    format="%d.%m.'%y %a",
+                ),
+
                 widget.Spacer(
                     length=bar_indent,
                 ),
             ],    
-            size = 18),
+            size=18)
 
     ),
 ]

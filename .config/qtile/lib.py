@@ -8,8 +8,8 @@ device_indicators = [' ', ' ']
 
 network_devices={
         'ethernet' : '',
-        'wifi'     : '',
-        'none'     : '',
+        'wireless'     : '',
+        'None'     : '',
         }
 
 colors = {
