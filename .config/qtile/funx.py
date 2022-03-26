@@ -16,11 +16,11 @@ def network_dev():
 def vol1():
     com = check_output('pamixer --get-volume', shell=True, encoding='utf-8').split()
     #   =====|----
-    seg1 = (int(com[0]) // 15 -1) * '='
+    seg1 = (int(com[0]) // 15) * 'I'
     return [seg1, com[0]]
 
 def vol2():
-    return (10 - len(vol1()[0]) - 1) * '-'
+    return ((10 - len(vol1()[0])) * 'I')[:-1]
 
 def volumechange(ok):
     def a(qtile):

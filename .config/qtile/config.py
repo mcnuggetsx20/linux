@@ -32,6 +32,7 @@ red    = '#C61717'
 dred   = '#6b1015'
 solar  = '#fdf6e3'
 
+Popen('pkill -f qpanel',shell=True)
 Popen('qpanel -c /home/mcnuggetsx20/.config/panel/qlauncher.py &',shell=True)
 
 @hook.subscribe.startup_once
@@ -256,7 +257,7 @@ for i in groups:
 widget_defaults = dict(
     font='IBM Plex Mono Bold',
     fontsize=13,
-    padding=1,
+    padding=0,
     inactive='#FFFFFF',
 )
 extension_defaults = widget_defaults.copy()
@@ -472,21 +473,17 @@ screens = [
                         name = 'vol_level1',
                         text=vol1()[0],
                         foreground=green,
-                        font = 'mononoki',
-                ),
-
-                widget.TextBox(
-                        foreground=violet,
-                        font = 'mononoki',
-                        text = '|',
+                        font = 'Ubuntu Bold',
+                        fontsize=12,
                 ),
 
                 widget.TextBox(
                         name = 'vol_rest1',
                         text=vol2(),
-                        font = 'mononoki',
+                        font = 'Ubuntu Bold',
+                        fontsize=12,
                         func = vol2,
-                        foreground=gray,
+                        foreground=black,
                 ),
 
                 widget.TextBox(
@@ -698,21 +695,17 @@ screens = [
                         name = 'vol_level1',
                         text=vol1()[0],
                         foreground=green,
-                        font = 'mononoki',
-                ),
-
-                widget.TextBox(
-                        foreground=violet,
-                        font = 'mononoki',
-                        text = '|',
+                        font = 'Ubuntu Bold',
+                        fontsize=12,
                 ),
 
                 widget.TextBox(
                         name = 'vol_rest1',
                         text=vol2(),
-                        font = 'mononoki',
+                        font = 'Ubuntu Bold',
+                        fontsize=12,
                         func = vol2,
-                        foreground=gray,
+                        foreground=black,
                 ),
 
                 widget.TextBox(
