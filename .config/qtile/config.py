@@ -35,6 +35,7 @@ solar  = '#fdf6e3'
 Popen('pkill -f qpanel',shell=True)
 Popen('qpanel -c /home/mcnuggetsx20/.config/panel/qlauncher.py &',shell=True)
 
+################### Hooks #########################
 @hook.subscribe.startup_once
 def autostart():
     home = os.path.expanduser('~')
@@ -42,7 +43,6 @@ def autostart():
 
 @hook.subscribe.client_new
 def func(new_window):
-    #currentScreen = check_output("qtile cmd-obj -o screen -f info | awk -F ', ' '{print $2}' | awk '{print $2}'", shell=True, encoding='utf-8')
     if new_window.name=='QPanel':
         new_window.cmd_static(screen=1) #The number of the xscreen you want to put QPanel on goes here
     elif new_window.name=='QNetwork':
@@ -51,6 +51,7 @@ def func(new_window):
         new_window.cmd_static(screen=0, x = 0, y = 0)
 
 
+################### Variables #########################
 mod = "mod1"
 sup = "mod4"
 terminal = "alacritty"
@@ -59,7 +60,6 @@ this_dir = '/home/mcnuggetsx20/.config/qtile/'
 
 upgrade_size = check_output("cat " + this_dir + "up_size", shell=True, encoding='utf-8')
 upgrade_size = ['0', upgrade_size][int(bool(len(upgrade_size)))] + ' MB'
-#terminal = "urxvt -lsp 4"
 
 def qnetwork(qtile):
     screen = qtile.current_screen.index
@@ -68,6 +68,9 @@ def qnetwork(qtile):
 
     x += 1920 * int(not bool(screen))
     Popen('qnetwork ' + str(x) + ' ' + str(y), shell=True)
+
+
+################### Keybinds #########################
 
 keys = [
     Key([sup], 'z', lazy.function(qnetwork)),
@@ -149,6 +152,8 @@ keys = [
         desc="Spawn a command using a prompt widget"),
 ]
 
+################### Layouts #########################
+
 all_layouts = [
     layout.MonadTall(
         border_focus=green, 
@@ -192,6 +197,8 @@ floating_layout = layout.Floating(
             Match(title='QLauncher'),
         ]
 )
+
+################### Groups #########################
 
 groups = [
     Group(
@@ -254,6 +261,9 @@ for i in groups:
         #     desc="move focused window to group {}".format(i.name)),
     ])
 
+
+################### Screens, widgets and their support functions #########################
+
 widget_defaults = dict(
     font='IBM Plex Mono Bold',
     fontsize=13,
@@ -264,25 +274,16 @@ extension_defaults = widget_defaults.copy()
 
 bar_color=dgray+'.91'
 
-current_net_dev =''
-current_net = 'Searching...'
-
-def _dev():
-    global current_net_dev
-    return current_net_dev
-
-def _net():
-    global current_net, this_dir
-    return ' ' + current_net
-
 def network_current():
-    global current_net_dev, current_net
     st = check_output("nmcli -t connection show --active | awk -F ':' '{print $1 " + '"\\n"' + " $(NF-1)}'", shell=True, encoding='utf-8').split('\n')[:-1]
     st.append('None')
     st.append('None')
 
     current_net_dev = network_devices[st[1].split('-')[-1]]
-    current_net = st[0]
+    qtile.widgets_map['network_device1'].update(current_net_dev + ' ')
+    qtile.widgets_map['network_name1'].update(st[0])
+    qtile.widgets_map['network_device2'].update(current_net_dev + ' ')
+    qtile.widgets_map['network_name2'].update(st[0])
     return ''
 
 screens = [
@@ -324,6 +325,10 @@ screens = [
 
                 widget.Spacer(
                     length=bar_indent,
+                ),
+                widget.TextBox(
+                    text = '',
+                    name = 'testbox',
                 ),
 
                 widget.Image(
@@ -412,7 +417,7 @@ screens = [
                 ),
 
                 widget.TaskList(
-                    parse_text=remtext, 
+                    parse_text=lambda text: '', 
                     borderwidth=0, 
                     margin_x=0, 
                     margin_y=0, 
@@ -424,20 +429,16 @@ screens = [
                     length=bar.STRETCH,
                 ),
 
-
-                widget.GenPollText(
+                widget.TextBox(
                     name='network_device1',
-                    func=_dev,
                     foreground=green,
                     font='Font Awesome 6 Free Solid',
-                    update_interval=1,
                 ),
 
-                widget.GenPollText(
+                widget.TextBox(
+                    text='Searching...',
                     name='network_name1',
                     foreground=gray,
-                    func=_net,
-                    update_interval=1,
                 ),
 
                 widget.TextBox(
@@ -651,7 +652,7 @@ screens = [
                 ),
 
                 widget.TaskList(
-                    parse_text=remtext, 
+                    parse_text=lambda text: '', 
                     borderwidth=0, 
                     margin_x=0, 
                     margin_y=0, 
@@ -664,19 +665,16 @@ screens = [
                 ),
 
 
-                widget.GenPollText(
-                    name='network_device1',
-                    func=_dev,
+                widget.TextBox(
+                    name='network_device2',
                     foreground=green,
                     font='Font Awesome 6 Free Solid',
-                    update_interval=1,
                 ),
 
-                widget.GenPollText(
-                    name='network_name1',
+                widget.TextBox(
+                    name='network_name2',
                     foreground=gray,
-                    func=_net,
-                    update_interval=1,
+                    text='Searching...',
                 ),
 
                 widget.TextBox(

@@ -1,18 +1,6 @@
 from subprocess import check_output, run, Popen
 from lib import *
 
-def remtext(text):
-    return ''
-
-current_net='net'
-current_net_dev='dev'
-    
-
-def network_dev():
-    dev = check_output("nmcli connection show --active | awk 'FNR>1 {print $(NF-1)}'", shell=True, encoding='utf-8').split()
-    dev.append('none')
-    return network_devices[dev[0]] + ' '
-
 def vol1():
     com = check_output('pamixer --get-volume', shell=True, encoding='utf-8').split()
     #   =====|----
