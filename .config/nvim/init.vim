@@ -86,7 +86,7 @@ function! s:ExecuteInShell(command)
 endfunction
 
 command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
-command -bar WW silent! :w !sudo tee % <CR>
+command WW silent! :w !sudo tee % <CR>
 
 augroup numbertoggle
     autocmd!
@@ -96,11 +96,10 @@ augroup numbertoggle
 augroup END
 
 lua << EOF
-    require('lspconfig').pyright.setup{
-    handlers = {
-            ['textDocument/publishDiagnostics'] = function(...) end
-        },
+    local nvim_lsp = require'lspconfig'
+    vim.lsp.handlers["textDocument/publishDiagnostics"] = function(...) end
 
+    require('lspconfig').pyright.setup{
       settings = {
         python = {
           analysis = {
@@ -110,6 +109,8 @@ lua << EOF
         }
       }
     }
+
+    require'lspconfig'.clangd.setup{}
 EOF
 
 set completeopt=menuone,noselect
