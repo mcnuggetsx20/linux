@@ -3,26 +3,30 @@ window:
 
 font:
   normal:
-    family: mononoki
+    family: JetBrains Mono
     style: Regular
 
   bold:
-    family: mononoki
+    family: JetBrains Mono
     style: Bold
 
   italic:
-    family: mononoki
+    family: JetBrains Mono 
     style: Italic
 
   bold_italic:
-    family: mononoki
+    family: JetBrains Mono
     style: Bold Italic
 
   offset:
     x: 0
     y: 1
 
-  size: 13 
+  size: 12 
+
+key_bindings:
+  - {key: Equals, mods: Control, action: IncreaseFontSize}
+  - {key: Minus, mods: Control, action: DecreaseFontSize}
 
 colors:
   primary:
@@ -34,7 +38,7 @@ colors:
     cursor: '#A9DC76' # base00
 
   normal:
-    black:   '#a49f82' # base2
+    black:   '#000000' # base2
     red:     '#C61717' # red
     green:   '#A9DC76' # green
     yellow:  '#EFAD08' # yellow
@@ -49,6 +53,6 @@ colors:
     green:   '#4db5bd' # base01
     yellow:  '#ecbe7b' # base00
     blue:    '#D88A00' # base0
-    magenta: '#a9a1e1' # violet
+    magenta: '#811a74' # violet
     cyan:    '#28E8DD' # base1
     white:   '#dfdfdf' # base3
