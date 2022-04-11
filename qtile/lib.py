@@ -1,5 +1,3 @@
-from libqtile import widget, bar
-import funx
 
 devices = [
     "alsa_output.pci-0000_00_1f.3.analog-stereo",
@@ -8,6 +6,12 @@ devices = [
 
 device_indicators = [' ', ' ']
 
+network_devices={
+        'ethernet' : '',
+        'wireless'     : '',
+        'None'     : '',
+        }
+
 colors = {
         'orange' : '#F0Af16',
         'ored'   : '#F77B53',
@@ -15,6 +19,4 @@ colors = {
         'swamp'  : '#335D03',  
         'lime'   : '#32CD32',
         }
-
-janek = [('system shutdown', 'shutdown now', 'calkiem niezle')]
 

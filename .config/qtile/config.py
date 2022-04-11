@@ -33,7 +33,7 @@ dred   = '#6b1015'
 solar  = '#fdf6e3'
 
 Popen('pkill -f qpanel',shell=True)
-Popen('qpanel -c /home/mcnuggetsx20/.config/panel/qlauncher.py &',shell=True)
+Popen('qpanel -c /home/mcnuggetsx20/.config/qpanel/qlauncher.py',shell=True)
 
 ################### Hooks #########################
 @hook.subscribe.startup_once
@@ -58,8 +58,6 @@ terminal = "alacritty"
 bar_indent=7
 this_dir = '/home/mcnuggetsx20/.config/qtile/'
 
-upgrade_size = check_output("cat " + this_dir + "up_size", shell=True, encoding='utf-8')
-upgrade_size = ['0', upgrade_size][int(bool(len(upgrade_size)))] + ' MB'
 
 def qnetwork(qtile):
     screen = qtile.current_screen.index
@@ -69,11 +67,16 @@ def qnetwork(qtile):
     x += 1920 * int(not bool(screen))
     Popen('qnetwork ' + str(x) + ' ' + str(y), shell=True)
 
+def screenshot(qtile):
+    screen=qtile.current_screen.index
+    screen = int(not bool(screen))
+    screen += 1
+    Popen('screenshot -m ' + str(screen),shell=True)
+
 
 ################### Keybinds #########################
 
 keys = [
-    Key([sup], 'z', lazy.function(qnetwork)),
     #My stuff
     Key([sup], 'b', lazy.spawn('brave')),
     Key([mod], 'p', lazy.spawn("dmenu_run -sb '" + green + "' -nf '" + violet + "' -sf '" + black + "'")),
@@ -84,14 +87,16 @@ keys = [
     Key([sup], 'p', lazy.spawn('feh /mnt/hdd/zdjecia/plan_lekcji.png')),
     Key([sup], 'q', lazy.spawn('sh power_menu')),
 
+    Key([mod], 'F1', lazy.function(fanSpeed(False))),
+    Key([mod], 'F2', lazy.function(fanSpeed(True))),
+
     Key([sup], 'bracketleft', lazy.spawn('sh qnetwork')),
     Key([sup], 't', lazy.spawn('sh qpanel')),
     Key([sup], 'k', lazy.spawn('pkill -f qpanel')),
 
     Key([sup], 'a', lazy.function(ChangeAudioDevice(False))),
     Key([mod, 'shift'], 's', lazy.spawn('sh screenshot -s')),
-    Key([mod, 'shift'], 'e', lazy.spawn('sh screenshot -m 2')),
-    Key([mod, 'shift'], 'w', lazy.spawn('sh screenshot -m 1')),
+    Key([], 'Print', lazy.function(screenshot)),
     Key([sup],  'v', lazy.spawn('pavucontrol')),
     Key([],    'XF86AudioRaiseVolume', lazy.function(volumechange(True))),
     Key([],    'XF86AudioLowerVolume', lazy.function(volumechange(False))),
@@ -164,19 +169,7 @@ all_layouts = [
         change_ratio=0.025,
         min_ratio=0,
     ),
-
-    #layout.Columns(border_focus=colors['swamp'], border_normal='#000000',  border_width=2, margin=3, grow_amount=5, fair=True),
-    #layout.Matrix(border_focus='#F0AF16', border_width = 2, margin=5),
     layout.Max(border_width=0, border_focus='#000000'),
-    # Try more layouts by unleashing below layouts.
-    # layout.Stack(num_stacks=6),
-    # layout.Bsp(),
-    # layout.MonadWide(),
-    # layout.RatioTile(),
-    # layout.Tile(border_focus='#F0AF16'),
-    # layout.TreeTab(),
-    # layout.VerticalTile(),
-    # layout.Zoomy(),
 ]
 floating_layout = layout.Floating(
         border_width=2,
@@ -292,7 +285,7 @@ screens = [
         wallpaper_mode='fill',
 
         top=bar.Bar(
-            margin=[0, 880, 0, 880], #[N, E, S, W]
+            margin=[0, 880, 0, 890], #[N, E, S, W]
             background = bar_color,
             widgets=[
                 widget.Spacer(
@@ -351,7 +344,7 @@ screens = [
 
                 widget.TextBox(
                     text='',
-                    font='Font Awesome 6 Free Solid',
+                    font='Ubuntu',
                     foreground=violet,
                 ),
 
@@ -384,31 +377,9 @@ screens = [
 
                 widget.NvidiaSensors(
                     foreground=gray, 
-                    format='{temp}°C',
-                    update_interval = 4,
-                    threshold=75,
-                ),
-
-                widget.TextBox(
-                    text = '|',
-                    foreground=black,
-                ),
-
-                widget.TextBox(
-                    text='',
-                    font='Font Awesome 6 Free Solid',
-                    foreground=violet,
-                ),
-                widget.TextBox(
-                    text='',
-                    font='Font Awesome 6 Free Solid',
-                    foreground=green,
-                ),
-
-                widget.TextBox(
-                    name='upgrade',
-                    text=upgrade_size,
-                    foreground=gray,
+                    format='{temp}°C {fan_speed}',
+                    update_interval = 1,
+                    threshold=70,
                 ),
 
                 widget.TextBox(
@@ -417,7 +388,7 @@ screens = [
                 ),
 
                 widget.TaskList(
-                    parse_text=lambda text: '', 
+                    parse_text=lambda text: ' ', 
                     borderwidth=0, 
                     margin_x=0, 
                     margin_y=0, 
@@ -622,28 +593,6 @@ screens = [
                     format='{temp}°C',
                     update_interval = 4,
                     threshold=75,
-                ),
-
-                widget.TextBox(
-                    text = '|',
-                    foreground=black,
-                ),
-
-                widget.TextBox(
-                    text='',
-                    font='Font Awesome 6 Free Solid',
-                    foreground=violet,
-                ),
-                widget.TextBox(
-                    text='',
-                    font='Font Awesome 6 Free Solid',
-                    foreground=green,
-                ),
-
-                widget.TextBox(
-                    name='upgrade',
-                    text=upgrade_size,
-                    foreground=gray,
                 ),
 
                 widget.TextBox(

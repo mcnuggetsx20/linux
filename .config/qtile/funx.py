@@ -61,3 +61,12 @@ def ChangeAudioDevice(init=False):
         curr = ''.join(check_output('pactl get-default-sink', shell=True, encoding='utf-8').split())
         return str(device_indicators[devices.index(curr)])
 
+def fanSpeed(ok):
+    def a(qtile):
+        val = -5 + 10 *int(ok)
+        curr = int(check_output('nvidia-smi --query-gpu=fan.speed --format=csv,noheader,nounits',shell=True,encoding='utf-8')[:-1])
+        curr = str(curr+val)
+        Popen('nvidia-settings -a "[fan:0]/GPUTargetFanSpeed="' + curr, shell=True)
+    return a
+
+        
