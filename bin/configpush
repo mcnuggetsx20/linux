@@ -2,10 +2,12 @@
 
 DEST=/mnt/hdd/dokumenty/repos/linux-pc
 USR=/home/mcnuggetsx20
-DATE=$(date | awk '{print $2 " " $3 " " $4}')
+DATE=$(date "+%d %b %Y %H:%M:%S")
 
+cp /bin/configpush ${DEST}/bin
 cp -r ${USR}/.config/qtile ${DEST}/.config
 cp -r ${USR}/.config/alacritty ${DEST}/.config
+cp -r ${USR}/.config/nvim ${DEST}/.config
 cp -r ${USR}/.bashrc ${DEST}
 
 cd $DEST
