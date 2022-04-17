@@ -4,7 +4,7 @@ devices = [
     "alsa_output.pci-0000_01_00.1.hdmi-stereo",
 ]
 
-device_indicators = [' ', ' ']
+device_indicators = ['', '']
 
 network_devices={
         'ethernet' : '',

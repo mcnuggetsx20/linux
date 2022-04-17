@@ -264,7 +264,7 @@ widget_defaults = dict(
 )
 extension_defaults = widget_defaults.copy()
 
-bar_color=dgray+'.91'
+bar_color=black+'.75'
 
 def network_current():
     st = check_output("nmcli -t connection show --active | awk -F ':' '{print $1 " + '"\\n"' + " $(NF-1)}'", shell=True, encoding='utf-8').split('\n')[:-1]
@@ -274,8 +274,8 @@ def network_current():
     current_net_dev = network_devices[st[1].split('-')[-1]]
     qtile.widgets_map['network_device1'].update(' ' + current_net_dev + ' ')
     qtile.widgets_map['network_name1'].update(' ' + st[0] + ' ')
-    qtile.widgets_map['network_device2'].update(' ' + current_net_dev + ' ')
-    qtile.widgets_map['network_name2'].update(' ' + st[0] + ' ')
+    qtile.widgets_map['network_device2'].update(current_net_dev)
+    qtile.widgets_map['network_name2'].update(st[0])
     return ''
 
 screens = [
@@ -311,9 +311,10 @@ screens = [
         ),
 
         bottom=bar.Bar(
-            #margin=[0, 0, 0, 0], #[N, E, S, W]
-            background='#1b1919.90',
+            margin=[0, -1, 2, -1], #[N, E, S, W]
+            background=bar_color,
             widgets=[
+
                 widget.Spacer(
                     length=bar_indent,
                 ),
@@ -504,6 +505,10 @@ screens = [
                     func=network_current,
                     update_interval=2,
                 ),
+
+                widget.Spacer(
+                    length=bar_indent,
+                ),
             ],    
             size=18)
     ),
@@ -538,9 +543,10 @@ screens = [
         ),
 
         bottom=bar.Bar(
-            #margin=[0, 0, 0, 0], #[N, E, S, W]
-            background='#1b1919.90',
+            margin=[0, 35, 2, 35], #[N, E, S, W]
+            background=bar_color,
             widgets=[
+
                 widget.Spacer(
                     length=bar_indent,
                 ),
@@ -549,37 +555,47 @@ screens = [
                     text = 'C',
                     font='Bartek',
                     fontsize=30,
-                    foreground=black,
-                    background=dviolet,
                 ),
 
                 widget.TextBox(
-                    text = ' ' + check_output('uname -r', shell=True, encoding='utf-8').split()[0] + ' ',
+                    text = ' ' + check_output('uname -r', shell=True, encoding='utf-8').split()[0],
                     foreground=gray,
-                    background=dgray,
                 ),
 
                 widget.Spacer(
-                   length=12,
+                    length=3,
                 ),
 
                 widget.TextBox(
-                    text='  ',
-                    font='mononoki',
-                    background=dviolet,
+                    text = '|',
                     foreground=black,
+                ),
+
+                widget.TextBox(
+                    text=' ',
+                    font='mononoki',
+                    foreground=violet,
+                ),
+
+                widget.TextBox(
+                    text='GPU ',
+                    foreground=green,
                 ),
 
                 widget.NvidiaSensors(
                     foreground=gray, 
-                    background=dgray,
-                    format=' {temp}°C {fan_speed} ',
-                    update_interval = 1,
-                    threshold=70,
+                    format='{temp}°C',
+                    update_interval = 4,
+                    threshold=75,
+                ),
+
+                widget.TextBox(
+                    text = '|',
+                    foreground=black,
                 ),
 
                 widget.TaskList(
-                    parse_text=lambda text: ' ', 
+                    parse_text=lambda text: '', 
                     borderwidth=0, 
                     margin_x=0, 
                     margin_y=0, 
@@ -590,115 +606,106 @@ screens = [
                 widget.Spacer(
                     length=bar.STRETCH,
                 ),
+
+
                 widget.TextBox(
                     name='network_device2',
-                    background=green,
-                    foreground=black,
+                    foreground=green,
                     font='Font Awesome 6 Free Solid',
-                    fontsize=12,
                 ),
 
                 widget.TextBox(
-                    text='Searching...',
                     name='network_name2',
                     foreground=gray,
-                    background=dgray,
-                ),
-
-                widget.Spacer(
-                   length=12,
+                    text='Searching...',
                 ),
 
                 widget.TextBox(
-                    text = ' ' + ChangeAudioDevice(True) + ' ',
-                    name = 'AudioDeviceIndicator2',
-                    background=dviolet,
+                    text = '|',
                     foreground=black,
-                    font = 'mononoki',
                 ),
 
                 widget.TextBox(
-                    name = 'vol_level2',
-                    text=' ' + vol1()[0],
-                    background=dgray,
-                    foreground=green,
-                    font = 'Ubuntu Bold',
-                    fontsize=12,
+                        text = ChangeAudioDevice(True),
+                        name = 'AudioDeviceIndicator1',
+                        foreground = violet,
+                        font = 'SauceCodePro NF Bold',
                 ),
 
                 widget.TextBox(
-                    name = 'vol_rest2',
-                    text=vol2(),
-                    font = 'Ubuntu Bold',
-                    fontsize=12,
-                    func = vol2,
+                        name = 'vol_level1',
+                        text=vol1()[0],
+                        foreground=green,
+                        font = 'Ubuntu Bold',
+                        fontsize=12,
+                ),
+
+                widget.TextBox(
+                        name = 'vol_rest1',
+                        text=vol2(),
+                        font = 'Ubuntu Bold',
+                        fontsize=12,
+                        func = vol2,
+                        foreground=black,
+                ),
+
+                widget.TextBox(
+                        text='(',
+                        foreground=green,
+                ),
+
+                widget.TextBox(
+                        name='vol_number1',
+                        text = vol1()[1]+'%',
+                        foreground=violet,
+                ),
+
+                widget.TextBox(
+                        text=')',
+                        foreground=green,
+                ),
+
+                widget.TextBox(
+                    text = '|',
                     foreground=black,
-                    background=dgray,
                 ),
+
 
                 widget.TextBox(
-                    text='(',
-                    foreground=green,
-                    background=dgray,
-                ),
-
-                widget.TextBox(
-                    name='vol_number2',
-                    text = vol1()[1]+'%',
-                    foreground=violet,
-                    background=dgray,
-                ),
-
-                widget.TextBox(
-                    text=') ',
-                    foreground=green,
-                    background=dgray,
-                ),
-
-                widget.Spacer(
-                   length=12,
-                ),
-
-                widget.TextBox(
-                    text='  ',
-                    font='mononoki',
-                    fontsize=14,
-                    foreground=black,
-                    background=green,
+                        text=' ',
+                        font='mononoki',
+                        foreground=green,
                 ),
 
                 widget.Clock(
                     foreground=gray, 
-                    background=dgray,
                     padding=0,
-                    format=" %H:%M:%S ",
-                ),
-
-                widget.Spacer(
-                   length=12,
+                    format="%H:%M:%S",
                 ),
 
                 widget.TextBox(
-                    text='  ',
-                    font='mononoki',
-                    fontsize=14,
-                    background=dviolet,
+                    text = '|',
                     foreground=black,
+                ),
+
+                widget.TextBox(
+                        text=' ',
+                        font='mononoki',
+                        foreground=violet,
                 ),
 
                 widget.Clock(
                     foreground=green, 
-                    background=dgray,
                     padding=0,
-                    format=" %d.%m.'%y %a ",
+                    format="%d.%m.'%y %a",
                 ),
 
-                widget.GenPollText(
-                    func=network_current,
-                    update_interval=2,
+                widget.Spacer(
+                    length=bar_indent,
                 ),
             ],    
             size=18)
+
     ),
 ]
 

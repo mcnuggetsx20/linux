@@ -1,7 +1,7 @@
 call plug#begin()
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/nvim-compe'
-Plug 'ayu-theme/ayu-vim'
+Plug 'doums/darcula'
 call plug#end()
 
 autocmd BufNewFile *.cpp 0r /mnt/hdd/Program-Files/Vim/ClassicTemplate.txt
@@ -52,9 +52,7 @@ set guicursor=i:hor15-Cursor
 "set guioptions-=r
 
 set termguicolors 
-let ayucolor="dark"
-
-colorscheme ayu
+colorscheme darcula
 "colorscheme desert
 
 nnoremap x "_x
@@ -94,6 +92,7 @@ augroup numbertoggle
     autocmd BufLeave,FocusLost,InsertEnter * set nornu
 	autocmd BufLeave,FocusLost,InsertEnter * set nu
 augroup END
+set numberwidth=5
 
 lua << EOF
     local nvim_lsp = require'lspconfig'
