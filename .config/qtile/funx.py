@@ -44,15 +44,15 @@ def ChangeAudioDevice(init=False):
         a = vol1()
         b= vol2()
 
-        qtile.widgets_map['vol_level1'].update(a[0])
+        qtile.widgets_map['vol_level1'].update(' ' +a[0])
         qtile.widgets_map['vol_rest1'].update(b)
         qtile.widgets_map['vol_number1'].update(a[1]+'%')
-        qtile.widgets_map['AudioDeviceIndicator1'].update(device_indicators[devices.index(desired)])
+        qtile.widgets_map['AudioDeviceIndicator1'].update(' '+device_indicators[devices.index(desired)]+' ')
 
-        qtile.widgets_map['vol_level2'].update(a[0])
+        qtile.widgets_map['vol_level2'].update(' ' +a[0])
         qtile.widgets_map['vol_rest2'].update(b)
         qtile.widgets_map['vol_number2'].update(a[1]+'%')
-        qtile.widgets_map['AudioDeviceIndicator2'].update(device_indicators[devices.index(desired)])
+        qtile.widgets_map['AudioDeviceIndicator2'].update(' ' + device_indicators[devices.index(desired)] + ' ')
 
     if not init:
         return a

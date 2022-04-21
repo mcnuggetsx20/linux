@@ -6,14 +6,14 @@ call plug#end()
 
 autocmd BufNewFile *.cpp 0r /mnt/hdd/Program-Files/Vim/ClassicTemplate.txt
 let g:currentmode={
-       \ 'n'  : 'NORMAL  ',
-       \ 'v'  : 'VISUAL  ',
-       \ 'V'  : 'V·Line  ',
-       \ "\<C-V>" : 'V·Block  ',
-       \ 'i'  : 'INSERT  ',
-       \ 'R'  : 'R  ',
-       \ 'Rv' : 'V·Replace  ',
-       \ 'c'  : 'Command  ',
+       \ 'n'  : 'NORMAL ',
+       \ 'v'  : 'VISUAL ',
+       \ 'V'  : 'V·Line ',
+       \ "\<C-V>" : 'V·Block ',
+       \ 'i'  : 'INSERT ',
+       \ 'R'  : 'R ',
+       \ 'Rv' : 'V·Replace ',
+       \ 'c'  : 'Command ',
        \}
 
 let $LANG = 'en_US'
@@ -40,9 +40,20 @@ set backupdir=/mnt/hdd/vim_backups/backup
 set directory=/mnt/hdd/vim_backups/swp
 
 set laststatus=2
+
+set statusline+=%#keyword#
 set statusline+=\ %{(g:currentmode[mode()])}
-set statusline+=%F\ %=\ %L\ lines,
+
+set statusline+=%#statusline#
+set statusline+=\ %F\ %=\ 
+
+set statusline+=%#number#
+set statusline+=\ %L\ lines
+
+set statusline+=%#string#
 set statusline+=\ %{wordcount().words}\ words
+
+set statusline+=%#function#
 set statusline+=\ [NVIM]
 
 set guicursor=i:hor15-Cursor

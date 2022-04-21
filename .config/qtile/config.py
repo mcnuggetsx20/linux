@@ -280,7 +280,7 @@ def network_current():
 
 screens = [
     Screen(
-        wallpaper='/mnt/hdd/zdjecia/wallpaper/img20.jpg',
+        wallpaper='/mnt/hdd/zdjecia/wallpaper/img20b.jpg',
         wallpaper_mode='fill',
 
         top=bar.Bar(
@@ -366,6 +366,10 @@ screens = [
                     format=' {temp}°C {fan_speed} ',
                     update_interval = 1,
                     threshold=70,
+                ),
+
+                widget.Spacer(
+                   length=12,
                 ),
 
                 widget.TaskList(
@@ -566,7 +570,7 @@ screens = [
                 widget.TextBox(
                     text='  ',
                     font='mononoki',
-                    background=dviolet,
+                    background=green,
                     foreground=black,
                 ),
 
