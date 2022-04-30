@@ -35,6 +35,9 @@ set nowrap
 set belloff=all
 set nu
 
+set undofile
+set backup
+
 set undodir=/mnt/hdd/vim_backups/undo
 set backupdir=/mnt/hdd/vim_backups/backup
 set directory=/mnt/hdd/vim_backups/swp
@@ -79,6 +82,8 @@ nnoremap <C-x> :tabclose <CR>
 
 nnoremap <F4> :w <bar> :Shell python -B % <CR>
 autocmd filetype cpp nnoremap <F3> :w <bar> :Shell g++ -std=c++17 -DLOCAL -Wall -Wextra -Wconversion -Wshadow -Wno-sign-conversion -D_GLIBCXX_DEBUG -fno-sanitize-recover=undefined -DAC % -o %< && ./a <CR>
+autocmd filetype javascript nnoremap <F3> :w <bar> :Shell node % <CR>
+autocmd filetype c nnoremap <F3> :w <bar> :Shell gcc -o a % && ./a <CR>
 
 function! s:ExecuteInShell(command)
   let command = join(map(split(a:command), 'expand(v:val)'))
@@ -121,6 +126,7 @@ lua << EOF
     }
 
     require'lspconfig'.clangd.setup{}
+    require'lspconfig'.tsserver.setup{}
 EOF
 
 set completeopt=menuone,noselect

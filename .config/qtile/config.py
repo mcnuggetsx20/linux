@@ -32,9 +32,6 @@ red    = '#C61717'
 dred   = '#6b1015'
 solar  = '#fdf6e3'
 
-Popen('pkill -f qpanel',shell=True)
-Popen('qpanel -c /home/mcnuggetsx20/.config/qpanel/qlauncher.py',shell=True)
-
 ################### Hooks #########################
 @hook.subscribe.startup_once
 def autostart():
@@ -51,7 +48,7 @@ def func(new_window):
         new_window.cmd_static(screen=0, x = 0, y = 0)
 
 
-################### Variables #########################
+#################### Variables #########################
 mod = "mod1"
 sup = "mod4"
 terminal = "alacritty"
@@ -264,7 +261,7 @@ widget_defaults = dict(
 )
 extension_defaults = widget_defaults.copy()
 
-bar_color=dgray+'.91'
+bar_color=solar+'.31'
 
 def network_current():
     st = check_output("nmcli -t connection show --active | awk -F ':' '{print $1 " + '"\\n"' + " $(NF-1)}'", shell=True, encoding='utf-8').split('\n')[:-1]
@@ -278,13 +275,17 @@ def network_current():
     qtile.widgets_map['network_name2'].update(' ' + st[0] + ' ')
     return ''
 
+def wttr():
+    wtt = check_output("curl -s wttr.in/Wojnów?format=4", shell=True, encoding='utf-8').split()
+    return ' '.join(wtt) 
+
 screens = [
     Screen(
-        wallpaper='/mnt/hdd/zdjecia/wallpaper/img20b.jpg',
+        wallpaper='/mnt/hdd/zdjecia/wallpaper/cool.jpg',
         wallpaper_mode='fill',
 
         top=bar.Bar(
-            margin=[0, 880, 0, 890], #[N, E, S, W]
+            margin=[0, 0, 0, 0], #[N, E, S, W]
             background = bar_color,
             widgets=[
                 widget.Spacer(
@@ -302,6 +303,53 @@ screens = [
                     disable_drag=True,
                     use_mouse_wheel=False,
                 ),
+                widget.TextBox(
+                    text = 'B',
+                    font='Bartek',
+                    fontsize = 25,
+                    foreground=bar_color,
+                    background='#000000.00',
+                    padding= -2,
+                ),
+
+
+                widget.Spacer(
+                    length = bar.STRETCH,
+                    background='#000000.00',
+                ),
+
+                widget.TextBox(
+                    text = 'A',
+                    font='Bartek',
+                    fontsize = 25,
+                    foreground=bar_color,
+                    background='#000000.00',
+                    padding= -2,
+                ),
+                widget.GenPollText(
+                    name = 'weather',
+                    func = wttr,
+                    foreground = gray,
+                    background = bar_color,
+                    update_interval=600,
+                ),
+                widget.TextBox(
+                    text = 'B',
+                    font='Bartek',
+                    fontsize = 25,
+                    foreground=bar_color,
+                    background='#000000.00',
+                    padding= -2,
+                ),
+
+                widget.Spacer(
+                    length = bar.STRETCH,
+                    background='#000000.00',
+                ),
+
+                widget.Systray(
+                    background = '#625f62',
+                ),
 
                 widget.Spacer(
                     length=bar_indent,
@@ -312,7 +360,8 @@ screens = [
 
         bottom=bar.Bar(
             #margin=[0, 0, 0, 0], #[N, E, S, W]
-            background='#1b1919.90',
+            #background='#1b1919.90',
+            background=bar_color,
             widgets=[
                 widget.Spacer(
                     length=bar_indent,
@@ -402,18 +451,6 @@ screens = [
                 widget.TextBox(
                     text = '|',
                     foreground=black,
-                ),
-
-                widget.WidgetBox(
-                    widgets=[
-                        widget.Systray(
-                        ),
-                    ],
-                    text_closed='[<=]',
-                    text_open='[=>]',
-                    foreground=green,
-                    backround=bar_color,
-                    name='wbox',
                 ),
 
                 widget.Spacer(
@@ -512,7 +549,7 @@ screens = [
             size=18)
     ),
     Screen(
-        wallpaper='/mnt/hdd/zdjecia/wallpaper/img23.jpg',
+        wallpaper='/mnt/hdd/zdjecia/wallpaper/cool.jpg',
         wallpaper_mode='fill',
         top=bar.Bar(
             margin=[0, 880, 0, 880], #[N, E, S, W]
@@ -543,7 +580,8 @@ screens = [
 
         bottom=bar.Bar(
             #margin=[0, 0, 0, 0], #[N, E, S, W]
-            background='#1b1919.90',
+            #background='#1b1919.90',
+            background=bar_color,
             widgets=[
                 widget.Spacer(
                     length=bar_indent,

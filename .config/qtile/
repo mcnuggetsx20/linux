@@ -32,9 +32,6 @@ red    = '#C61717'
 dred   = '#6b1015'
 solar  = '#fdf6e3'
 
-Popen('pkill -f qpanel',shell=True)
-Popen('qpanel -c /home/mcnuggetsx20/.config/qpanel/qlauncher.py',shell=True)
-
 ################### Hooks #########################
 @hook.subscribe.startup_once
 def autostart():
@@ -51,7 +48,7 @@ def func(new_window):
         new_window.cmd_static(screen=0, x = 0, y = 0)
 
 
-################### Variables #########################
+#################### Variables #########################
 mod = "mod1"
 sup = "mod4"
 terminal = "alacritty"
@@ -280,16 +277,17 @@ def network_current():
 
 screens = [
     Screen(
-        wallpaper='/mnt/hdd/zdjecia/wallpaper/img20b.jpg',
+        wallpaper='/mnt/hdd/zdjecia/wallpaper/cool.jpg',
         wallpaper_mode='fill',
 
         top=bar.Bar(
             margin=[0, 880, 0, 890], #[N, E, S, W]
-            background = bar_color,
+            background = solar + '.90',
             widgets=[
                 widget.Spacer(
                     length=bar_indent,
                 ),
+                widget.TextBox(),
                 widget.GroupBox(
                     font='SauceCodePro NF', 
                     fontsize=14,
@@ -366,6 +364,10 @@ screens = [
                     format=' {temp}°C {fan_speed} ',
                     update_interval = 1,
                     threshold=70,
+                ),
+
+                widget.Spacer(
+                   length=12,
                 ),
 
                 widget.TaskList(
