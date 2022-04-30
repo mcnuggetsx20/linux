@@ -350,10 +350,6 @@ screens = [
                 widget.Systray(
                     background = '#625f62',
                 ),
-
-                widget.Spacer(
-                    length=bar_indent,
-                ),
             ], 
             size=18
         ),
