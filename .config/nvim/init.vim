@@ -31,7 +31,6 @@ set tabstop=4
 set shiftwidth=4
 set si
 set noshowmode
-set nowrap
 set belloff=all
 set nu
 

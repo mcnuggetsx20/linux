@@ -31,6 +31,14 @@ def volumechange(ok):
         qtile.widgets_map['vol_number2'].update(a[1]+'%')
     return a
 
+def mic_vol_change(ok):
+    def a(qtile):
+        val = -5 + 10 * int(ok)
+        curr = check_output("pactl get-source-volume alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.mono-fallback | awk -F ' / ' 'FNR<2 {print  $(NF-1)}'",shell=True,encoding='utf-8')[:-1]
+        run('pactl set-source-volume alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.mono-fallback ' + curr,shell=True)
+
+        #qtile.widgets_map('mic_vol1').update(
+
 def ChangeAudioDevice(init=False):
     global devices, device_indicators
 

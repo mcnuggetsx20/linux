@@ -4,6 +4,8 @@ devices = [
     "alsa_output.pci-0000_01_00.1.hdmi-stereo",
 ]
 
+mic = 'alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.mono-fallback' 
+
 device_indicators = ['', '']
 
 network_devices={
