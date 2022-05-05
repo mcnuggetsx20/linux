@@ -84,6 +84,17 @@ keys = [
     Key([sup], 'p', lazy.spawn('feh /mnt/hdd/zdjecia/plan_lekcji.png')),
     Key([sup], 'q', lazy.spawn('sh power_menu')),
 
+    #Volume Control
+    Key([],    'XF86AudioRaiseVolume', lazy.function(volumechange(True))),
+    Key([],    'XF86AudioLowerVolume', lazy.function(volumechange(False))),
+    Key([],    'XF86AudioMute', lazy.spawn('pulsemixer --toggle-mute')),
+
+    Key([sup], 'XF86AudioRaiseVolume', lazy.function(mic_vol_change(True))),
+    Key([sup], 'XF86AudioLowerVolume', lazy.function(mic_vol_change(False))),
+    Key([sup], 'XF86AudioMute', lazy.spawn('pulsemixer --toggle-mute')),
+    Key([sup],  'v', lazy.spawn('pavucontrol')),
+
+
     Key([mod], 'F1', lazy.function(fanSpeed(False))),
     Key([mod], 'F2', lazy.function(fanSpeed(True))),
 
@@ -94,10 +105,6 @@ keys = [
     Key([sup], 'a', lazy.function(ChangeAudioDevice(False))),
     Key([mod, 'shift'], 's', lazy.spawn('sh screenshot -s')),
     Key([], 'Print', lazy.function(screenshot)),
-    Key([sup],  'v', lazy.spawn('pavucontrol')),
-    Key([],    'XF86AudioRaiseVolume', lazy.function(volumechange(True))),
-    Key([],    'XF86AudioLowerVolume', lazy.function(volumechange(False))),
-    Key([],    'XF86AudioMute', lazy.spawn('pulsemixer --toggle-mute')),
     Key([],    'XF86HomePage', lazy.spawn('brave')),
     Key([mod], 't', lazy.window.toggle_floating()),
     Key([sup], 'j', lazy.window.toggle_minimize()),
@@ -513,9 +520,50 @@ screens = [
                 widget.Spacer(
                     length=bar.STRETCH,
                 ),
+
                 widget.TextBox(
-                    text = '|',
+                    text = '  ',
+                    name = 'MicIcon1',
+                    background=dviolet,
                     foreground=black,
+                    font = 'mononoki',
+                ),
+
+                widget.TextBox(
+                    name = 'mic_level1',
+                    text=' ' + vol1(device='mic')[0],
+                    background=dgray,
+                    foreground=green,
+                    font = 'Ubuntu Bold',
+                    fontsize=12,
+                ),
+
+                widget.TextBox(
+                    name = 'mic_rest1',
+                    text=vol1(device='mic')[1],
+                    font = 'Ubuntu Bold',
+                    fontsize=12,
+                    foreground=black,
+                    background=dgray,
+                ),
+
+                widget.TextBox(
+                    text='(',
+                    foreground=green,
+                    background=dgray,
+                ),
+
+                widget.TextBox(
+                    name='mic_number1',
+                    text = vol1(device='mic')[2]+'%',
+                    foreground=violet,
+                    background=dgray,
+                ),
+
+                widget.TextBox(
+                    text=') ',
+                    foreground=green,
+                    background=dgray,
                 ),
 
                 widget.Spacer(
@@ -532,7 +580,7 @@ screens = [
 
                 widget.TextBox(
                     name = 'vol_level1',
-                    text=' ' + vol1()[0],
+                    text=' ' + vol1(device='else')[0],
                     background=dgray,
                     foreground=green,
                     font = 'Ubuntu Bold',
@@ -541,10 +589,9 @@ screens = [
 
                 widget.TextBox(
                     name = 'vol_rest1',
-                    text=vol2(),
+                    text=vol1(device='else')[1],
                     font = 'Ubuntu Bold',
                     fontsize=12,
-                    func = vol2,
                     foreground=black,
                     background=dgray,
                 ),
@@ -557,7 +604,7 @@ screens = [
 
                 widget.TextBox(
                     name='vol_number1',
-                    text = vol1()[1]+'%',
+                    text = vol1(device='else')[2]+'%',
                     foreground=violet,
                     background=dgray,
                 ),
@@ -812,6 +859,56 @@ screens = [
                 widget.Spacer(
                     length=bar.STRETCH,
                 ),
+                
+                widget.TextBox(
+                    text = '  ',
+                    name = 'MicIcon2',
+                    background=dviolet,
+                    foreground=black,
+                    font = 'mononoki',
+                ),
+
+                widget.TextBox(
+                    name = 'mic_level2',
+                    text=' ' + vol1(device='mic')[0],
+                    background=dgray,
+                    foreground=green,
+                    font = 'Ubuntu Bold',
+                    fontsize=12,
+                ),
+
+                widget.TextBox(
+                    name = 'mic_rest2',
+                    text=vol1(device='mic')[1],
+                    font = 'Ubuntu Bold',
+                    fontsize=12,
+                    foreground=black,
+                    background=dgray,
+                ),
+
+                widget.TextBox(
+                    text='(',
+                    foreground=green,
+                    background=dgray,
+                ),
+
+                widget.TextBox(
+                    name='mic_number2',
+                    text = vol1(device='mic')[2]+'%',
+                    foreground=violet,
+                    background=dgray,
+                ),
+
+                widget.TextBox(
+                    text=') ',
+                    foreground=green,
+                    background=dgray,
+                ),
+
+                widget.Spacer(
+                   length=12,
+                ),
+
                 widget.TextBox(
                     text = ' ' + ChangeAudioDevice(True) + ' ',
                     name = 'AudioDeviceIndicator2',
@@ -822,7 +919,7 @@ screens = [
 
                 widget.TextBox(
                     name = 'vol_level2',
-                    text=' ' + vol1()[0],
+                    text=' ' + vol1(device='else')[0],
                     background=dgray,
                     foreground=green,
                     font = 'Ubuntu Bold',
@@ -831,10 +928,9 @@ screens = [
 
                 widget.TextBox(
                     name = 'vol_rest2',
-                    text=vol2(),
+                    text=vol1(device='else')[1],
                     font = 'Ubuntu Bold',
                     fontsize=12,
-                    func = vol2,
                     foreground=black,
                     background=dgray,
                 ),
@@ -847,7 +943,7 @@ screens = [
 
                 widget.TextBox(
                     name='vol_number2',
-                    text = vol1()[1]+'%',
+                    text = vol1(device='else')[2]+'%',
                     foreground=violet,
                     background=dgray,
                 ),
