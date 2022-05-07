@@ -83,6 +83,7 @@ keys = [
     Key([mod], 'w', lazy.to_screen(1)),
     Key([sup], 'p', lazy.spawn('feh /mnt/hdd/zdjecia/plan_lekcji.png')),
     Key([sup], 'q', lazy.spawn('sh power_menu')),
+    Key([],    'XF86MonBrightnessDown', lazy.function(brightness_toggle())),
 
     #Volume Control
     Key([],    'XF86AudioRaiseVolume', lazy.function(volumechange(True))),
@@ -262,7 +263,7 @@ for i in groups:
 ################### Screens, widgets and their support functions #########################
 
 widget_defaults = dict(
-    font='IBM Plex Mono Bold',
+    font='IBM Plex Mono Medium',
     fontsize=13,
     padding=0,
     inactive='#FFFFFF',
@@ -299,6 +300,7 @@ screens = [
         wallpaper='/mnt/hdd/zdjecia/wallpaper/cool.jpg',
         wallpaper_mode='fill',
 
+        #TOP1
         top=bar.Bar(
             margin=[0, 0, 0, 0], #[N, E, S, W]
             background = '#000000.00',
@@ -459,11 +461,12 @@ screens = [
             size=18
         ),
 
+        #BOTTOM1
         bottom=bar.Bar(
             #margin=[0, 0, 0, 0], #[N, E, S, W]
             #background='#1b1919.90',
             background='#000000.00',
-            widgets=[
+            widgets= [
                 widget.Spacer(
                     length=bar_indent,
                 ),
@@ -488,7 +491,7 @@ screens = [
                 widget.TextBox(
                     text='  ',
                     font='mononoki',
-                    background=green,
+                    background=dviolet,
                     foreground=black,
                 ),
 
@@ -517,8 +520,62 @@ screens = [
                     update_interval = 1,
                     threshold=70,
                 ),
+
+                widget.Spacer(
+                    length = 12,
+                ),
+                widget.TextBox(
+                    text = '  ',
+                    foreground = black,
+                    background = dviolet,
+                    font = 'Font Awesome 6 Free Regular',
+                ),
+
+                widget.Memory(
+                    name = 'memory',
+                    foreground=gray, 
+                    background=dgray,
+                    format=' {MemUsed:.0f} MB ',
+                    update_interval = 1,
+                    font='IBM Plex Mono Medium',
+                ),
+
+                widget.Spacer(
+                    length=12,
+                ),
+
+                widget.TextBox(
+                    text = '   ',
+                    foreground = black,
+                    background = dviolet,
+                ),
+
+                widget.GenPollText(
+                    name= 'disk space',
+                    func = DiskSpace,
+                    background = dgray,
+                    foreground = gray,
+                ),
+                
                 widget.Spacer(
                     length=bar.STRETCH,
+                ),
+                widget.TextBox(
+                    text='   ' ,
+                    background = dviolet,
+                    foreground = black,
+                    padding=-2,
+                ),
+
+                widget.Net(
+                    format=' {down}↓ {up}↑ ',
+                    background=dgray,
+                    foreground=gray,
+                    prefix='M'
+                ),
+
+                widget.Spacer(
+                    length=12,
                 ),
 
                 widget.TextBox(
@@ -633,6 +690,9 @@ screens = [
                     padding=0,
                     format=" %d.%m.'%y %a ",
                 ),
+                widget.Spacer(
+                    length=bar_indent,
+                ),
 
                 widget.GenPollText(
                     func=network_current,
@@ -645,6 +705,7 @@ screens = [
         wallpaper='/mnt/hdd/zdjecia/wallpaper/cool.jpg',
         wallpaper_mode='fill',
 
+        #TOP2
         top=bar.Bar(
             margin=[0, 0, 0, 0], #[N, E, S, W]
             background = '#000000.00',
@@ -805,6 +866,7 @@ screens = [
             size=18
         ),
 
+        #BOTTOM2
         bottom=bar.Bar(
             #margin=[0, 0, 0, 0], #[N, E, S, W]
             #background='#1b1919.90',
@@ -914,7 +976,7 @@ screens = [
                     name = 'AudioDeviceIndicator2',
                     background=dviolet,
                     foreground=black,
-                    font = 'mononoki',
+                    font='mononoki',
                 ),
 
                 widget.TextBox(
@@ -971,6 +1033,10 @@ screens = [
                     background=dgray,
                     padding=0,
                     format=" %d.%m.'%y %a ",
+                ),
+
+                widget.Spacer(
+                    length=bar_indent,
                 ),
 
                 widget.GenPollText(

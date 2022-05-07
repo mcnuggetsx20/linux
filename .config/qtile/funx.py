@@ -96,4 +96,15 @@ def fanSpeed(ok):
         Popen('nvidia-settings -a "[fan:0]/GPUTargetFanSpeed="' + curr, shell=True)
     return a
 
+def DiskSpace():
+    return ' ' + check_output("df -h | grep nvme0n1p2 | awk '{print $3}'", shell=True, encoding='utf-8')[:-1] + ' '
+
+def brightness_toggle():
+    def a(qtile):
+        status = check_output("xrandr --current --verbose | grep Brightness | awk 'FNR>1'", shell=True, encoding='utf-8')[13:-1]
+        val = 1 + 0.3 * (status=='1.0')
+        run("xrandr --output DP-4 --brightness %(new)f" % {'new': val}, shell=True, encoding='utf-8')
+        return
+    return a
+
         

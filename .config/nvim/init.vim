@@ -33,6 +33,7 @@ set si
 set noshowmode
 set belloff=all
 set nu
+set ignorecase
 
 set undofile
 set backup
