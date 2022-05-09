@@ -1,1 +1,4 @@
-IN-USE  BSSID  SSID  MODE  CHAN  RATE  SIGNAL  BARS  SECURITY 
+IN-USE  BSSID              SSID              MODE   CHAN  RATE        SIGNAL  BARS  SECURITY 
+        C0:25:E9:9A:4B:48  TP-LINK_4B48      Infra  1     270 Mbit/s  80      ▂▄▆_  WPA2     
+        BC:1A:E4:84:52:AD  HUAWEI_B818_52AD  Infra  11    130 Mbit/s  80      ▂▄▆_  WPA2     
+        BC:1A:E4:84:52:B2  --                Infra  11    130 Mbit/s  80      ▂▄▆_  WPA2     

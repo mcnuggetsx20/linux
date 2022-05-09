@@ -9,6 +9,7 @@ cp -r ${USR}/.config/qtile ${DEST}/.config
 cp -r ${USR}/.config/alacritty ${DEST}/.config
 cp -r ${USR}/.config/nvim ${DEST}/.config
 cp -r ${USR}/.bashrc ${DEST}
+cp -r ${USR}/.config/qpanel ${DEST}/.config
 
 cd $DEST
 git add -A

@@ -386,7 +386,16 @@ screens = [
                     background='#000000.00',
                 ),
 
-                widget.Systray(),
+                widget.StatusNotifier(
+                    highlight_colour=dviolet,
+                    menu_foreground = gray,
+                    #menu_background = dgray,
+                    menu_font = widget_defaults['font'],
+                    menu_fontsize = widget_defaults['fontsize'],
+                    menu_row_height = 11,
+                    icon_size=18,
+                    padding=5,
+                ),
 
                 widget.TextBox(
                     text = 'A',
@@ -560,6 +569,7 @@ screens = [
                 widget.Spacer(
                     length=bar.STRETCH,
                 ),
+
                 widget.TextBox(
                     text='   ' ,
                     background = dviolet,
@@ -921,7 +931,7 @@ screens = [
                 widget.Spacer(
                     length=bar.STRETCH,
                 ),
-                
+
                 widget.TextBox(
                     text = '  ',
                     name = 'MicIcon2',

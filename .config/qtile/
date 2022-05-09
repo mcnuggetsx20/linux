@@ -1,727 +1,191 @@
-#figlet
-#                                             _            ____   ___  
-# _ __ ___   ___ _ __  _   _  __ _  __ _  ___| |_ _____  _|___ \ / _ \ 
-#| '_ ` _ \ / __| '_ \| | | |/ _` |/ _` |/ _ \ __/ __\ \/ / __) | | | |
-#| | | | | | (__| | | | |_| | (_| | (_| |  __/ |_\__ \>  < / __/| |_| |
-#|_| |_| |_|\___|_| |_|\__,_|\__, |\__, |\___|\__|___/_/\_\_____|\___/ 
-#                            |___/ |___/                               
+# Copyright (c) 2021 elParaguayo
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+from __future__ import annotations
 
-from typing import List  # noqa: F401
-from libqtile import bar, layout, widget, qtile, hook
-from libqtile.config import Click, Drag, Group, Key, Match, Screen
-from libqtile.command import lazy
-from libqtile.command.client import InteractiveCommandClient
-from funx import *
-from lib import *
-from subprocess import call 
+import asyncio
 import os
+from subprocess import check_output
+from typing import TYPE_CHECKING
 
-orange = '#F0Af16'
-ored   = '#F77B53'
-black  = '#000000'
-swamp  = '#335D03'  
-lime   = '#32CD32'
-green  = '#A9DC76'
-violet = '#C76BFA'
-dviolet= '#7A05BE'
-dblue  = '#3A69F0'
-white  = '#FFFFFF'
-dgray  = '#312D2D'
-gray   = '#D0D0D0'
-red    = '#C61717'
-dred   = '#6b1015'
-solar  = '#fdf6e3'
+from libqtile.widget.statusnotifier import StatusNotifier as QtileStatusNotifier
+from libqtile.widget.statusnotifier import StatusNotifierItem, host
 
-################### Hooks #########################
-@hook.subscribe.startup_once
-def autostart():
-    home = os.path.expanduser('~')
-    call([home + '/.config/qtile/autostart.sh'])
+from qtile_extras.popup.menu import PopupMenu
+from qtile_extras.resources.dbusmenu import DBusMenu
 
-@hook.subscribe.client_new
-def func(new_window):
-    if new_window.name=='QPanel':
-        new_window.cmd_static(screen=1) #The number of the xscreen you want to put QPanel on goes here
-    #elif new_window.name=='QNetwork':
-    #    new_window.cmd_focus()
-    elif new_window.name=='QLauncher':
-        new_window.cmd_static(screen=0, x = 0, y = 0)
+if TYPE_CHECKING:
+    from typing import Any, Callable
+
+NO_MENU = "/NO_DBUSMENU"
 
 
-#################### Variables #########################
-mod = "mod1"
-sup = "mod4"
-terminal = "alacritty"
-bar_indent=7
-this_dir = '/home/mcnuggetsx20/.config/qtile/'
+async def attach_menu(self, display_menu_callback: Callable | None = None):
+    # self.display_menu_callback = display_menu_callback
+    self.menu = None
 
-def qnetwork(qtile):
-    screen = qtile.current_screen.index
-    x = 1250 
-    y = 910
+    # Check if the default action for this item should be to show a context menu
+    try:
+        self.is_context_menu = await self.item.get_item_is_menu()
+    except AttributeError:
+        self.is_context_menu = False
 
-    x += 1920 * int(not bool(screen))
-    Popen('qnetwork ' + str(x) + ' ' + str(y), shell=True)
+    # Get the path of the attached menu
+    menu_path = await self.item.get_menu()
 
-def screenshot(qtile):
-    screen=qtile.current_screen.index
-    screen = int(not bool(screen))
-    screen += 1
-    Popen('screenshot -m ' + str(screen),shell=True)
-
-
-################### Keybinds #########################
-
-keys = [
-    #My stuff
-    Key([sup], 'b', lazy.spawn('brave')),
-    Key([mod], 'p', lazy.spawn("dmenu_run -sb '" + green + "' -nf '" + violet + "' -sf '" + black + "'")),
-    Key([sup], 'f', lazy.spawn('pcmanfm')),
-    Key([sup], 'm', lazy.spawn(terminal + ' -e htop')),
-    Key([mod], 'e', lazy.to_screen(0)),
-    Key([mod], 'w', lazy.to_screen(1)),
-    Key([sup], 'p', lazy.spawn('feh /mnt/hdd/zdjecia/plan_lekcji.png')),
-    Key([sup], 'q', lazy.spawn('sh power_menu')),
-
-    Key([mod], 'F1', lazy.function(fanSpeed(False))),
-    Key([mod], 'F2', lazy.function(fanSpeed(True))),
-
-    Key([sup], 'bracketleft', lazy.spawn('sh qpanel -c /home/mcnuggetsx20/.config/qpanel/qnetwork/qnetwork.py')),
-    Key([sup], 't', lazy.spawn('sh qpanel')),
-    Key([sup], 'k', lazy.spawn('pkill -f qpanel')),
-
-    Key([sup], 'a', lazy.function(ChangeAudioDevice(False))),
-    Key([mod, 'shift'], 's', lazy.spawn('sh screenshot -s')),
-    Key([], 'Print', lazy.function(screenshot)),
-    Key([sup],  'v', lazy.spawn('pavucontrol')),
-    Key([],    'XF86AudioRaiseVolume', lazy.function(volumechange(True))),
-    Key([],    'XF86AudioLowerVolume', lazy.function(volumechange(False))),
-    Key([],    'XF86AudioMute', lazy.spawn('pulsemixer --toggle-mute')),
-    Key([],    'XF86HomePage', lazy.spawn('brave')),
-    Key([mod], 't', lazy.window.toggle_floating()),
-    Key([sup], 'j', lazy.window.toggle_minimize()),
-    Key([mod], 'Tab', lazy.spawn('rofi -show window')),
-
-    # Switch between windows
-    Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
-    Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
-    Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
-    Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
-    Key([mod], "space", lazy.layout.next(),
-        desc="Move window focus to other window"),
-    Key([mod], "s", lazy.group.prev_window()),
-    Key([mod], "d", lazy.group.next_window()),
-
-    # Move windows between left/right columns or move up/down in current stack.
-    # Moving out of range in Columns layout will create new column.
-    Key([mod, "shift"], "h", lazy.layout.shuffle_left(),
-        desc="Move window to the left"),
-    Key([mod, "shift"], "l", lazy.layout.shuffle_right(),
-        desc="Move window to the right"),
-    Key([mod, "shift"], "j", lazy.layout.shuffle_down(),
-        desc="Move window down"),
-    Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
-
-    # Grow windows. If current window is on the edge of screen and direction
-    # will be to screen edge - window would shrink.
-    Key([mod, "control"], "h", lazy.layout.grow_left(),
-        desc="Grow window to the left"),
-    Key([mod, "control"], "l", lazy.layout.grow_right(),
-        desc="Grow window to the right"),
-    Key([mod, "control"], "j", lazy.layout.grow_down(),
-        desc="Grow window down"),
-    Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
-    Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
-    Key([mod], 'i', lazy.layout.grow()),
-    Key([mod], 'm', lazy.layout.shrink()),
-
-    # Toggle between split and unsplit sides of stack.
-    # Split = all windows displayed
-    # Unsplit = 1 window displayed, like Max layout, but still with
-    # multiple stack panes
-    Key([mod, "shift"], "Return", lazy.layout.toggle_split(),
-        desc="Toggle between split and unsplit sides of stack"),
-    Key([sup], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-
-    # Toggle between different layouts as defined below
-    Key([mod], "space", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([sup], "BackSpace", lazy.window.kill(), desc="Kill focused window"),
-
-    Key([mod, "control"], "r", lazy.restart(), desc="Restart Qtile"),
-    Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "r", lazy.spawncmd(),
-        desc="Spawn a command using a prompt widget"),
-]
-
-################### Layouts #########################
-
-all_layouts = [
-    layout.MonadTall(
-        border_focus=green, 
-        border_width=2, 
-        single_border_width=2, 
-        margin=6, 
-        new_client_position='before_current', 
-        change_ratio=0.025,
-        min_ratio=0,
-    ),
-    layout.Max(border_width=0, border_focus='#000000'),
-]
-floating_layout = layout.Floating(
-        border_width=2,
-        border_focus=green,
-        float_rules=[
-            # Run the utility of `xprop` to see the wm class and name of an X client.
-            *layout.Floating.default_float_rules,
-            Match(wm_class='confirmreset'),  # gitk
-            Match(wm_class='makebranch'),  # gitk
-            Match(wm_class='maketag'),  # gitk
-            Match(wm_class='ssh-askpass'),  # ssh-askpass
-            Match(wm_class='polo'),  # ssh-askpass
-            Match(title='branchdialog'),  # gitk
-            Match(title='pinentry'),  # GPG key password entry
-            Match(wm_class='feh'),
-            Match(wm_class='pavucontrol'),
-            Match(title='QNetwork'),
-            Match(title='QLauncher'),
-        ]
-)
-
-################### Groups #########################
-
-groups = [
-    Group(
-        name='', 
-        position=1, 
-        layouts=all_layouts
-    ),
-
-    Group(
-        name='', 
-        position=2, 
-        layouts=all_layouts
-    ),
-
-    Group(
-        name='',
-        position=3, 
-        layouts=all_layouts
-    ),
-
-    Group(
-        name='',
-        position=4, 
-        layouts=all_layouts, 
-        matches = [
-            Match(wm_class='discord')
-        ]
-    ),
-        
-    Group(
-        name='', 
-        position=5, 
-        layouts=all_layouts, 
-        matches = [
-            Match(wm_class='teams')
-        ]
-    ),
-
-    Group(
-        name='', 
-        position=6, 
-        layouts=[floating_layout], 
-        matches = [
-            Match(wm_class='Steam'), 
-            Match(wm_class='csgo_linux64'),
-            Match(wm_class='hl2_linux'),
-        ]
-    ),
-]
-
-for i in groups:
-    keys.extend([
-        # mod1 + letter of group = switch to group
-        Key([mod], str(i.position), lazy.group[i.name].toscreen()),
-        # mod1 + shift + letter of group = switch to & move focused window to group
-        Key([mod, "shift"], str(i.position), lazy.window.togroup(i.name)),
-        # Or, use below if you prefer not to switch to that group.
-        # # mod1 + shift + letter of group = move focused window to group
-        # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
-        #     desc="move focused window to group {}".format(i.name)),
-    ])
+    # If there is a menu then create and start the menu object
+    if menu_path and menu_path != NO_MENU:
+        self.menu = DBusMenu(
+            self.service, menu_path, self.bus, display_menu_callback=display_menu_callback
+        )
+        await self.menu.start()
 
 
-################### Screens, widgets and their support functions #########################
+def get_menu(self, root: int = 0):
+    if self.menu:
+        self.menu.get_menu(root)
 
-widget_defaults = dict(
-    font='IBM Plex Mono Bold',
-    fontsize=13,
-    padding=0,
-    inactive='#FFFFFF',
-)
-extension_defaults = widget_defaults.copy()
 
-bar_color=dgray+'.91'
+StatusNotifierItem.attach_menu = attach_menu  # type: ignore
+StatusNotifierItem.get_menu = get_menu  # type: ignore
 
-def network_current():
-    st = check_output("nmcli -t connection show --active | awk -F ':' '{print $1 " + '"\\n"' + " $(NF-1)}'", shell=True, encoding='utf-8').split('\n')[:-1]
-    st.append('None')
-    st.append('None')
 
-    current_net_dev = network_devices[st[1].split('-')[-1]]
-    qtile.widgets_map['network_device1'].update(' ' + current_net_dev + ' ')
-    qtile.widgets_map['network_name1'].update(' ' + st[0] + ' ')
-    qtile.widgets_map['network_device2'].update(' ' + current_net_dev + ' ')
-    qtile.widgets_map['network_name2'].update(' ' + st[0] + ' ')
-    return ''
+class StatusNotifier(QtileStatusNotifier):
+    """
+    A modified version of the default Qtile StatusNotifier widget.
 
-screens = [
-    Screen(
-        wallpaper='/mnt/hdd/zdjecia/wallpaper/cool.jpg',
-        wallpaper_mode='fill',
+    Added the ability to render context menus by right-clicking on the
+    icon.
+    """
 
-        top=bar.Bar(
-            margin=[0, 880, 0, 890], #[N, E, S, W]
-            background = solar + '.90',
-            widgets=[
-                widget.Spacer(
-                    length=bar_indent,
-                ),
-                widget.TextBox(),
-                widget.GroupBox(
-                    font='SauceCodePro NF', 
-                    fontsize=14,
-                    highlight_method='line', 
-                    this_current_screen_border=violet, 
-                    this_screen_border=violet,
-                    block_highlight_text_color=green,
-                    inactive=gray,
-                    active=gray,
-                    disable_drag=True,
-                    use_mouse_wheel=False,
-                ),
+    _experimental = True
 
-                widget.Spacer(
-                    length=bar_indent,
-                ),
-            ], 
-            size=18
+    defaults = [
+        ("menu_font", "sans", "Font for menu text"),
+        ("menu_fontsize", 12, "Font size for menu text"),
+        ("menu_foreground", "ffffff", "Font colour for menu text"),
+        ("menu_background", "333333", "Background colour for menu"),
+        ("separator_colour", "555555", "Colour of menu separator"),
+        (
+            "highlight_colour",
+            "0060A0",
+            "Colour of highlight for menu items (None for no highlight)",
         ),
-
-        bottom=bar.Bar(
-            #margin=[0, 0, 0, 0], #[N, E, S, W]
-            background='#1b1919.90',
-            widgets=[
-                widget.Spacer(
-                    length=bar_indent,
-                ),
-
-                widget.TextBox(
-                    text = 'C',
-                    font='Bartek',
-                    fontsize=30,
-                    foreground=black,
-                    background=dviolet,
-                ),
-
-                widget.TextBox(
-                    text = ' ' + check_output('uname -r', shell=True, encoding='utf-8').split()[0] + ' ',
-                    foreground=gray,
-                    background=dgray,
-                ),
-
-                widget.Spacer(
-                   length=12,
-                ),
-                widget.TextBox(
-                    text='  ',
-                    font='mononoki',
-                    background=green,
-                    foreground=black,
-                ),
-
-                widget.CPU(
-                    foreground=gray, 
-                    background=dgray,
-                    format=' {load_percent}% ', 
-                    update_interval=1.0,
-                ),
-
-                widget.Spacer(
-                   length=12,
-                ),
-
-                widget.TextBox(
-                    text='  ',
-                    font='mononoki',
-                    background=dviolet,
-                    foreground=black,
-                ),
-
-                widget.NvidiaSensors(
-                    foreground=gray, 
-                    background=dgray,
-                    format=' {temp}°C {fan_speed} ',
-                    update_interval = 1,
-                    threshold=70,
-                ),
-
-                widget.Spacer(
-                   length=12,
-                ),
-
-                widget.TaskList(
-                    parse_text=lambda text: ' ', 
-                    borderwidth=0, 
-                    margin_x=0, 
-                    margin_y=0, 
-                    icon_size=18, 
-                    txt_floating='',
-                ),
-
-                widget.Spacer(
-                    length=bar.STRETCH,
-                ),
-                widget.TextBox(
-                    name='network_device1',
-                    background=green,
-                    foreground=black,
-                    font='Font Awesome 6 Free Solid',
-                    fontsize=12,
-                ),
-
-                widget.TextBox(
-                    text='Searching...',
-                    name='network_name1',
-                    foreground=gray,
-                    background=dgray,
-                ),
-
-                widget.TextBox(
-                    text = '|',
-                    foreground=black,
-                ),
-
-                widget.WidgetBox(
-                    widgets=[
-                        widget.Systray(
-                        ),
-                    ],
-                    text_closed='[<=]',
-                    text_open='[=>]',
-                    foreground=green,
-                    backround=bar_color,
-                    name='wbox',
-                ),
-
-                widget.Spacer(
-                   length=12,
-                ),
-
-                widget.TextBox(
-                    text = ' ' + ChangeAudioDevice(True) + ' ',
-                    name = 'AudioDeviceIndicator1',
-                    background=dviolet,
-                    foreground=black,
-                    font = 'mononoki',
-                ),
-
-                widget.TextBox(
-                    name = 'vol_level1',
-                    text=' ' + vol1()[0],
-                    background=dgray,
-                    foreground=green,
-                    font = 'Ubuntu Bold',
-                    fontsize=12,
-                ),
-
-                widget.TextBox(
-                    name = 'vol_rest1',
-                    text=vol2(),
-                    font = 'Ubuntu Bold',
-                    fontsize=12,
-                    func = vol2,
-                    foreground=black,
-                    background=dgray,
-                ),
-
-                widget.TextBox(
-                    text='(',
-                    foreground=green,
-                    background=dgray,
-                ),
-
-                widget.TextBox(
-                    name='vol_number1',
-                    text = vol1()[1]+'%',
-                    foreground=violet,
-                    background=dgray,
-                ),
-
-                widget.TextBox(
-                    text=') ',
-                    foreground=green,
-                    background=dgray,
-                ),
-
-                widget.Spacer(
-                   length=12,
-                ),
-
-                widget.TextBox(
-                    text='  ',
-                    font='mononoki',
-                    fontsize=14,
-                    foreground=black,
-                    background=green,
-                ),
-
-                widget.Clock(
-                    foreground=gray, 
-                    background=dgray,
-                    padding=0,
-                    format=" %H:%M:%S ",
-                ),
-
-                widget.Spacer(
-                   length=12,
-                ),
-
-                widget.TextBox(
-                    text='  ',
-                    font='mononoki',
-                    fontsize=14,
-                    background=dviolet,
-                    foreground=black,
-                ),
-
-                widget.Clock(
-                    foreground=green, 
-                    background=dgray,
-                    padding=0,
-                    format=" %d.%m.'%y %a ",
-                ),
-
-                widget.GenPollText(
-                    func=network_current,
-                    update_interval=2,
-                ),
-            ],    
-            size=18)
-    ),
-    Screen(
-        wallpaper='/mnt/hdd/zdjecia/wallpaper/img23.jpg',
-        wallpaper_mode='fill',
-        top=bar.Bar(
-            margin=[0, 880, 0, 880], #[N, E, S, W]
-            background = bar_color,
-            widgets=[
-                widget.Spacer(
-                    length=bar_indent,
-                ),
-                widget.GroupBox(
-                    font='SauceCodePro NF', 
-                    fontsize=14,
-                    highlight_method='line', 
-                    this_current_screen_border=violet, 
-                    this_screen_border=violet,
-                    block_highlight_text_color=green,
-                    inactive=gray,
-                    active=gray,
-                    disable_drag=True,
-                    use_mouse_wheel=False,
-                ),
-
-                widget.Spacer(
-                    length=bar_indent,
-                ),
-            ], 
-            size=18
+        (
+            "menu_row_height",
+            None,
+            (
+                "Height of menu row (NB text entries are 2 rows tall, separators are 1 row tall.) "
+                '"None" will attempt to calculate height based on font size.'
+            ),
         ),
+        ("menu_width", 200, "Context menu width"),
+        ("show_menu_icons", True, "Show icons in context menu"),
+        ("hide_after", 0.5, "Time in seconds before hiding menu atfer mouse leave"),
+        ("opacity", 1, "Menu opactity"),
+    ]  # type: list[tuple[str, Any, str]]
 
-        bottom=bar.Bar(
-            #margin=[0, 0, 0, 0], #[N, E, S, W]
-            background='#1b1919.90',
-            widgets=[
-                widget.Spacer(
-                    length=bar_indent,
-                ),
+    _dependencies = ["dbus-next", "xdg"]
 
-                widget.TextBox(
-                    text = 'C',
-                    font='Bartek',
-                    fontsize=30,
-                    foreground=black,
-                    background=dviolet,
-                ),
+    _screenshots = [("statusnotifier.png", "Widget showing Remmina icon and context menu.")]
 
-                widget.TextBox(
-                    text = ' ' + check_output('uname -r', shell=True, encoding='utf-8').split()[0] + ' ',
-                    foreground=gray,
-                    background=dgray,
-                ),
+    def __init__(self, **config):
+        QtileStatusNotifier.__init__(self, **config)
+        self.add_defaults(StatusNotifier.defaults)
+        self.add_callbacks({"Button3": self.show_menu})
 
-                widget.Spacer(
-                   length=12,
-                ),
+        self.menu_config = {
+            "background": self.menu_background,
+            "font": self.menu_font,
+            "fontsize": self.menu_fontsize,
+            "foreground": self.menu_foreground,
+            "highlight": self.highlight_colour,
+            "show_menu_icons": self.show_menu_icons,
+            "hide_after": self.hide_after,
+            "colour_above": self.separator_colour,
+            "opacity": self.opacity,
+            "row_height": self.menu_row_height,
+            "menu_width": self.menu_width,
+        }
 
-                widget.TextBox(
-                    text='  ',
-                    font='mononoki',
-                    background=green,
-                    foreground=black,
-                ),
+        self.session = os.environ.get("DBUS_SESSION_BUS_ADDRESS")
+        self.host = host
 
-                widget.NvidiaSensors(
-                    foreground=gray, 
-                    background=dgray,
-                    format=' {temp}°C {fan_speed} ',
-                    update_interval = 1,
-                    threshold=70,
-                ),
+    def _configure(self, qtile, bar):
+        host.display_menu_callback = self.display_menu
+        QtileStatusNotifier._configure(self, qtile, bar)
 
-                widget.TaskList(
-                    parse_text=lambda text: ' ', 
-                    borderwidth=0, 
-                    margin_x=0, 
-                    margin_y=0, 
-                    icon_size=18, 
-                    txt_floating='',
-                ),
+    async def _config_async(self):
+        def draw(x=None):
+            self.bar.draw()
 
-                widget.Spacer(
-                    length=bar.STRETCH,
-                ),
-                widget.TextBox(
-                    name='network_device2',
-                    background=green,
-                    foreground=black,
-                    font='Font Awesome 6 Free Solid',
-                    fontsize=12,
-                ),
+        def attach_menu(item):
+            task = asyncio.create_task(item.attach_menu(display_menu_callback=self.display_menu))
+            task.add_done_callback(draw)
 
-                widget.TextBox(
-                    text='Searching...',
-                    name='network_name2',
-                    foreground=gray,
-                    background=dgray,
-                ),
+        await host.start(on_item_added=attach_menu, on_item_removed=draw, on_icon_changed=draw)
 
-                widget.Spacer(
-                   length=12,
-                ),
+    # TO BE REMOVED ONCE qtile/qtile/pr3060 is merged
+    def find_icon_at_pos(self, x, y):
+        """returns StatusNotifierItem object for icon in given position"""
+        offset = self.padding
+        val = x if self.bar.horizontal else y
 
-                widget.TextBox(
-                    text = ' ' + ChangeAudioDevice(True) + ' ',
-                    name = 'AudioDeviceIndicator2',
-                    background=dviolet,
-                    foreground=black,
-                    font = 'mononoki',
-                ),
+        if val < offset:
+            return None
 
-                widget.TextBox(
-                    name = 'vol_level2',
-                    text=' ' + vol1()[0],
-                    background=dgray,
-                    foreground=green,
-                    font = 'Ubuntu Bold',
-                    fontsize=12,
-                ),
+        for icon in self.available_icons:
+            offset += self.icon_size
+            if val < offset:
+                return icon
+            offset += self.padding
 
-                widget.TextBox(
-                    name = 'vol_rest2',
-                    text=vol2(),
-                    font = 'Ubuntu Bold',
-                    fontsize=12,
-                    func = vol2,
-                    foreground=black,
-                    background=dgray,
-                ),
+        return None
 
-                widget.TextBox(
-                    text='(',
-                    foreground=green,
-                    background=dgray,
-                ),
+    def show_menu(self):
+        if not self.selected_item:
+            return
+        self.selected_item.get_menu()
 
-                widget.TextBox(
-                    name='vol_number2',
-                    text = vol1()[1]+'%',
-                    foreground=violet,
-                    background=dgray,
-                ),
+    def display_menu(self, menu_items):
+        if not menu_items:
+            return
 
-                widget.TextBox(
-                    text=') ',
-                    foreground=green,
-                    background=dgray,
-                ),
+        self.menu = PopupMenu.from_dbus_menu(self.qtile, menu_items, **self.menu_config)
 
-                widget.Spacer(
-                   length=12,
-                ),
+        screen = self.bar.screen
+        ind = self.qtile.current_screen.index
 
-                widget.TextBox(
-                    text='  ',
-                    font='mononoki',
-                    fontsize=14,
-                    foreground=black,
-                    background=green,
-                ),
+        if screen.top == self.bar:
+            x = min(self.offsetx, self.bar.width - self.menu.width)
+            y = self.bar.height
 
-                widget.Clock(
-                    foreground=gray, 
-                    background=dgray,
-                    padding=0,
-                    format=" %H:%M:%S ",
-                ),
+        elif screen.bottom == self.bar:
+            x = min(self.offsetx, self.bar.width - self.menu.width)
+            y = screen.height - self.bar.height - self.menu.height
 
-                widget.Spacer(
-                   length=12,
-                ),
+        elif screen.left == self.bar:
+            x = self.bar.width
+            y = min(self.offsety, screen.height - self.menu.height)
 
-                widget.TextBox(
-                    text='  ',
-                    font='mononoki',
-                    fontsize=14,
-                    background=dviolet,
-                    foreground=black,
-                ),
-
-                widget.Clock(
-                    foreground=green, 
-                    background=dgray,
-                    padding=0,
-                    format=" %d.%m.'%y %a ",
-                ),
-
-                widget.GenPollText(
-                    func=network_current,
-                    update_interval=2,
-                ),
-            ],    
-            size=18)
-    ),
-]
-
-# Drag floating layouts.
-mouse = [
-    Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
-    Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
-    Click([mod], "Button2", lazy.window.bring_to_front())
-]
-
-dgroups_key_binder = None
-dgroups_app_rules = []  # type: List
-follow_mouse_focus = True
-bring_front_click = True
-cursor_warp = False
-auto_fullscreen = True
-focus_on_window_activation = "smart"
-reconfigure_screens = True
-
-# If things like steam games want to auto-minimize themselves when losing
-# focus, should we respect this or not?
-auto_minimize = False
-
-wmname = "QTile"
+        else:
+            x = screen.width - self.bar.width - self.menu.width
+            y = min(self.offsety, screen.height - self.menu.height)
+        x += 1920 * int(not ind)
+        self.menu.show(x, y)

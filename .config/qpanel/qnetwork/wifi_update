@@ -1,0 +1,30 @@
+#!/usr/bin/python
+from time import sleep
+from subprocess import Popen, check_output
+
+
+def wifi_list_update():
+    global ac
+    target = '/home/mcnuggetsx20/.config/qpanel/qnetwork/wifi_list'
+    lt = check_output("nmcli device wifi list", shell=True, encoding='utf-8')
+    Popen('printf "' + ''.join(lt) +'" > ' + target, shell=True)
+    return
+
+def eth_list_update():
+    target = '/home/mcnuggetsx20/.config/qpanel/qnetwork/eth_list'
+    lt = check_output("nmcli connection show | grep ethernet | awk -F '  ' '{print $1}'", shell=True, encoding='utf-8').split('\n')[:-1]
+    ac = check_output("nmcli connection show --active | awk -F '  ' 'FNR>1 {print $1}'", shell=True, encoding='utf-8').split('\n')[:-1]
+    out = []
+    for i in lt:
+        out.append(i + ';' + str(int(i in ac)))
+    
+    Popen('printf "' + ''.join(out) +'" > ' + target, shell=True)
+    return
+
+while True:
+    eth_list_update()
+    wifi_list_update()
+    sleep(2)
+
+
+
