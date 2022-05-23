@@ -36,6 +36,7 @@ alias pcom='gvim ~/.config/picom/picom.conf &'
 alias urxvt='urxvt -lsp 4'
 alias pb='python -B'
 alias lf='lfub'
+alias cd='nvim_autocd'
 
 bind "set completion-ignore-case on"
 
@@ -51,4 +52,11 @@ function initx (){
 function brightness(){
     xrandr --output DP-4 --brightness $1
     xrandr --output HDMI-0 --brightness $1
+}
+
+nvim_autocd(){
+    builtin cd $1 
+    if [ -v NVIM_LISTEN_ADDRESS ]; then
+        (nvim_autocd_python &) > /dev/null
+    fi
 }

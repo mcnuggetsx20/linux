@@ -14,6 +14,7 @@ let g:currentmode={
        \ 'R'  : 'R ',
        \ 'Rv' : 'V·Replace ',
        \ 'c'  : 'Command ',
+       \ 't'  : 'TERMINAL',
        \}
 
 let $LANG = 'en_US'
@@ -66,8 +67,9 @@ set guicursor=i:hor15-Cursor
 "set guioptions-=r
 
 set termguicolors 
-colorscheme darcula
+"colorscheme darcula
 "colorscheme desert
+colorscheme alduin
 
 nnoremap x "_x
 vmap x "_d
@@ -79,6 +81,7 @@ nnoremap <F2> :%y+ <cr>
 nnoremap <C-j> :tabprevious <CR>
 nnoremap<C-k> :tabnext <CR>
 nnoremap <C-x> :tabclose <CR>
+tnoremap <Esc> <C-\><C-n>
 
 nnoremap <F4> :w <bar> :Shell python -B % <CR>
 autocmd filetype cpp nnoremap <F3> :w <bar> :Shell g++ -std=c++17 -DLOCAL -Wall -Wextra -Wconversion -Wshadow -Wno-sign-conversion -D_GLIBCXX_DEBUG -fno-sanitize-recover=undefined -DAC % -o %< && ./a <CR>

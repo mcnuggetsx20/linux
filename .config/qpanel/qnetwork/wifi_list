@@ -1,1 +1,5 @@
-IN-USE  BSSID  SSID  MODE  CHAN  RATE  SIGNAL  BARS  SECURITY 
+IN-USE  BSSID              SSID                 MODE   CHAN  RATE        SIGNAL  BARS  SECURITY 
+        14:9D:09:41:48:BF  HUAWEI P9 lite 2017  Infra  11    65 Mbit/s   100     ****  WPA2     
+        BC:1A:E4:84:52:AD  HUAWEI_B818_52AD     Infra  5     130 Mbit/s  94      ****  WPA2     
+        C0:25:E9:9A:4B:48  TP-LINK_4B48         Infra  4     270 Mbit/s  88      ****  WPA2     
+        BC:1A:E4:84:52:B2  --                   Infra  5     130 Mbit/s  74      ***   WPA2     

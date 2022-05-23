@@ -52,7 +52,7 @@ def func(new_window):
 #################### Variables #########################
 mod = "mod1"
 sup = "mod4"
-terminal = "alacritty"
+terminal = "alacritty -e nvim -c term -c 'set ma' -c startinsert"
 bar_indent=7
 this_dir = '/home/mcnuggetsx20/.config/qtile/'
 
@@ -570,6 +570,8 @@ screens = [
                     length=bar.STRETCH,
                 ),
 
+                widget.Systray(),
+
                 widget.TextBox(
                     text='   ' ,
                     background = dviolet,
@@ -917,15 +919,6 @@ screens = [
                     format=' {temp}°C {fan_speed} ',
                     update_interval = 1,
                     threshold=70,
-                ),
-
-                widget.TaskList(
-                    parse_text=lambda text: ' ', 
-                    borderwidth=0, 
-                    margin_x=0, 
-                    margin_y=0, 
-                    icon_size=18, 
-                    txt_floating='',
                 ),
 
                 widget.Spacer(
