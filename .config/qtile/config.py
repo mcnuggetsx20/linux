@@ -52,7 +52,7 @@ def func(new_window):
 #################### Variables #########################
 mod = "mod1"
 sup = "mod4"
-terminal = "alacritty -e nvim -c term -c 'set ma' -c startinsert"
+terminal = "alacritty -e nvim -c term -c 'set ma' -c startinsert -c 'colorscheme darcula'"
 bar_indent=7
 this_dir = '/home/mcnuggetsx20/.config/qtile/'
 

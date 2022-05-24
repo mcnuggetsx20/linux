@@ -14,7 +14,7 @@ let g:currentmode={
        \ 'R'  : 'R ',
        \ 'Rv' : 'V·Replace ',
        \ 'c'  : 'Command ',
-       \ 't'  : 'TERMINAL',
+       \ 't'  : 'TERMINAL ',
        \}
 
 let $LANG = 'en_US'
@@ -52,13 +52,13 @@ set statusline+=%#statusline#
 set statusline+=\ %F\ %=\ 
 
 set statusline+=%#number#
-set statusline+=\ %L\ lines
+set statusline+=\ %L\ lines\ 
 
 set statusline+=%#string#
-set statusline+=\ %{wordcount().words}\ words
+set statusline+=\ %{wordcount().words}\ words\ 
 
 set statusline+=%#function#
-set statusline+=\ [NVIM]
+set statusline+=\ [NVIM]\ 
 
 set guicursor=i:hor15-Cursor
 
@@ -67,9 +67,10 @@ set guicursor=i:hor15-Cursor
 "set guioptions-=r
 
 set termguicolors 
-"colorscheme darcula
+colorscheme default
 "colorscheme desert
-colorscheme alduin
+"colorscheme alduin
+"colorscheme darcula
 
 nnoremap x "_x
 vmap x "_d
@@ -87,6 +88,7 @@ nnoremap <F4> :w <bar> :Shell python -B % <CR>
 autocmd filetype cpp nnoremap <F3> :w <bar> :Shell g++ -std=c++17 -DLOCAL -Wall -Wextra -Wconversion -Wshadow -Wno-sign-conversion -D_GLIBCXX_DEBUG -fno-sanitize-recover=undefined -DAC % -o %< && ./a <CR>
 autocmd filetype javascript nnoremap <F3> :w <bar> :Shell node % <CR>
 autocmd filetype c nnoremap <F3> :w <bar> :Shell gcc -o a % && ./a <CR>
+autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"
 
 function! s:ExecuteInShell(command)
   let command = join(map(split(a:command), 'expand(v:val)'))
