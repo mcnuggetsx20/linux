@@ -57,7 +57,7 @@ def func(new_window):
 @hook.subscribe.client_killed
 def killed(zombie):
     if zombie.info()['wm_class']==['gvim','Gvim']:
-        qtile.cmd_spawn('qtile cmd-obj -o layout -f reset')
+        qtile.current_layout.cmd_reset()
 
 #################### Variables #########################
 mod = "mod1"

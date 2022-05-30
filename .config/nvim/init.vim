@@ -26,7 +26,7 @@ set langmenu=en_US
 set hls
 set is
 set cb=unnamedplus
-set gfn=Fixedsys\ Excelsior\ 12
+set gfn=8514oem
 set expandtab
 set tabstop=4
 set shiftwidth=4
@@ -72,6 +72,13 @@ colorscheme default
 "colorscheme alduin
 "colorscheme darcula
 
+if (has('gui_running'))
+    colorscheme darcula
+    set guicursor=i:hor15-Cursor
+    "set linespace=4
+    set linespace=0
+endif
+
 nnoremap x "_x
 vmap x "_d
 nnoremap dd "_dd
@@ -114,7 +121,6 @@ augroup numbertoggle
 	autocmd BufLeave,FocusLost,InsertEnter * set nu
 augroup END
 set numberwidth=5
-
 lua << EOF
     local nvim_lsp = require'lspconfig'
     vim.lsp.handlers["textDocument/publishDiagnostics"] = function(...) end
