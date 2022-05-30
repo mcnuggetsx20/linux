@@ -51,13 +51,8 @@ def func(new_window):
     elif new_window.name=='QLauncher':
         new_window.cmd_static(screen=0, x = 0, y = 0)
     elif new_window.info()['wm_class']==['gvim', 'Gvim']:
-        qtile.cmd_spawn('qtile cmd-obj -o layout -f swap_main')
-        qtile.cmd_spawn('qtile cmd-obj -o layout -f grow')
-        qtile.cmd_spawn('qtile cmd-obj -o layout -f grow')
-        qtile.cmd_spawn('qtile cmd-obj -o layout -f grow')
-        qtile.cmd_spawn('qtile cmd-obj -o layout -f grow')
-        qtile.cmd_spawn('qtile cmd-obj -o layout -f grow')
-        qtile.cmd_spawn('qtile cmd-obj -o layout -f grow')
+        qtile.current_layout.cmd_swap_main()
+        qtile.current_layout.cmd_set_ratio(0.70)
 
 @hook.subscribe.client_killed
 def killed(zombie):
