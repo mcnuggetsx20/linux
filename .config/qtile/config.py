@@ -33,6 +33,9 @@ dred   = '#6b1015'
 solar  = '#fdf6e3'
 transp = '#000000.00'
 
+def dbg(text):
+    call('echo ' + text + ' >> /home/mcnuggetsx20/.config/qtile/debug', shell=True)
+
 ################### Hooks #########################
 @hook.subscribe.startup_once
 def autostart():
@@ -47,7 +50,19 @@ def func(new_window):
     #    new_window.cmd_focus()
     elif new_window.name=='QLauncher':
         new_window.cmd_static(screen=0, x = 0, y = 0)
+    elif new_window.info()['wm_class']==['gvim', 'Gvim']:
+        qtile.cmd_spawn('qtile cmd-obj -o layout -f swap_main')
+        qtile.cmd_spawn('qtile cmd-obj -o layout -f grow')
+        qtile.cmd_spawn('qtile cmd-obj -o layout -f grow')
+        qtile.cmd_spawn('qtile cmd-obj -o layout -f grow')
+        qtile.cmd_spawn('qtile cmd-obj -o layout -f grow')
+        qtile.cmd_spawn('qtile cmd-obj -o layout -f grow')
+        qtile.cmd_spawn('qtile cmd-obj -o layout -f grow')
 
+@hook.subscribe.client_killed
+def killed(zombie):
+    if zombie.info()['wm_class']==['gvim','Gvim']:
+        qtile.cmd_spawn('qtile cmd-obj -o layout -f reset')
 
 #################### Variables #########################
 mod = "mod1"

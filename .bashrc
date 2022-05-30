@@ -20,7 +20,7 @@ PS1="[${PURPLE}\e[1m\u${RESET} \w]: ${GREEN}\t${RESET}\n${GREEN} >$ ${RESET}"
 
 #set -o vi
 
-alias qconf='nvim ~/.config/qtile/config.py'
+alias qconf='nv ~/.config/qtile/config.py'
 alias gdr='cd /mnt/hdd/programming'
 alias hdd='cd /mnt/hdd'
 alias term='sudo vim ~/.Xresources'
