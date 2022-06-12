@@ -2,6 +2,7 @@ call plug#begin()
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/nvim-compe'
 Plug 'doums/darcula'
+Plug 'ayu-theme/ayu-vim'
 call plug#end()
 
 autocmd BufNewFile *.cpp 0r /mnt/hdd/Program-Files/Vim/ClassicTemplate.txt
@@ -68,6 +69,7 @@ set guicursor=i:hor15-Cursor
 
 set termguicolors 
 colorscheme default
+let ayucolor="light"
 "colorscheme desert
 "colorscheme alduin
 "colorscheme darcula

@@ -32,7 +32,7 @@ alias pacrefresh='sudo pacman -Syy'
 alias pacupgrade='sudo pacman -Syyu'
 alias oi='cd ~/hdd/programming/oi_2021'
 alias pconf='gvim /home/mcnuggetsx20/.config/qpanel/panelrc.py'
-alias pcom='gvim ~/.config/picom/picom.conf &'
+alias pcom='nv ~/.config/picom/picom.conf &'
 alias urxvt='urxvt -lsp 4'
 alias pb='python -B'
 alias lf='lfub'
@@ -58,12 +58,12 @@ function brightness(){
 nvim_autocd(){
     builtin cd $1 
     if [ -v NVIM_LISTEN_ADDRESS ]; then
-        (nvim_client_python -c &) > /dev/null
+        (nvim_client_python -cd &) > /dev/null
     fi
 }
 
 internal_nvim(){
     if [ -v NVIM_LISTEN_ADDRESS ]; then
-        (nvim_client_python -tn $1 &) > /dev/null
+        (nvim_client_python -c "tabnew $1" &) > /dev/null
     fi
 }

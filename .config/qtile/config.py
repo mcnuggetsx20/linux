@@ -1,3 +1,4 @@
+#Version 3.0
 #figlet
 #                                             _            ____   ___  
 # _ __ ___   ___ _ __  _   _  __ _  __ _  ___| |_ _____  _|___ \ / _ \ 
@@ -62,7 +63,7 @@ def killed(zombie):
 #################### Variables #########################
 mod = "mod1"
 sup = "mod4"
-terminal = "alacritty -e nvim -c term -c 'set ma' -c startinsert -c 'colorscheme darcula'"
+terminal = "alacritty -e nvim -c term -c 'set ma' -c startinsert -c 'colorscheme ayu'"
 bar_indent=7
 this_dir = '/home/mcnuggetsx20/.config/qtile/'
 
@@ -176,14 +177,16 @@ keys = [
 
 all_layouts = [
     layout.MonadTall(
-        border_focus=green, 
+        border_focus=orange, 
         border_width=2, 
         single_border_width=2, 
         margin=6, 
         new_client_position='before_current', 
         change_ratio=0.025,
         min_ratio=0,
+        single_margin=[10, 20, 10, 20],
     ),
+
     layout.Max(border_width=0, border_focus='#000000'),
 ]
 floating_layout = layout.Floating(
@@ -290,42 +293,34 @@ def network_current():
     st.append('None')
 
     current_net_dev = network_devices[st[1].split('-')[-1]]
-    qtile.widgets_map['network_device1'].update(current_net_dev + ' ')
+    qtile.widgets_map['network_device1'].update(current_net_dev)
     qtile.widgets_map['network_name1'].update(' ' + st[0])
-    qtile.widgets_map['network_device2'].update(current_net_dev + ' ')
+    qtile.widgets_map['network_device2'].update(current_net_dev)
     qtile.widgets_map['network_name2'].update(' ' + st[0])
     return ''
 
-def wttr_wojn():
-    wtt = check_output("curl -s wttr.in/Wojnów?format=4", shell=True, encoding='utf-8').split()
-    return ' '.join(wtt) 
-
-def wttr_pion():
-    wtt = check_output("curl -s wttr.in/Pionki?format=4", shell=True, encoding='utf-8').split()
-    return ' '.join(wtt) 
+def wttr(loc):
+    def a():
+        wtt = check_output("curl -s wttr.in/"+loc+"?format=4", shell=True, encoding='utf-8').split()
+        return ' '.join(wtt) 
+    return a
 
 
 screens = [
     Screen(
-        wallpaper='/mnt/hdd/zdjecia/wallpaper/cool.jpg',
+        wallpaper='/mnt/hdd/zdjecia/wallpaper/bear/bear_fhd.png',
         wallpaper_mode='fill',
 
         #TOP1
         top=bar.Bar(
-            margin=[0, 0, 0, 0], #[N, E, S, W]
+            margin=[3, 10, 0, 10], #[N, E, S, W]
             background = '#000000.00',
+            #background = '#434345',
+            #background='#444040',
             widgets=[
-                widget.TextBox(
-                    text = 'A',
-                    font='Bartek',
-                    fontsize = 25,
-                    foreground=bar_color,
-                    background='#000000.00',
-                    padding= -2,
-                ),
                 widget.GroupBox(
-                    font='SauceCodePro NF', 
-                    fontsize=14,
+                    font='Samsung Sans Light', 
+                    fontsize=15,
                     highlight_method='line', 
                     this_current_screen_border=violet, 
                     this_screen_border=violet,
@@ -335,65 +330,34 @@ screens = [
                     disable_drag=True,
                     use_mouse_wheel=False,
                     background = bar_color,
-                ),
-
-                widget.TextBox(
-                    text = 'B',
-                    font='Bartek',
-                    fontsize = 25,
-                    foreground=bar_color,
-                    background='#000000.00',
-                    padding= -2,
-                ),
-                
-                widget.Spacer(
-                    length = 10,
-                    background='#000000.00',
-                ),
-
-                widget.TaskList(
-                    parse_text=lambda text: ' ', 
-                    borderwidth=0, 
-                    margin_x=0, 
-                    margin_y=0, 
-                    icon_size=18, 
-                    txt_floating='',
-                    background=transp,
-                ),
-
-                widget.Spacer(
-                    length = 15,
-                    background='#000000.00',
-                ),
-
-                widget.TextBox(
-                    text = 'A',
-                    font='Bartek',
-                    fontsize = 25,
-                    foreground=bar_color,
-                    background='#000000.00',
-                    padding= -2,
-                ),
-
-                widget.GenPollText(
-                    name = 'weather1',
-                    func = wttr_wojn,
-                    foreground = dgray,
-                    background = bar_color,
-                    update_interval=600,
+                    foreground = ored,
+                    highlight_color=transp,
                 ),
                 widget.TextBox(
-                    text = 'B',
+                    text='B',
                     font='Bartek',
-                    fontsize = 25,
-                    foreground=bar_color,
-                    background='#000000.00',
-                    padding= -2,
+                    foreground =bar_color,
+                    fontsize=30,
+                    padding=-6,
                 ),
 
                 widget.Spacer(
                     length = bar.STRETCH,
-                    background='#000000.00',
+                    #background='#000000.00',
+                ),
+
+                widget.GenPollText(
+                    name = 'weather1',
+                    func = wttr('Wojnów'),
+                    foreground = gray,
+                    font='Samsung Sans bold',
+                    #background = bar_color,
+                    update_interval=600,
+                ),
+
+                widget.Spacer(
+                    length = bar.STRETCH,
+                    #background='#000000.00',
                 ),
 
                 widget.StatusNotifier(
@@ -408,72 +372,42 @@ screens = [
                 ),
 
                 widget.TextBox(
-                    text = 'A',
-                    font='Bartek',
-                    fontsize = 25,
-                    foreground=dviolet,
-                    background='#000000.00',
-                    padding= -2,
-                ),
-
-                widget.TextBox(
                     name='network_device1',
-                    background=dviolet,
-                    foreground=black,
-                    font='Font Awesome 6 Free Solid',
-                    fontsize=12,
+                    #background=dviolet,
+                    foreground=dviolet,
+                    font='Samsung Sans Light',
+                    fontsize=16,
                 ),
 
                 widget.TextBox(
                     text='Searching...',
                     name='network_name1',
-                    foreground=dgray,
-                    background=bar_color2,
-                ),
-
-                widget.TextBox(
-                    text = 'B',
-                    font='Bartek',
-                    fontsize = 25,
-                    foreground=bar_color2,
-                    background='#000000.00',
-                    padding= -2,
+                    foreground=gray,
+                    #background=bar_color2,
+                    font='Samsung Sans Bold',
+                    fontsize=13,
                 ),
                 
                 widget.Spacer(
-                    length = 10,
-                    background='#000000.00',
+                    length = 20,
+                    #background='#000000.00',
                 ),
 
                 widget.TextBox(
-                    text = 'A',
-                    font='Bartek',
-                    fontsize = 25,
+                    text='',
+                    font='Samsung Sans Light',
+                    fontsize=16,
                     foreground=green,
-                    background='#000000.00',
-                    padding= -2,
-                ),
-                widget.TextBox(
-                    text=' ',
-                    font='mononoki',
-                    fontsize=14,
-                    foreground=black,
-                    background=green,
+                    #background=green,
                 ),
 
                 widget.Clock(
-                    foreground=dgray, 
-                    background=bar_color2,
+                    foreground=gray, 
+                    #background=bar_color2,
                     padding=0,
-                    format=" %H:%M:%S",
-                ),
-                widget.TextBox(
-                    text = 'B',
-                    font='Bartek',
-                    fontsize = 25,
-                    foreground=bar_color2,
-                    background='#000000.00',
-                    padding= -2,
+                    format=" %H:%M:%S  ",
+                    font='Samsung Sans Bold',
+                    fontsize=13,
                 ),
 
             ], 
@@ -489,6 +423,18 @@ screens = [
                 widget.Spacer(
                     length=bar_indent,
                 ),
+
+                widget.TaskList(
+                    parse_text=lambda text: '|' + text, 
+                    borderwidth=0, 
+                    icon_size=18, 
+                    txt_floating='',
+                    spacing = 10,
+                    foreground = gray,
+                    txt_minimized='-',
+                ),
+
+                widget.Systray(),
 
                 widget.TextBox(
                     text = 'C',
@@ -575,13 +521,11 @@ screens = [
                     background = dgray,
                     foreground = gray,
                 ),
-                
+
                 widget.Spacer(
-                    length=bar.STRETCH,
+                    length=12,
                 ),
-
-                widget.Systray(),
-
+                
                 widget.TextBox(
                     text='   ' ,
                     background = dviolet,
@@ -724,7 +668,7 @@ screens = [
             size=18)
     ),
     Screen(
-        wallpaper='/mnt/hdd/zdjecia/wallpaper/cool.jpg',
+        wallpaper='/mnt/hdd/zdjecia/wallpaper/bear/bear_fhd.png',
         wallpaper_mode='fill',
 
         #TOP2
@@ -833,7 +777,7 @@ screens = [
 
                 widget.GenPollText(
                     name = 'weather2',
-                    func = wttr_pion,
+                    func = wttr('Pionki'),
                     foreground = dgray,
                     background = bar_color,
                     update_interval=600,
@@ -857,7 +801,7 @@ screens = [
                     text = 'A',
                     font='Bartek',
                     fontsize = 25,
-                    foreground=bar_color,
+                    foreground = '#444040',
                     background='#000000.00',
                     padding= -2,
                 ),
@@ -868,18 +812,19 @@ screens = [
                     this_current_screen_border=violet, 
                     this_screen_border=violet,
                     block_highlight_text_color=green,
-                    inactive=dgray,
-                    active=dgray,
+                    inactive=gray,
+                    active=gray,
                     disable_drag=True,
                     use_mouse_wheel=False,
-                    background = bar_color,
+                    background = '#444040',
+                    highlight_color=transp,
                 ),
 
                 widget.TextBox(
                     text = 'B',
                     font='Bartek',
                     fontsize = 25,
-                    foreground=bar_color,
+                    foreground = '#444040',
                     background='#000000.00',
                     padding= -2,
                 ),
