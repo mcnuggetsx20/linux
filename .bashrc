@@ -57,13 +57,13 @@ function brightness(){
 
 nvim_autocd(){
     builtin cd $1 
-    if [ -v NVIM_LISTEN_ADDRESS ]; then
+    if [ -v NVIM ]; then
         (nvim_client_python -cd &) > /dev/null
     fi
 }
 
 internal_nvim(){
-    if [ -v NVIM_LISTEN_ADDRESS ]; then
+    if [ -v NVIM ]; then
         (nvim_client_python -c "tabnew $1" &) > /dev/null
     fi
 }

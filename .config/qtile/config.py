@@ -45,13 +45,8 @@ def autostart():
 
 @hook.subscribe.client_new
 def func(new_window):
-    if new_window.name=='QPanel':
-        new_window.cmd_static(screen=1) #The number of the xscreen you want to put QPanel on goes here
-    #elif new_window.name=='QNetwork':
-    #    new_window.cmd_focus()
-    elif new_window.name=='QLauncher':
-        new_window.cmd_static(screen=0, x = 0, y = 0)
-    elif new_window.info()['wm_class']==['gvim', 'Gvim']:
+
+    if new_window.info()['wm_class']==['gvim', 'Gvim']:
         qtile.current_layout.cmd_swap_main()
         qtile.current_layout.cmd_set_ratio(0.70)
 
@@ -63,17 +58,9 @@ def killed(zombie):
 #################### Variables #########################
 mod = "mod1"
 sup = "mod4"
-terminal = "alacritty -e nvim -c term -c 'set ma' -c startinsert -c 'colorscheme ayu'"
+terminal = "alacritty -e nvim -c term -c 'set ma' -c startinsert -c 'colorscheme darcula'"
 bar_indent=7
 this_dir = '/home/mcnuggetsx20/.config/qtile/'
-
-def qnetwork(qtile):
-    screen = qtile.current_screen.index
-    x = 1250 
-    y = 910
-
-    x += 1920 * int(not bool(screen))
-    Popen('qnetwork ' + str(x) + ' ' + str(y), shell=True)
 
 def screenshot(qtile):
     screen=qtile.current_screen.index
@@ -110,9 +97,7 @@ keys = [
     Key([mod], 'F1', lazy.function(fanSpeed(False))),
     Key([mod], 'F2', lazy.function(fanSpeed(True))),
 
-    Key([sup], 'bracketleft', lazy.spawn('sh qpanel -c /home/mcnuggetsx20/.config/qpanel/qnetwork/qnetwork.py')),
-    Key([sup], 't', lazy.spawn('sh qpanel')),
-    Key([sup], 'k', lazy.spawn('pkill -f qpanel')),
+    Key([sup], 'bracketleft', lazy.spawn('Straw')),
 
     Key([sup], 'a', lazy.function(ChangeAudioDevice(False))),
     Key([mod, 'shift'], 's', lazy.spawn('sh screenshot -s')),
@@ -187,7 +172,7 @@ all_layouts = [
         single_margin=[10, 20, 10, 20],
     ),
 
-    layout.Max(border_width=0, border_focus='#000000'),
+    layout.Max(border_width=0, border_focus='#000000', margin=[-100, 0, -10, 0]),
 ]
 floating_layout = layout.Floating(
         border_width=2,
@@ -204,7 +189,7 @@ floating_layout = layout.Floating(
             Match(title='pinentry'),  # GPG key password entry
             Match(wm_class='feh'),
             Match(wm_class='pavucontrol'),
-            Match(title='QNetwork'),
+            Match(title='Straw'),
             Match(title='QLauncher'),
         ]
 )
@@ -429,9 +414,10 @@ screens = [
                     borderwidth=0, 
                     icon_size=18, 
                     txt_floating='',
-                    spacing = 10,
+                    spacing = 20,
                     foreground = gray,
                     txt_minimized='-',
+                    #padding_y=-2,
                 ),
 
                 widget.Systray(),
@@ -766,31 +752,13 @@ screens = [
                     background='#000000.00',
                 ),
 
-                widget.TextBox(
-                    text = 'A',
-                    font='Bartek',
-                    fontsize = 25,
-                    foreground=bar_color,
-                    background='#000000.00',
-                    padding= -2,
-                ),
-
                 widget.GenPollText(
                     name = 'weather2',
                     func = wttr('Pionki'),
-                    foreground = dgray,
-                    background = bar_color,
+                    foreground = gray,
+                    #background = bar_color,
                     update_interval=600,
                 ),
-                widget.TextBox(
-                    text = 'B',
-                    font='Bartek',
-                    fontsize = 25,
-                    foreground=bar_color,
-                    background='#000000.00',
-                    padding= -2,
-                ),
-
                 widget.Spacer(
                     length = bar.STRETCH,
                     background='#000000.00',

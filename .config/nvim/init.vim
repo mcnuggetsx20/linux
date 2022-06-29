@@ -21,7 +21,7 @@ let g:currentmode={
 let $LANG = 'en_US'
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
-:lcd %:p:h
+lcd %:p:h
 
 set langmenu=en_US
 set hls
@@ -62,6 +62,8 @@ set statusline+=%#function#
 set statusline+=\ [NVIM]\ 
 
 set guicursor=i:hor15-Cursor
+
+set scrollback=1000
 
 "set guioptions -=m 
 "set guioptions -=T

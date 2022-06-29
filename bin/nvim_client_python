@@ -12,7 +12,7 @@ def main():
 
     args = parser.parse_args()
 
-    nvim = neovim.attach('socket', path = os.environ['NVIM_LISTEN_ADDRESS'])
+    nvim = neovim.attach('socket', path = os.environ['NVIM'])
 
     if args.change_dir:
         curr = os.environ['PWD']

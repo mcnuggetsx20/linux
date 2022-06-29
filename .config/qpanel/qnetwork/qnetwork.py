@@ -1,4 +1,5 @@
-from lib.all import *
+from lib.text import *
+from lib.indicator import *
 from lib.ini import all_defaults
 import subprocess
 
@@ -388,7 +389,6 @@ wid_map = dict()
 for i in pages:
     for j, val in enumerate(pages[i]):
         wid_map[val.init.name]=(i, j) 
-
 
 ind = INDICATOR(
         pages=pages,
