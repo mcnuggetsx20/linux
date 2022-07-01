@@ -20,6 +20,9 @@ def main():
     
     if args.command!=None:
         print(args.command)
-        nvim.command(args.command)
+        try:
+            nvim.command(args.command)
+        except:
+            pass
 
 main()

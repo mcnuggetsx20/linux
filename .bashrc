@@ -24,7 +24,7 @@ alias qconf='nv ~/.config/qtile/config.py'
 alias gdr='cd /mnt/hdd/programming'
 alias hdd='cd /mnt/hdd'
 alias term='sudo vim ~/.Xresources'
-alias l='ls -lah'
+alias l='exa --group-directories-first --icons -lagBh'
 alias pacinstall='sudo pacman -S'
 alias pacclear='sudo pacman -Scc'
 alias pacremove='sudo pacman -Rns'
@@ -38,6 +38,9 @@ alias pb='python -B'
 alias lf='lfub'
 alias cd='nvim_autocd'
 alias nv='internal_nvim'
+alias search='sudo find / -path /mnt/hdd -prune -iname'
+
+alias nvidia-settings='nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settings'
 
 bind "set completion-ignore-case on"
 

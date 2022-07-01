@@ -190,7 +190,7 @@ floating_layout = layout.Floating(
             Match(wm_class='feh'),
             Match(wm_class='pavucontrol'),
             Match(title='Straw'),
-            Match(title='QLauncher'),
+            Match(wm_class='clementine'),
         ]
 )
 
@@ -240,7 +240,7 @@ groups = [
         matches = [
             Match(wm_class='Steam'), 
             Match(wm_class='csgo_linux64'),
-            Match(wm_class='hl2_linux'),
+            #Match(wm_class='hl2_linux'),
         ]
     ),
 ]
@@ -506,6 +506,7 @@ screens = [
                     func = DiskSpace,
                     background = dgray,
                     foreground = gray,
+                    update_interval = 1,
                 ),
 
                 widget.Spacer(
