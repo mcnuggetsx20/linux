@@ -198,25 +198,29 @@ floating_layout = layout.Floating(
 
 groups = [
     Group(
-        name='', 
+        #name='', 
+        name='home',
         position=1, 
         layouts=all_layouts
     ),
 
     Group(
-        name='', 
+        #name='', 
+        name='web',
         position=2, 
         layouts=all_layouts
     ),
 
     Group(
-        name='',
+        #name='',
+        name='dev',
         position=3, 
         layouts=all_layouts
     ),
 
     Group(
-        name='',
+        #name='',
+        name='etc',
         position=4, 
         layouts=all_layouts, 
         matches = [
@@ -225,7 +229,8 @@ groups = [
     ),
         
     Group(
-        name='', 
+        #name='', 
+        name='sys',
         position=5, 
         layouts=all_layouts, 
         matches = [
@@ -304,24 +309,23 @@ screens = [
             #background='#444040',
             widgets=[
                 widget.GroupBox(
-                    font='Samsung Sans Light', 
-                    fontsize=15,
+                    font='White Rabbit', 
+                    fontsize=14,
                     highlight_method='line', 
                     this_current_screen_border=violet, 
                     this_screen_border=violet,
                     block_highlight_text_color=green,
-                    inactive=dgray,
-                    active=dgray,
+                    inactive=gray,
+                    active=gray,
                     disable_drag=True,
                     use_mouse_wheel=False,
-                    background = bar_color,
-                    foreground = ored,
+                    background = '#444040',
                     highlight_color=transp,
                 ),
                 widget.TextBox(
                     text='B',
                     font='Bartek',
-                    foreground =bar_color,
+                    foreground ='#444040',
                     fontsize=30,
                     padding=-6,
                 ),
@@ -713,7 +717,7 @@ screens = [
                     name='network_device2',
                     background=dviolet,
                     foreground=black,
-                    font='Font Awesome 6 Free Solid',
+                    font='Font Awesome 5 Free Solid',
                     fontsize=12,
                 ),
 
@@ -775,7 +779,7 @@ screens = [
                     padding= -2,
                 ),
                 widget.GroupBox(
-                    font='SauceCodePro NF', 
+                    font='White Rabbit', 
                     fontsize=14,
                     highlight_method='line', 
                     this_current_screen_border=violet, 

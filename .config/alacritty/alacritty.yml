@@ -3,19 +3,19 @@ window:
 
 font:
   normal:
-    family: JetBrains Mono Medium
-    style: Regular
+    family: JetBrains Mono Nerd Font
+    style: Medium
 
   bold:
-    family: JetBrains Mono Medium
+    family: JetBrains Mono Nerd Font
     style: Bold
 
   italic:
-    family: JetBrains Mono Medium
+    family: JetBrains Mono Nerd Font
     style: Italic
 
   bold_italic:
-    family: JetBrains Mono Medium 
+    family: JetBrains Mono Nerd Font 
     style: Bold Italic
 
   offset:
