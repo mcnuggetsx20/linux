@@ -239,7 +239,8 @@ groups = [
     ),
 
     Group(
-        name='', 
+        #name='', 
+        name='g',
         position=6, 
         layouts=[floating_layout], 
         matches = [
