@@ -59,7 +59,7 @@ function brightness(){
 }
 
 nvim_autocd(){
-    builtin cd $1 
+    builtin cd "$@"
     if [ -v NVIM ]; then
         (nvim_client_python -cd &) > /dev/null
     fi

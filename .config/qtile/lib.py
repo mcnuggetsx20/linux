@@ -9,9 +9,9 @@ mic = 'alsa_input.usb-C-Media_Electronics_Inc._USB_PnP_Sound_Device-00.mono-fall
 device_indicators = ['', '', '']
 
 network_devices={
-        'ethernet' : '',
-        'wireless'     : '',
-        'None'     : '',
+        'ethernet' : 'I',
+        'wireless'     : 'H',
+        'None'     : 'J',
         }
 
 colors = {

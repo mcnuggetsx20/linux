@@ -116,7 +116,7 @@ function! s:ExecuteInShell(command)
 endfunction
 
 command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
-command WW silent! :w !sudo tee % <CR>
+command WW silent! :w !sudo tee % 
 
 augroup numbertoggle
     autocmd!
