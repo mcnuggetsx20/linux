@@ -61,8 +61,8 @@ def func(new_window):
 
     elif new_window.name=='weatherReport':
         new_window.cmd_toggle_floating()
-        new_window.cmd_set_position_floating(20, 100)
-        new_window.cmd_static(screen=0)
+        new_window.cmd_set_position_floating(20, 350)
+        new_window.cmd_static(screen=1)
 
 @hook.subscribe.client_killed
 def killed(zombie):
@@ -114,7 +114,7 @@ keys = [
     Key([sup], 'bracketleft', lazy.spawn('Straw')),
 
     Key([sup], 'a', lazy.function(ChangeAudioDevice(False))),
-    Key([mod, 'shift'], 's', lazy.spawn('sh screenshot -s')),
+    Key([mod, 'shift'], 's', lazy.spawn('screenshot -s')),
     Key([], 'Print', lazy.function(screenshot)),
     Key([],    'XF86HomePage', lazy.spawn('brave')),
     Key([mod], 't', lazy.window.toggle_floating()),
@@ -369,8 +369,8 @@ screens = [
                 widget.TextBox(
                     name='current window',
                     foreground = gray,
-                    font='White Rabbit',
-                    fontsize=14,
+                    font='Samsung Sans Bold',
+                    #fontsize=14,
                     background = '#444040',
                     #max_chars=20,
                 ),
@@ -422,8 +422,8 @@ screens = [
                     name='network_name1',
                     foreground=gray,
                     background='#444040',
-                    font='White Rabbit',
-                    fontsize=14,
+                    font='Samsung Sans Bold',
+                    fontsize = 13,
                     mouse_callbacks={'Button1' : lazy.spawn('Straw')},
                 ),
 
@@ -511,6 +511,7 @@ screens = [
 
                 widget.TaskList(
                     parse_text=lambda text: '|' + text, 
+                    max_title_width=100,
                     borderwidth=0, 
                     icon_size=18, 
                     txt_floating='',
@@ -752,72 +753,99 @@ screens = [
             widgets=[
 
                 widget.TextBox(
-                    text = 'A',
-                    font='Bartek',
-                    fontsize = 25,
-                    foreground=green,
-                    background='#000000.00',
-                    padding= -2,
-                ),
-                widget.TextBox(
-                    text=' ',
+                    text='  ',
                     font='mononoki',
                     fontsize=14,
-                    foreground=black,
-                    background=green,
+                    background ='#444040',
+                    foreground=green,
                 ),
 
                 widget.Clock(
-                    foreground=dgray, 
-                    background=bar_color2,
+                    foreground=gray, 
+                    background ='#444040',
                     padding=0,
-                    format=" %H:%M:%S",
-                ),
-                widget.TextBox(
-                    text = 'B',
-                    font='Bartek',
-                    fontsize = 25,
-                    foreground=bar_color2,
-                    background='#000000.00',
-                    padding= -2,
-                ),
-
-                widget.Spacer(
-                    length = 10,
-                    background='#000000.00',
+                    font='Samsung Sans Bold',
+                    fontsize=13,
+                    format="%d.%m.'%y %a",
                 ),
 
                 widget.TextBox(
-                    text = 'A',
+                    text='E',
                     font='Bartek',
-                    fontsize = 25,
-                    foreground=dviolet,
-                    background='#000000.00',
-                    padding= -2,
+                    foreground ='#444040',
+                    fontsize=35,
+                    padding = -1,
+                ),
+
+                widget.TextBox(
+                    text='G',
+                    font='Bartek',
+                    foreground ='#444040',
+                    fontsize=35,
+                    padding = -1,
+                ),
+
+                widget.TextBox(
+                    text='',
+                    font='Samsung Sans Light',
+                    fontsize=16,
+                    foreground=green,
+                    background ='#444040',
+                    #background=green,
+                ),
+
+                widget.Clock(
+                    foreground=gray, 
+                    background ='#444040',
+                    #background=bar_color2,
+                    padding=0,
+                    format=" %H:%M:%S  ",
+                    font='Samsung Sans Bold',
+                    fontsize=13,
+                ),
+
+                widget.TextBox(
+                    text='E',
+                    font='Bartek',
+                    foreground ='#444040',
+                    fontsize=35,
+                    padding = -1,
+                ),
+
+                widget.TextBox(
+                    text='G',
+                    font='Bartek',
+                    foreground ='#444040',
+                    fontsize=35,
+                    padding = -1,
                 ),
 
                 widget.TextBox(
                     name='network_device2',
-                    background=dviolet,
-                    foreground=black,
-                    font='Font Awesome 5 Free Solid',
-                    fontsize=12,
+                    background='#444040',
+                    #background=dviolet,
+                    foreground=dviolet,
+                    font='Bartek',
+                    fontsize=25,
+                    mouse_callbacks={'Button1' : lazy.spawn('Straw')},
                 ),
 
                 widget.TextBox(
                     text='Searching...',
                     name='network_name2',
-                    foreground=dgray,
-                    background=bar_color2,
+                    foreground=gray,
+                    background='#444040',
+                    font='Samsung Sans Bold',
+                    fontsize = 13,
+                    mouse_callbacks={'Button1' : lazy.spawn('Straw')},
                 ),
 
                 widget.TextBox(
-                    text = 'B',
+                    text='E',
                     font='Bartek',
-                    fontsize = 25,
-                    foreground=bar_color2,
-                    background='#000000.00',
-                    padding= -2,
+                    foreground ='#444040',
+                    fontsize=35,
+                    padding = -1,
                 ),
                 
                 widget.Spacer(
