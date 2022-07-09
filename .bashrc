@@ -39,6 +39,7 @@ alias lf='lfub'
 alias cd='nvim_autocd'
 alias nv='internal_nvim'
 alias search='sudo find / -path /mnt/hdd -prune -iname'
+alias setCover='eyeD3 --add-image $2:FRONT_COVER:front $1' #SONG / IMAGE
 
 alias nvidia-settings='nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settings'
 

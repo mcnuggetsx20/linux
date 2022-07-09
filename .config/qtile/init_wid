@@ -1,0 +1,11 @@
+#!/bin/bash
+
+xrdb ~/.config/xterm/wttr_today
+xterm -e "mywatch curl -s wttr.in/Wojnów?4 | awk 'FNR < 39'" &
+sleep 1
+
+xrdb ~/.config/xterm/calendar
+xterm -e 'cal -ym; sleep infinity' &
+
+xrdb ~/.config/xterm/default
+

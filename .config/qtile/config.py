@@ -14,7 +14,7 @@ from libqtile.command import lazy
 from libqtile.command.client import InteractiveCommandClient
 from funx import *
 from lib import *
-from subprocess import call 
+from subprocess import call, Popen
 import os
 
 orange = '#F0Af16'
@@ -33,6 +33,8 @@ red    = '#C61717'
 dred   = '#6b1015'
 solar  = '#fdf6e3'
 transp = '#000000.00'
+
+iconPath = '~/.config/qtile/icons/'
 
 def dbg(text):
     call('echo ' + text + ' >> /home/mcnuggetsx20/.config/qtile/debug', shell=True)
@@ -54,6 +56,8 @@ def nameUpdate(window):
 
 @hook.subscribe.client_new
 def func(new_window):
+    #_id = str(new_window.info()['id'])
+    #Popen('getxicon -w ' + _id + ' ' + iconPath + _id, shell=True)
 
     if new_window.info()['wm_class']==['gvim', 'Gvim']:
         qtile.current_layout.cmd_swap_main()
@@ -64,8 +68,18 @@ def func(new_window):
         new_window.cmd_set_position_floating(20, 350)
         new_window.cmd_static(screen=1)
 
+    elif new_window.name == 'calendar':
+        new_window.cmd_toggle_floating()
+        new_window.cmd_set_position_floating(1300, 40)
+        new_window.cmd_static(screen=1)
+
+
 @hook.subscribe.client_killed
 def killed(zombie):
+    #_id = str(zombie.info()['id'])
+    #Popen('rm ' + iconPath + _id + '*', shell=True)
+    qtile.widgets_map['current window'].update('None')
+
     if zombie.info()['wm_class']==['gvim','Gvim']:
         qtile.current_layout.cmd_reset()
 
@@ -350,7 +364,7 @@ screens = [
                 ),
 
                 widget.TextBox(
-                    text='D',
+                    text='G',
                     font='Bartek',
                     foreground ='#444040',
                     fontsize=35,
@@ -400,7 +414,7 @@ screens = [
                 ),
 
                 widget.TextBox(
-                    text='D',
+                    text='G',
                     font='Bartek',
                     foreground ='#444040',
                     fontsize=35,
