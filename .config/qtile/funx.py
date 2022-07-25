@@ -1,5 +1,6 @@
 from subprocess import check_output, run, Popen
 from lib import *
+from re import split as sp
 
 def vol1(device=None, status=None):
     if status==None:
@@ -63,30 +64,25 @@ def ChangeAudioDevice(init=False):
 
 
     def a(qtile):
-        curr = ''.join(check_output('pactl get-default-sink', shell=True, encoding='utf-8').split())
-        desired = devices[(devices.index(curr) + 1) * int(devices.index(curr) != len(devices)-1)]
+        curr = check_output('pacmd list | grep "active port: <analog-output"', shell=True, encoding='utf-8')
+        curr = sp('\t|\n', curr)[1]
 
-        run('pactl set-default-sink ' + desired, shell=True)
-        status = check_output('pamixer --get-volume', shell=True, encoding='utf-8').split()[0]
+        desired = 'headphones' not in curr
 
-        a = vol1(status=status)
+        run('pactl set-sink-port ' + devices[0] +' ' + ports[ int(desired) ], shell=True)
 
-        qtile.widgets_map['vol_level1'].update(' ' +a[0])
-        qtile.widgets_map['vol_rest1'].update(a[1])
-        qtile.widgets_map['vol_number1'].update(a[2]+'%')
-        qtile.widgets_map['AudioDeviceIndicator1'].update(' '+device_indicators[devices.index(desired)]+' ')
+        desired = device_indicators[ int( 'headphones' not in curr) ]
 
-        qtile.widgets_map['vol_level2'].update(' ' +a[0])
-        qtile.widgets_map['vol_rest2'].update(a[1])
-        qtile.widgets_map['vol_number2'].update(a[2]+'%')
-        qtile.widgets_map['AudioDeviceIndicator2'].update(' ' + device_indicators[devices.index(desired)] + ' ')
+        qtile.widgets_map['AudioDeviceIndicator1'].update(' '+ desired +' ')
+        qtile.widgets_map['AudioDeviceIndicator2'].update(' ' + desired + ' ')
 
     if not init:
         return a
 
     else:
-        curr = ''.join(check_output('pactl get-default-sink', shell=True, encoding='utf-8').split())
-        return str(device_indicators[devices.index(curr)])
+        curr = check_output('pacmd list | grep "active port: <analog-output"', shell=True, encoding='utf-8')
+        curr = sp('\t|\n', curr)[1]
+        return device_indicators[ int( 'headphones' in curr) ]
 
 def fanSpeed(ok):
     def a(qtile):

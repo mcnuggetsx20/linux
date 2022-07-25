@@ -3,6 +3,7 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/nvim-compe'
 Plug 'doums/darcula'
 Plug 'ayu-theme/ayu-vim'
+Plug 'NLKNguyen/papercolor-theme'
 call plug#end()
 
 autocmd BufNewFile *.cpp 0r /mnt/hdd/Program-Files/Vim/ClassicTemplate.txt
@@ -72,6 +73,7 @@ set scrollback=1000
 set termguicolors 
 colorscheme default
 let ayucolor="light"
+set background=light
 "colorscheme desert
 "colorscheme alduin
 "colorscheme darcula

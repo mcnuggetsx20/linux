@@ -86,7 +86,7 @@ def killed(zombie):
 #################### Variables #########################
 mod = "mod1"
 sup = "mod4"
-terminal = "alacritty -e nvim -c term -c 'set ma' -c startinsert -c 'colorscheme darcula'"
+terminal = "alacritty -e nvim -c term -c 'set ma' -c startinsert -c 'colorscheme summerfruit256'"
 bar_indent=7
 this_dir = '/home/mcnuggetsx20/.config/qtile/'
 
