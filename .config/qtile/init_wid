@@ -8,4 +8,3 @@ xrdb ~/.config/xterm/calendar
 xterm -e 'cal -ym; sleep infinity' &
 
 xrdb ~/.config/xterm/default
-

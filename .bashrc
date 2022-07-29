@@ -5,6 +5,7 @@
 # If not running interactively, don't do anything
 GREEN="\[$(tput setaf 2)\]"
 PURPLE="\[$(tput setaf 6)\]"
+BLUE="\[$(tput setaf 4)\]"
 RED="\e[31m"
 RESET="\[$(tput sgr0)\]"
 [[ $- != *i* ]] && return

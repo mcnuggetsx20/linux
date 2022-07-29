@@ -40,7 +40,7 @@ colors:
   normal:
     black:   '#000000' # base2
     red:     '#C61717' # red
-    green:   '#A9DC76' # green
+    green:   '#028A42' # green
     yellow:  '#EFAD08' # yellow
     blue:    '#1D72AE' # blue
     magenta: '#C53AF0' # magenta
