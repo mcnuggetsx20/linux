@@ -4,4 +4,6 @@ xset -dpms
 xset r rate 200 90
 nvidia-settings --load-config-only &
 nvidia-settings -a "[gpu:0]/GPUFanControlState=1" -a "[fan:0]/GPUTargetFanSpeed=55"
+xrandr --dpi 96
+xrdb /home/mcnuggetsx20/.config/xterm/default
 /usr/bin/qtile start

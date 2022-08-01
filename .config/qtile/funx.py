@@ -33,9 +33,9 @@ def volumechange(ok):
         qtile.widgets_map['vol_rest1'].update(a[1])
         qtile.widgets_map['vol_number1'].update(a[2]+'%')
 
-        qtile.widgets_map['vol_level2'].update(' ' + a[0])
-        qtile.widgets_map['vol_rest2'].update(a[1])
-        qtile.widgets_map['vol_number2'].update(a[2]+'%')
+        #qtile.widgets_map['vol_level2'].update(' ' + a[0])
+        #qtile.widgets_map['vol_rest2'].update(a[1])
+        #qtile.widgets_map['vol_number2'].update(a[2]+'%')
     return a
 
 def mic_vol_change(ok):
@@ -54,9 +54,9 @@ def mic_vol_change(ok):
         qtile.widgets_map['mic_rest1'].update(a[1])
         qtile.widgets_map['mic_number1'].update(a[2]+'%')
 
-        qtile.widgets_map['mic_level2'].update(' ' + a[0])
-        qtile.widgets_map['mic_rest2'].update(a[1])
-        qtile.widgets_map['mic_number2'].update(a[2]+'%')
+        #qtile.widgets_map['mic_level2'].update(' ' + a[0])
+        #qtile.widgets_map['mic_rest2'].update(a[1])
+        #qtile.widgets_map['mic_number2'].update(a[2]+'%')
     return a
 
 def ChangeAudioDevice(init=False):
@@ -74,7 +74,7 @@ def ChangeAudioDevice(init=False):
         desired = device_indicators[ int( 'headphones' not in curr) ]
 
         qtile.widgets_map['AudioDeviceIndicator1'].update(' '+ desired +' ')
-        qtile.widgets_map['AudioDeviceIndicator2'].update(' ' + desired + ' ')
+        #qtile.widgets_map['AudioDeviceIndicator2'].update(' ' + desired + ' ')
 
     if not init:
         return a
@@ -95,12 +95,10 @@ def fanSpeed(ok):
 def DiskSpace():
     return ' ' + check_output("df -h | grep nvme0n1p2 | awk '{print $3}'", shell=True, encoding='utf-8')[:-1] + ' '
 
-def brightness_toggle():
-    def a(qtile):
-        status = check_output("xrandr --current --verbose | grep Brightness | awk 'FNR>1'", shell=True, encoding='utf-8')[13:-1]
-        val = 1 + 0.3 * (status=='1.0')
-        run("xrandr --output DP-4 --brightness %(new)f" % {'new': val}, shell=True, encoding='utf-8')
-        return
-    return a
+def brightness_toggle(ok=False):
+    #status = check_output("xrandr --current --verbose | grep Gamma", shell=True, encoding='utf-8').split(':')[2]
+    val = 1 + 0.6 * (ok)
+    run("xrandr --output DP-4 --gamma %(new)f" % {'new': val}, shell=True, encoding='utf-8')
+    return
 
         

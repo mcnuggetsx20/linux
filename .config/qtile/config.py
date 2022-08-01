@@ -36,6 +36,8 @@ transp = '#000000.00'
 
 iconPath = '~/.config/qtile/icons/'
 
+CSGO=False
+
 def dbg(text):
     call('echo ' + text + ' >> /home/mcnuggetsx20/.config/qtile/debug', shell=True)
 
@@ -48,7 +50,19 @@ def autostart():
 
 @hook.subscribe.client_focus
 def newFocus(window):
+    global CSGO
     qtile.widgets_map['current window'].update(window.name)
+    if window.name == 'Counter-Strike: Global Offensive - OpenGL':
+        CSGO=True
+        brightness_toggle(True)
+        return
+
+    elif CSGO:
+        CSGO=False
+        #qtile.widgets_map['current window'].update('essa')
+        brightness_toggle(False)
+        return
+
 
 @hook.subscribe.client_name_updated
 def nameUpdate(window):
@@ -65,17 +79,18 @@ def func(new_window):
 
     elif new_window.name=='weatherReport':
         new_window.cmd_toggle_floating()
-        new_window.cmd_set_position_floating(20, 850)
-        new_window.cmd_static(screen=1)
+        new_window.cmd_set_position_floating(20, 100)
+        new_window.cmd_static(screen=0)
 
     elif new_window.name == 'calendar':
         new_window.cmd_toggle_floating()
-        new_window.cmd_set_position_floating(20, 200)
-        new_window.cmd_static(screen=1)
+        new_window.cmd_set_position_floating(2900, 100)
+        new_window.cmd_static(screen=0)
 
 
 @hook.subscribe.client_killed
 def killed(zombie):
+    global CSGO
     #_id = str(zombie.info()['id'])
     #Popen('rm ' + iconPath + _id + '*', shell=True)
     qtile.widgets_map['current window'].update('None')
@@ -83,18 +98,31 @@ def killed(zombie):
     if zombie.info()['wm_class']==['gvim','Gvim']:
         qtile.current_layout.cmd_reset()
 
+    if CSGO:
+        CSGO=False
+        brightness_toggle(False)
+
 #################### Variables #########################
 mod = "mod1"
 sup = "mod4"
-terminal = "alacritty -e nvim -c term -c 'set ma' -c startinsert -c 'colorscheme summerfruit256'"
+terminal = "alacritty -e nvim -c term -c 'set ma' -c startinsert -c 'colorscheme zellner'"
 bar_indent=7
 this_dir = '/home/mcnuggetsx20/.config/qtile/'
 
 def screenshot(qtile):
     screen=qtile.current_screen.index
-    screen = int(not bool(screen))
-    screen += 1
-    Popen('screenshot -m ' + str(screen),shell=True)
+
+    monitors=[
+            '+0+0',
+            '+3440+1440',
+    ]
+
+    resolutions=[
+            '3440x1440',
+            '1080x1920',
+    ]
+
+    Popen('maim -g ' + resolutions[ int(screen) ] + monitors[ int(screen) ] + ' ~/Pictures/shot.png; xclip -selection clipboard -t image/png -i ~/Pictures/shot.png', shell=True)
 
 
 ################### Keybinds #########################
@@ -109,7 +137,7 @@ keys = [
     Key([mod], 'w', lazy.to_screen(0)),
     Key([sup], 'p', lazy.spawn('feh /mnt/hdd/zdjecia/plan_lekcji.png')),
     Key([sup], 'q', lazy.spawn('sh power_menu')),
-    Key([],    'XF86MonBrightnessDown', lazy.function(brightness_toggle())),
+    #Key([],    'XF86MonBrightnessDown', lazy.function(brightness_toggle())),
 
     #Volume Control
     Key([],    'XF86AudioRaiseVolume', lazy.function(volumechange(True))),
@@ -193,7 +221,7 @@ all_layouts = [
         border_focus=orange, 
         border_width=2, 
         single_border_width=2, 
-        margin=6, 
+        margin=15, 
         new_client_position='before_current', 
         change_ratio=0.025,
         min_ratio=0,
@@ -217,7 +245,7 @@ floating_layout = layout.Floating(
             Match(title='branchdialog'),  # gitk
             Match(title='pinentry'),  # GPG key password entry
             Match(wm_class='feh'),
-            Match(wm_class='pavucontrol'),
+            #Match(wm_class='pavucontrol'),
             Match(title='Straw'),
             Match(wm_class='clementine'),
         ]
@@ -264,15 +292,6 @@ groups = [
         layouts=[floating_layout], 
         matches = [
             Match(wm_class='csgo_linux64'),
-        ]
-    ),
-
-    Group(
-        #name='', 
-        name='g+',
-        position=6, 
-        layouts=[floating_layout], 
-        matches = [
             #Match(wm_class='hl2_linux'),
             Match(wm_class='teams'),
             Match(wm_class='Steam'), 
@@ -332,7 +351,7 @@ screens = [
 
         #TOP1
         top=bar.Bar(
-            margin=[0, 10, 0, 10], #[N, E, S, W]
+            margin=[3, 10, 0, 10], #[N, E, S, W]
             background = '#000000.00',
             #background = '#434345',
             #background=dgray,
@@ -355,12 +374,8 @@ screens = [
                     text='F',
                     font='Bartek',
                     foreground =dgray,
-                    fontsize=35,
+                    fontsize=39,
                     padding = -1,
-                ),
-
-                widget.Image(
-                    filename='/usr/share/icons/hicolor/32x32/apps/steam.png'
                 ),
 
                 widget.Spacer(
@@ -372,7 +387,7 @@ screens = [
                     text='G',
                     font='Bartek',
                     foreground =dgray,
-                    fontsize=35,
+                    fontsize=39,
                     padding = -1,
                 ),
 
@@ -398,7 +413,7 @@ screens = [
                     text='F',
                     font='Bartek',
                     foreground =dgray,
-                    fontsize=35,
+                    fontsize=39,
                     padding = -1,
                 ),
 
@@ -422,7 +437,7 @@ screens = [
                     text='G',
                     font='Bartek',
                     foreground =dgray,
-                    fontsize=35,
+                    fontsize=39,
                     padding = -1,
                 ),
 
@@ -450,7 +465,7 @@ screens = [
                     text='F',
                     font='Bartek',
                     foreground =dgray,
-                    fontsize=35,
+                    fontsize=39,
                     padding = -1,
                 ),
                 
@@ -458,7 +473,8 @@ screens = [
                     text='D',
                     font='Bartek',
                     foreground =dgray,
-                    fontsize=35,
+                    background=green,
+                    fontsize=39,
                     padding = -1,
                 ),
 
@@ -483,7 +499,7 @@ screens = [
                     text='F',
                     font='Bartek',
                     foreground =dgray,
-                    fontsize=35,
+                    fontsize=39,
                     padding = -1,
                 ),
 
@@ -491,7 +507,7 @@ screens = [
                     text='D',
                     font='Bartek',
                     foreground =dgray,
-                    fontsize=35,
+                    fontsize=39,
                     padding = -1,
                 ),
 
@@ -871,6 +887,7 @@ focus_on_window_activation = "smart"
 reconfigure_screens = True
 
 # If things like steam games want to auto-minimize themselves when losing
-# focus, should we respect this or not? auto_minimize = False
+# focus, should we respect this or not? 
+auto_minimize = False
 
 wmname = "QTile"
