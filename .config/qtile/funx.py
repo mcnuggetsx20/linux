@@ -1,6 +1,11 @@
 from subprocess import check_output, run, Popen
 from lib import *
 from re import split as sp
+from libqtile import qtile
+
+
+def dbg(text):
+    call('echo ' + text + ' >> /home/mcnuggetsx20/.config/qtile/debug', shell=True)
 
 def vol1(device=None, status=None):
     if status==None:
@@ -16,6 +21,7 @@ def vol1(device=None, status=None):
     seg1 = (int(status) // 15) * 'I'
     seg2 = ((10 - len(seg1)) * 'I')[:-1]
     return [seg1, seg2, str(status)]
+
 
 def volumechange(ok):
     def a(qtile):
@@ -38,6 +44,7 @@ def volumechange(ok):
         #qtile.widgets_map['vol_number2'].update(a[2]+'%')
     return a
 
+
 def mic_vol_change(ok):
     def a(qtile):
         val = -5 + 10 * int(ok)
@@ -58,6 +65,7 @@ def mic_vol_change(ok):
         #qtile.widgets_map['mic_rest2'].update(a[1])
         #qtile.widgets_map['mic_number2'].update(a[2]+'%')
     return a
+
 
 def ChangeAudioDevice(init=False):
     global devices, device_indicators
@@ -84,6 +92,7 @@ def ChangeAudioDevice(init=False):
         curr = sp('\t|\n', curr)[1]
         return device_indicators[ int( 'headphones' in curr) ]
 
+
 def fanSpeed(ok):
     def a(qtile):
         val = -5 + 10 *int(ok)
@@ -92,13 +101,59 @@ def fanSpeed(ok):
         Popen('nvidia-settings -a "[fan:0]/GPUTargetFanSpeed="' + curr, shell=True)
     return a
 
+
 def DiskSpace():
-    return ' ' + check_output("df -h | grep nvme0n1p2 | awk '{print $3}'", shell=True, encoding='utf-8')[:-1] + ' '
+    return ' ' + check_output('df -h --output=source,used,size | grep "nvme0n1p2\|sdb1\|sda1" | awk \'{printf $2 "/" $3 " "}\'', shell=True, encoding='utf-8')[:-1] + ' '
+
 
 def brightness_toggle(ok=False):
     #status = check_output("xrandr --current --verbose | grep Gamma", shell=True, encoding='utf-8').split(':')[2]
-    val = 1 + 0.6 * (ok)
+    val = 1 + 0.9 * (ok)
     run("xrandr --output DP-4 --gamma %(new)f" % {'new': val}, shell=True, encoding='utf-8')
     return
 
         
+def screenshot(qtile):
+    screen=qtile.current_screen.index
+
+    monitors=[
+            '+0+0',
+            '+3440+1440',
+    ]
+
+    resolutions=[
+            '3440x1440',
+            '1080x1920',
+    ]
+
+    Popen('maim -g ' + resolutions[ int(screen) ] + monitors[ int(screen) ] + ' ~/Pictures/shot.png; xclip -selection clipboard -t image/png -i ~/Pictures/shot.png', shell=True)
+
+
+def network_current():
+    st = check_output("nmcli -t connection show --active | awk -F ':' '{print $1 " + '"\\n"' + " $(NF-1)}'", shell=True, encoding='utf-8').split('\n')[:-1]
+    st.append('None')
+    st.append('None')
+
+    current_net_dev = network_devices[st[1].split('-')[-1]]
+    qtile.widgets_map['network_device1'].update(' ' + current_net_dev)
+    qtile.widgets_map['network_name1'].update(' ' + st[0])
+    #qtile.widgets_map['network_device2'].update(' ' + current_net_dev)
+    #qtile.widgets_map['network_name2'].update(' ' + st[0])
+    return ''
+
+
+def wttr(loc):
+    def a():
+        wtt = check_output("curl -s wttr.in/"+loc+"?format=4", shell=True, encoding='utf-8').split()
+        return ' '.join(wtt) 
+    return a
+
+def compswitch(qtile):
+    global comp
+    command = 'killall ' * int(comp) + 'picom'
+    Popen(command, shell=True)
+    comp = not comp
+    qtile.widgets_map['debug'].update(str(comp))
+
+
+

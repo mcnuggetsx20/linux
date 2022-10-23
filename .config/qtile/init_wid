@@ -1,10 +1,18 @@
 #!/bin/bash
 
-xrdb ~/.config/xterm/wttr_today
-xterm -e "mywatch curl -s wttr.in/Wojnów?4 | awk 'FNR < 39'" &
-sleep 1
+#xrdb ~/.config/xterm/wttr_today
+#xterm -e "mywatch curl -s wttr.in/Wojnów?4 | awk 'FNR < 39'" &
+#sleep 1
+#
+#xrdb ~/.config/xterm/calendar
+#xterm -e 'cal -ym; sleep infinity' &
 
-xrdb ~/.config/xterm/calendar
-xterm -e 'cal -ym; sleep infinity' &
+xrdb ~/.config/xterm/hack
+xterm -e 'unimatrix -g=black -s 96' & sleep .8s && transset -n hack 0.5
 
 xrdb ~/.config/xterm/default
+
+blackout &
+
+#transset -n weatherReport 0.75
+#transset -n calendar 0.75

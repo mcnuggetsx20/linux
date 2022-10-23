@@ -27,3 +27,4 @@ colors = {
         'lime'   : '#32CD32',
         }
 
+comp = True

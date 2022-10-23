@@ -3,8 +3,11 @@
 #
 
 # If not running interactively, don't do anything
+
+export GITHUB_API_TOKEN=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
+
 GREEN="\[$(tput setaf 2)\]"
-PURPLE="\[$(tput setaf 6)\]"
+YELLOW="\[$(tput setaf 3)\]"
 BLUE="\[$(tput setaf 4)\]"
 RED="\e[31m"
 RESET="\[$(tput sgr0)\]"
@@ -14,7 +17,7 @@ alias ls='ls --color=auto'
 #the first one is the default, the second one shows the whole directory
 #ZEBY BYL TYLKO TEN JEDEN FOLDER TO MUSI BYC W (DUZE)
 
-PS1="[${PURPLE}\e[1m\u${RESET} \w]: ${GREEN}\t${RESET}\n${GREEN} >$ ${RESET}"
+PS1="[${YELLOW}\e[1m\u${RESET} \w]: ${BLUE}\t${RESET}\n${GREEN} >$ ${RESET}"
 #PS1="[\u \w]`printf "%${COLUMNS}s" "\t" `$PS1"
 #PS1="[\w]${GREEN}$ ${RESET}"
 #PS1='[\u@\h \w]$ '
@@ -39,8 +42,10 @@ alias pb='python -B'
 alias lf='lfub'
 alias cd='nvim_autocd'
 alias nv='internal_nvim'
-alias search='sudo find / -path /mnt/hdd -prune -iname'
+alias lookfor='sudo find / -path /mnt/hdd -prune -iname'
 alias setCover='eyeD3 --add-image $2:FRONT_COVER:front $1' #SONG / IMAGE
+alias kanter='nv /mnt/csgo/SteamLibrary/steamapps/common/Counter-Strike\ Global\ Offensive/csgo/cfg/autoexec.cfg'
+alias take='_take'
 
 alias nvidia-settings='nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settings'
 
@@ -71,4 +76,9 @@ internal_nvim(){
     if [ -v NVIM ]; then
         (nvim_client_python -c "tabnew $1" &) > /dev/null
     fi
+}
+
+_take(){
+    mkdir "$@"
+    cd "$@"
 }

@@ -9,11 +9,9 @@
 
 from typing import List  # noqa: F401
 from libqtile import bar, layout, widget, qtile, hook
-from libqtile.lazy import lazy
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.command import lazy
 from libqtile.command.client import InteractiveCommandClient
-from qtile_extras import widget as ewidget
 from funx import *
 from lib import *
 from subprocess import call, Popen
@@ -35,12 +33,13 @@ red    = '#C61717'
 dred   = '#6b1015'
 solar  = '#fdf6e3'
 transp = '#000000.00'
-dlgray = '#434345'
 
 iconPath = '~/.config/qtile/icons/'
 
 CSGO=False
-BLK=False
+
+def dbg(text):
+    call('echo ' + text + ' >> /home/mcnuggetsx20/.config/qtile/debug', shell=True)
 
 ################### Hooks #########################
 @hook.subscribe.startup_once
@@ -51,24 +50,18 @@ def autostart():
 
 @hook.subscribe.client_focus
 def newFocus(window):
-    global CSGO, BLK
-    #qtile.widgets_map['debug'].update(window.cmd_get_position())
+    global CSGO
     qtile.widgets_map['current window'].update(window.name)
     if window.name == 'Counter-Strike: Global Offensive - OpenGL':
         CSGO=True
         brightness_toggle(True)
         return
 
-    elif window.name == 'blackout' and not BLK:
-        window.cmd_set_position_floating(0,0)
-        window.cmd_disable_floating()
-        BLK=True
-
-    if CSGO:
+    elif CSGO:
         CSGO=False
+        #qtile.widgets_map['current window'].update('essa')
         brightness_toggle(False)
         return
-
 
 
 @hook.subscribe.client_name_updated
@@ -77,22 +70,22 @@ def nameUpdate(window):
 
 @hook.subscribe.client_new
 def func(new_window):
+    #_id = str(new_window.info()['id'])
     #Popen('getxicon -w ' + _id + ' ' + iconPath + _id, shell=True)
 
-    if new_window.name=='weatherReport':
+    if new_window.info()['wm_class']==['gvim', 'Gvim']:
+        qtile.current_layout.cmd_swap_main()
+        qtile.current_layout.cmd_set_ratio(0.70)
+
+    elif new_window.name=='weatherReport':
         new_window.cmd_toggle_floating()
         new_window.cmd_set_position_floating(20, 100)
-        new_window.cmd_static(screen=1)
+        new_window.cmd_static(screen=0)
 
     elif new_window.name == 'calendar':
         new_window.cmd_toggle_floating()
-        new_window.cmd_set_position_floating(20, 850)
-        new_window.cmd_static(screen=1)
-
-    elif new_window.name == 'hack':
-        new_window.cmd_toggle_floating()
-        new_window.cmd_set_position_floating(0, 18)
-        new_window.cmd_static(screen=1)
+        new_window.cmd_set_position_floating(2900, 100)
+        new_window.cmd_static(screen=0)
 
 
 @hook.subscribe.client_killed
@@ -109,32 +102,41 @@ def killed(zombie):
         CSGO=False
         brightness_toggle(False)
 
-def change(name):
-    qtile.widgets_map['steam'].background='#FFFFFF'
-    qtile.widgets_map['steam'].draw()
-
 #################### Variables #########################
 mod = "mod1"
 sup = "mod4"
-terminal = "alacritty -e nvim -c term -c 'set ma' -c startinsert"
+terminal = "alacritty -e nvim -c term -c 'set ma' -c startinsert -c 'colorscheme zellner'"
 bar_indent=7
 this_dir = '/home/mcnuggetsx20/.config/qtile/'
 
+def screenshot(qtile):
+    screen=qtile.current_screen.index
 
-################## Keybinds #########################
+    monitors=[
+            '+0+0',
+            '+3440+1440',
+    ]
+
+    resolutions=[
+            '3440x1440',
+            '1080x1920',
+    ]
+
+    Popen('maim -g ' + resolutions[ int(screen) ] + monitors[ int(screen) ] + ' ~/Pictures/shot.png; xclip -selection clipboard -t image/png -i ~/Pictures/shot.png', shell=True)
+
+
+################### Keybinds #########################
 
 keys = [
     #My stuff
     Key([sup], 'b', lazy.spawn('brave')),
-    Key([mod], 'p', lazy.spawn("dmenu_run -sb '" + green + "' -nf '" + violet + "' -sf '" + black + "' -nb '" + black + "'")),
+    Key([mod], 'p', lazy.spawn("dmenu_run -sb '" + green + "' -nf '" + violet + "' -sf '" + black + "'")),
     Key([sup], 'f', lazy.spawn('pcmanfm')),
     Key([sup], 'm', lazy.spawn(terminal + ' -e htop')),
     Key([mod], 'e', lazy.to_screen(1)),
     Key([mod], 'w', lazy.to_screen(0)),
     Key([sup], 'p', lazy.spawn('feh /mnt/hdd/zdjecia/plan_lekcji.png')),
     Key([sup], 'q', lazy.spawn('sh power_menu')),
-    Key([sup], 'c', lazy.function(compswitch)),
-    #Key([sup], 't', lazy.function(change)),
     #Key([],    'XF86MonBrightnessDown', lazy.function(brightness_toggle())),
 
     #Volume Control
@@ -218,19 +220,19 @@ all_layouts = [
     layout.MonadThreeCol(
         border_focus=orange, 
         border_width=2, 
-        single_border_width=1, 
-        margin=7,
+        single_border_width=2, 
+        margin=15, 
         new_client_position='before_current', 
         change_ratio=0.025,
         min_ratio=0,
-        ratio=0.53,
-        single_margin=[5, 277, 10, 300],
+        ratio=0.45,
+        single_margin=[10, 300, 10, 300],
     ),
 
-    layout.Max(border_width=0, border_focus='#000000', margin=[0, 0, 0, 0]),
+    layout.Max(border_width=0, border_focus='#000000', margin=[-100, 0, -10, 0]),
 ]
 floating_layout = layout.Floating(
-        border_width=0,
+        border_width=2,
         border_focus=green,
         float_rules=[
             # Run the utility of `xprop` to see the wm class and name of an X client.
@@ -246,12 +248,7 @@ floating_layout = layout.Floating(
             #Match(wm_class='pavucontrol'),
             Match(title='Straw'),
             Match(wm_class='clementine'),
-            Match(wm_class='python3.10'),
         ]
-)
-
-gaming_layout = layout.Floating(
-    border_width=0,
 )
 
 ################### Groups #########################
@@ -283,37 +280,22 @@ groups = [
         name='etc',
         position=4, 
         layouts=all_layouts, 
+        matches = [
+            Match(wm_class='discord')
+        ]
     ),
         
     Group(
         #name='', 
-        name='gaming',
+        name='g',
         position=5, 
-        layouts=[gaming_layout], 
+        layouts=[floating_layout], 
         matches = [
             Match(wm_class='csgo_linux64'),
             #Match(wm_class='hl2_linux'),
             Match(wm_class='teams'),
-            Match(title='blackout'),
-            #Match(wm_class='Steam'), 
+            Match(wm_class='Steam'), 
         ]
-    ),
-    Group(
-        name='misc',
-        position=6,
-        layouts=[layout.Columns(
-            num_columns=1,
-            border_focus=orange,
-            border_width=1,
-            insert_position=0,
-            margin_on_single=[10,50,10,50],
-            margin=[10,25,10,25],
-            ),
-        ],
-        matches = [
-            Match(wm_class='discord'),
-            Match(wm_class='python3.10'),
-        ],
     ),
 ]
 
@@ -330,8 +312,7 @@ for i in groups:
     ])
 
 
-
-################### Screens and widgets#########################
+################### Screens, widgets and their support functions #########################
 
 widget_defaults = dict(
     font='IBM Plex Mono Medium',
@@ -345,89 +326,32 @@ bar_color=solar+'.60'
 bar_color2 = solar+'.80'
 #bar_color = '#575458.90'
 
+def network_current():
+    st = check_output("nmcli -t connection show --active | awk -F ':' '{print $1 " + '"\\n"' + " $(NF-1)}'", shell=True, encoding='utf-8').split('\n')[:-1]
+    st.append('None')
+    st.append('None')
+
+    current_net_dev = network_devices[st[1].split('-')[-1]]
+    qtile.widgets_map['network_device1'].update(' ' + current_net_dev)
+    qtile.widgets_map['network_name1'].update(' ' + st[0])
+    #qtile.widgets_map['network_device2'].update(' ' + current_net_dev)
+    #qtile.widgets_map['network_name2'].update(' ' + st[0])
+    return ''
+
+def wttr(loc):
+    def a():
+        wtt = check_output("curl -s wttr.in/"+loc+"?format=4", shell=True, encoding='utf-8').split()
+        return ' '.join(wtt) 
+    return a
 
 screens = [
     Screen(
-        wallpaper='/mnt/c/Windows/Web/Wallpaper/ThemeB/img27.jpg',
-        wallpaper_mode='stretch',
-
-        #right1
-        right = bar.Bar(
-            margin = [30, 5, 30, 0],
-            background = transp,
-            size=23,
-            widgets=[
-                ewidget.StatusNotifier(
-                    highlight_colour=dviolet,
-                    menu_foreground = gray,
-                    #menu_background = dgray,
-                    menu_font = widget_defaults['font'],
-                    menu_fontsize = widget_defaults['fontsize'],
-                    menu_row_height = 11,
-                    icon_size=18,
-                    padding=5,
-                ),
-
-                widget.Spacer(500),
-
-                widget.Image(
-                    filename='/usr/share/icons/Numix/32/places/default-folder.svg',
-                    mouse_callbacks={'Button1' : lazy.spawn('pcmanfm')},
-                ),
-                widget.Spacer(10),
-
-                widget.Image(
-                    filename='/usr/share/icons/hicolor/32x32/apps/polychromatic.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('polychromatic-controller')},
-                ),
-                widget.Spacer(50),
-
-                widget.Image(
-                    filename='/usr/share/icons/hicolor/32x32/apps/steam.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('steam')},
-                    name='steam',
-                ),
-                widget.Spacer(10),
-
-                widget.Image(
-                    filename='/home/mcnuggetsx20/hdd/Program-Files/discord_linux/Discord/discord.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('discord')},
-                ),
-                widget.Spacer(10),
-
-                widget.Image(
-                    filename='/usr/share/icons/hicolor/32x32/apps/brave-desktop.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('brave')},
-                ),
-
-                widget.Spacer(50),
-
-                widget.Image(
-                    filename='/home/mcnuggetsx20/hdd/Program-Files/multimc-pkgbuild/src/multimc-bin-1.6/opt/multimc/icon.svg',
-                    mouse_callbacks={'Button1' : lazy.spawn('multimc')},
-                ),
-
-                widget.Spacer(10),
-
-                widget.Image(
-                    filename='/home/mcnuggetsx20/.config/qtile/icons/csgo.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('steam steam://rungameid/730')},
-                ),
-
-                widget.Spacer(10),
-
-                widget.Image(
-                    filename='~/.local/share/icons/hicolor/32x32/apps/steam_icon_21000.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('steam steam://rungameid/21000')},
-                ),
-
-                widget.Spacer(bar.STRETCH),
-            ],
-        ),
+        wallpaper='/mnt/hdd/zdjecia/wallpaper/cool.jpg',
+        wallpaper_mode='fill',
 
         #TOP1
         top=bar.Bar(
-            margin=[0, 10, 0, 10], #[N, E, S, W]
+            margin=[3, 10, 0, 10], #[N, E, S, W]
             background = '#000000.00',
             #background = '#434345',
             #background=dgray,
@@ -436,20 +360,20 @@ screens = [
                     font='White Rabbit', 
                     fontsize=14,
                     highlight_method='line', 
-                    this_current_screen_border= red, 
-                    this_screen_border=red,
-                    block_highlight_text_color=ored,
-                    inactive=black,
-                    active=black,
+                    this_current_screen_border=violet, 
+                    this_screen_border=violet,
+                    block_highlight_text_color=green,
+                    inactive=gray,
+                    active=gray,
                     disable_drag=True,
                     use_mouse_wheel=False,
-                    background =white + '.60',
+                    background = dgray,
                     highlight_color=transp,
                 ),
                 widget.TextBox(
-                    text='B',
+                    text='F',
                     font='Bartek',
-                    foreground =white + '.60',
+                    foreground =dgray,
                     fontsize=39,
                     padding = -1,
                 ),
@@ -460,9 +384,9 @@ screens = [
                 ),
 
                 widget.TextBox(
-                    text='A',
+                    text='G',
                     font='Bartek',
-                    foreground =white + '.60',
+                    foreground =dgray,
                     fontsize=39,
                     padding = -1,
                 ),
@@ -478,17 +402,17 @@ screens = [
 
                 widget.TextBox(
                     name='current window',
-                    foreground = black,
+                    foreground = gray,
                     font='Samsung Sans Bold',
                     #fontsize=14,
-                    background = white + '.60',
+                    background = dgray,
                     #max_chars=20,
                 ),
 
                 widget.TextBox(
-                    text='B',
+                    text='F',
                     font='Bartek',
-                    foreground =white + '.60',
+                    foreground =dgray,
                     fontsize=39,
                     padding = -1,
                 ),
@@ -498,17 +422,28 @@ screens = [
                     #background='#000000.00',
                 ),
 
+                widget.StatusNotifier(
+                    highlight_colour=dviolet,
+                    menu_foreground = gray,
+                    #menu_background = dgray,
+                    menu_font = widget_defaults['font'],
+                    menu_fontsize = widget_defaults['fontsize'],
+                    menu_row_height = 11,
+                    icon_size=18,
+                    padding=5,
+                ),
+
                 widget.TextBox(
-                    text='A',
+                    text='G',
                     font='Bartek',
-                    foreground =white + '.60',
+                    foreground =dgray,
                     fontsize=39,
                     padding = -1,
                 ),
 
                 widget.TextBox(
                     name='network_device1',
-                    background =white + '.60',
+                    background=dgray,
                     #background=dviolet,
                     foreground=dviolet,
                     font='Bartek',
@@ -519,41 +454,41 @@ screens = [
                 widget.TextBox(
                     text='Searching...',
                     name='network_name1',
-                    foreground=black,
-                    background =white + '.60',
+                    foreground=gray,
+                    background=dgray,
                     font='Samsung Sans Bold',
                     fontsize = 13,
                     mouse_callbacks={'Button1' : lazy.spawn('Straw')},
                 ),
 
                 widget.TextBox(
-                    text='B',
+                    text='F',
                     font='Bartek',
-                    foreground =white + '.60',
-                    fontsize=39,
-                    padding = -1,
-                ),
-
-                widget.TextBox(
-                    text='A',
-                    font='Bartek',
-                    foreground =white + '.60',
+                    foreground =dgray,
                     fontsize=39,
                     padding = -1,
                 ),
                 
+                widget.TextBox(
+                    text='D',
+                    font='Bartek',
+                    foreground =dgray,
+                    background=green,
+                    fontsize=39,
+                    padding = -1,
+                ),
 
                 widget.TextBox(
                     text='  ',
                     font='mononoki',
                     fontsize=14,
-                    background =white + '.60',
-                    foreground=dblue,
+                    background =dgray,
+                    foreground=green,
                 ),
 
                 widget.Clock(
-                    foreground=black,
-                    background =white + '.60',
+                    foreground=gray, 
+                    background =dgray,
                     padding=0,
                     font='Samsung Sans Bold',
                     fontsize=13,
@@ -561,17 +496,17 @@ screens = [
                 ),
 
                 widget.TextBox(
-                    text='B',
+                    text='F',
                     font='Bartek',
-                    foreground =white + '.60',
+                    foreground =dgray,
                     fontsize=39,
                     padding = -1,
                 ),
 
                 widget.TextBox(
-                    text='A',
+                    text='D',
                     font='Bartek',
-                    foreground =white + '.60',
+                    foreground =dgray,
                     fontsize=39,
                     padding = -1,
                 ),
@@ -580,14 +515,14 @@ screens = [
                     text='',
                     font='Samsung Sans Light',
                     fontsize=16,
-                    foreground=ored,
-                    background =white + '.60',
+                    foreground=green,
+                    background =dgray,
                     #background=green,
                 ),
 
                 widget.Clock(
-                    foreground=black,
-                    background =white + '.60',
+                    foreground=gray, 
+                    background =dgray,
                     #background=bar_color2,
                     padding=0,
                     format=" %H:%M:%S  ",
@@ -618,71 +553,8 @@ screens = [
                     spacing = 20,
                     foreground = gray,
                     txt_minimized='-',
-                    font='IBM Plex Mono Bold',
                     #padding_y=-2,
                 ),
-
-                widget.Spacer(bar.STRETCH),
-
-                widget.TextBox(
-                    text='D',
-                    font='Bartek',
-                    foreground =dlgray,
-                    fontsize=39,
-                    padding = -1,
-                ),
-
-                widget.Image(
-                    filename='/usr/share/icons/Numix/16/places/default-folder.svg',
-                    mouse_callbacks={'Button1' : lazy.spawn('pcmanfm')},
-                    margin_x = 5,
-                    background=dlgray,
-                ),
-
-                widget.Image(
-                    filename='/usr/share/icons/hicolor/16x16/apps/polychromatic.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('polychromatic-controller')},
-                    margin_x = 5,
-                    background=dlgray,
-                ),
-
-                widget.Image(
-                    filename='/usr/share/icons/hicolor/16x16/apps/steam.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('steam')},
-                    margin_x = 5,
-                    background=dlgray,
-                ),
-
-                widget.Image(
-                    filename='/home/mcnuggetsx20/.config/qtile/icons/csgo.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('gtk-launch Counter\ Strike\:\ Global\ Offensive.desktop')},
-                    margin_x = 5,
-                    background=dlgray,
-                ),
-
-                widget.Image(
-                    filename='/home/mcnuggetsx20/hdd/Program-Files/discord_linux/Discord/discord.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('discord')},
-                    margin_x = 5,
-                    background=dlgray,
-                ),
-
-                widget.Image(
-                    filename='/usr/share/icons/hicolor/16x16/apps/brave-desktop.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('brave')},
-                    margin_x = 5,
-                    background=dlgray,
-                ),
-
-                widget.TextBox(
-                    text='E',
-                    font='Bartek',
-                    foreground =dlgray,
-                    fontsize=39,
-                    padding = -1,
-                ),
-
-                widget.Spacer(bar.STRETCH),
 
                 widget.Systray(),
 
@@ -913,7 +785,7 @@ screens = [
         #TOP2
         top=bar.Bar(
             margin=[0, 10, 0, 10], #[N, E, S, W]
-            background = '#000000.50',
+            background = '#000000.00',
             #background = '#434345',
             #background=dgray,
             widgets=[
@@ -931,11 +803,6 @@ screens = [
                     background = dgray,
                     highlight_color=transp,
                 ),
-
-                widget.TextBox(
-                    name='debug',
-                ),
-
                 widget.Spacer(bar.STRETCH),
                 widget.TextBox(
                     text='D',
@@ -1001,10 +868,7 @@ screens = [
             size=18),
         ),
     
-
 ]
-
-############ Miscellaneous #############
 
 # Drag floating layouts.
 mouse = [
