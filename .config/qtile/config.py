@@ -39,7 +39,7 @@ dlgray = '#434345'
 
 iconPath = '~/.config/qtile/icons/'
 
-CSGO=False
+curr_gamma = 1
 BLK=False
 
 ################### Hooks #########################
@@ -51,25 +51,24 @@ def autostart():
 
 @hook.subscribe.client_focus
 def newFocus(window):
-    global CSGO, BLK
+    global CSGO, BLK, gamma_rules, curr_gamma
     #qtile.widgets_map['debug'].update(window.cmd_get_position())
     qtile.widgets_map['current window'].update(window.name)
-    if window.name == 'Counter-Strike: Global Offensive - OpenGL':
-        CSGO=True
-        brightness_toggle(True)
-        return
+    #qtile.widgets_map['debug'].update(str(curr_gamma))
+
+    if window.name in gamma_rules:
+        qtile.widgets_map['debug'].update('jest')
+        brightness_toggle(gamma_rules[window.name])
+        curr_gamma = gamma_rules[window.name]
+
+    elif curr_gamma != 1:
+        brightness_toggle(1)
+        curr_gamma = 1
 
     elif window.name == 'blackout' and not BLK:
         window.cmd_set_position_floating(0,0)
         window.cmd_disable_floating()
         BLK=True
-
-    if CSGO:
-        CSGO=False
-        brightness_toggle(False)
-        return
-
-
 
 @hook.subscribe.client_name_updated
 def nameUpdate(window):
@@ -97,17 +96,18 @@ def func(new_window):
 
 @hook.subscribe.client_killed
 def killed(zombie):
-    global CSGO
+    global CSGO, gamma_rules
     #_id = str(zombie.info()['id'])
     #Popen('rm ' + iconPath + _id + '*', shell=True)
     qtile.widgets_map['current window'].update('None')
 
+    if curr_gamma != 1:
+        brightness_toggle(1)
+        curr_gamma = 1
+
     if zombie.info()['wm_class']==['gvim','Gvim']:
         qtile.current_layout.cmd_reset()
 
-    if CSGO:
-        CSGO=False
-        brightness_toggle(False)
 
 def change(name):
     qtile.widgets_map['steam'].background='#FFFFFF'
@@ -116,7 +116,7 @@ def change(name):
 #################### Variables #########################
 mod = "mod1"
 sup = "mod4"
-terminal = "alacritty -e nvim -c term -c 'set ma' -c startinsert"
+terminal = "alacritty -e nvim --cmd term -c 'set ma' -c startinsert"
 bar_indent=7
 this_dir = '/home/mcnuggetsx20/.config/qtile/'
 
@@ -336,8 +336,8 @@ for i in groups:
 widget_defaults = dict(
     font='IBM Plex Mono Medium',
     fontsize=13,
-    padding=0,
     inactive='#FFFFFF',
+    padding=0,
 )
 extension_defaults = widget_defaults.copy()
 
@@ -428,7 +428,9 @@ screens = [
         #TOP1
         top=bar.Bar(
             margin=[0, 10, 0, 10], #[N, E, S, W]
-            background = '#000000.00',
+            background=solar + '.30',
+            border_width=0,
+            #border_color=orange,
             #background = '#434345',
             #background=dgray,
             widgets=[
@@ -443,13 +445,13 @@ screens = [
                     active=black,
                     disable_drag=True,
                     use_mouse_wheel=False,
-                    background =white + '.60',
+                    background =gray,
                     highlight_color=transp,
                 ),
                 widget.TextBox(
                     text='B',
                     font='Bartek',
-                    foreground =white + '.60',
+                    foreground =gray,
                     fontsize=39,
                     padding = -1,
                 ),
@@ -462,7 +464,7 @@ screens = [
                 widget.TextBox(
                     text='A',
                     font='Bartek',
-                    foreground =white + '.60',
+                    foreground =gray,
                     fontsize=39,
                     padding = -1,
                 ),
@@ -481,14 +483,14 @@ screens = [
                     foreground = black,
                     font='Samsung Sans Bold',
                     #fontsize=14,
-                    background = white + '.60',
+                    background = gray,
                     #max_chars=20,
                 ),
 
                 widget.TextBox(
                     text='B',
                     font='Bartek',
-                    foreground =white + '.60',
+                    foreground =gray,
                     fontsize=39,
                     padding = -1,
                 ),
@@ -501,14 +503,14 @@ screens = [
                 widget.TextBox(
                     text='A',
                     font='Bartek',
-                    foreground =white + '.60',
+                    foreground =gray,
                     fontsize=39,
                     padding = -1,
                 ),
 
                 widget.TextBox(
                     name='network_device1',
-                    background =white + '.60',
+                    background =gray,
                     #background=dviolet,
                     foreground=dviolet,
                     font='Bartek',
@@ -520,7 +522,7 @@ screens = [
                     text='Searching...',
                     name='network_name1',
                     foreground=black,
-                    background =white + '.60',
+                    background =gray,
                     font='Samsung Sans Bold',
                     fontsize = 13,
                     mouse_callbacks={'Button1' : lazy.spawn('Straw')},
@@ -529,7 +531,7 @@ screens = [
                 widget.TextBox(
                     text='B',
                     font='Bartek',
-                    foreground =white + '.60',
+                    foreground =gray,
                     fontsize=39,
                     padding = -1,
                 ),
@@ -537,7 +539,7 @@ screens = [
                 widget.TextBox(
                     text='A',
                     font='Bartek',
-                    foreground =white + '.60',
+                    foreground =gray,
                     fontsize=39,
                     padding = -1,
                 ),
@@ -547,13 +549,13 @@ screens = [
                     text='  ',
                     font='mononoki',
                     fontsize=14,
-                    background =white + '.60',
+                    background =gray,
                     foreground=dblue,
                 ),
 
                 widget.Clock(
                     foreground=black,
-                    background =white + '.60',
+                    background =gray,
                     padding=0,
                     font='Samsung Sans Bold',
                     fontsize=13,
@@ -563,7 +565,7 @@ screens = [
                 widget.TextBox(
                     text='B',
                     font='Bartek',
-                    foreground =white + '.60',
+                    foreground =gray,
                     fontsize=39,
                     padding = -1,
                 ),
@@ -571,7 +573,7 @@ screens = [
                 widget.TextBox(
                     text='A',
                     font='Bartek',
-                    foreground =white + '.60',
+                    foreground =gray,
                     fontsize=39,
                     padding = -1,
                 ),
@@ -581,13 +583,13 @@ screens = [
                     font='Samsung Sans Light',
                     fontsize=16,
                     foreground=ored,
-                    background =white + '.60',
+                    background =gray,
                     #background=green,
                 ),
 
                 widget.Clock(
                     foreground=black,
-                    background =white + '.60',
+                    background =gray,
                     #background=bar_color2,
                     padding=0,
                     format=" %H:%M:%S  ",
@@ -603,7 +605,10 @@ screens = [
         bottom=bar.Bar(
             #margin=[0, 0, 0, 0], #[N, E, S, W]
             #background='#1b1919.90',
-            background='#000000.00',
+            background=solar + '.30',
+            size=18,
+            border_width=0,
+            border_color=dblue,
             widgets= [
                 widget.Spacer(
                     length=bar_indent,
@@ -613,13 +618,14 @@ screens = [
                     parse_text=lambda text: '|' + text, 
                     max_title_width=100,
                     borderwidth=0, 
+                    border=black,
                     icon_size=18, 
                     txt_floating='',
                     spacing = 20,
                     foreground = gray,
                     txt_minimized='-',
                     font='IBM Plex Mono Bold',
-                    #padding_y=-2,
+                    #padding_y=-4,
                 ),
 
                 widget.Spacer(bar.STRETCH),
@@ -903,7 +909,7 @@ screens = [
                     update_interval=2,
                 ),
             ],    
-            size=18),
+        ),
 
     ),
     Screen(

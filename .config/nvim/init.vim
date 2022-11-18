@@ -5,6 +5,7 @@ Plug 'doums/darcula'
 Plug 'ayu-theme/ayu-vim'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'vim-python/python-syntax'
+Plug 'preservim/nerdtree'
 call plug#end()
 
 autocmd BufNewFile *.cpp 0r /mnt/hdd/Program-Files/Vim/ClassicTemplate.txt
@@ -20,12 +21,19 @@ let g:currentmode={
        \ 't'  : 'TERMINAL ',
        \}
 
+if !has('nvim')
+    set viminfo+=~/.config/nvim/viminfo
+endif
+
 let $LANG = 'en_US'
 let g:python_highlight_all = 1
 let g:python_highlight_indent_errors = 0
+let g:NERDTreeShowHidden=1
 
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
+
+set viminfo='1000,\"100,:20,%,n~/.config/nvim/viminfo
 
 set langmenu=en_US
 set hls
@@ -67,7 +75,7 @@ set statusline+=\ [NVIM]\
 
 set guicursor=i:hor15-Cursor
 
-set scrollback=1000
+set scrollback=10000
 
 set numberwidth=5
 
@@ -109,6 +117,14 @@ autocmd filetype javascript nnoremap <F3> :w <bar> :Shell node % <CR>
 autocmd filetype c nnoremap <F3> :w <bar> :Shell gcc -o a % && ./a <CR>
 autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"
 autocmd BufEnter * silent! lcd %:p:h
+autocmd VimEnter * NERDTree | wincmd p
+autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTree | endif | wincmd p
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+autocmd BufReadPost *
+  \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+  \ |   exe "normal! g`\""
+  \ | endif
 
 function! s:ExecuteInShell(command)
   let command = join(map(split(a:command), 'expand(v:val)'))

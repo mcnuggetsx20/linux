@@ -13,6 +13,8 @@ RED="\e[31m"
 RESET="\[$(tput sgr0)\]"
 [[ $- != *i* ]] && return
 
+COLUMNS=$(tput cols)
+
 alias ls='ls --color=auto'
 #the first one is the default, the second one shows the whole directory
 #ZEBY BYL TYLKO TEN JEDEN FOLDER TO MUSI BYC W (DUZE)

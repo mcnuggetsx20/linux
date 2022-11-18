@@ -106,10 +106,9 @@ def DiskSpace():
     return ' ' + check_output('df -h --output=source,used,size | grep "nvme0n1p2\|sdb1\|sda1" | awk \'{printf $2 "/" $3 " "}\'', shell=True, encoding='utf-8')[:-1] + ' '
 
 
-def brightness_toggle(ok=False):
+def brightness_toggle(n):
     #status = check_output("xrandr --current --verbose | grep Gamma", shell=True, encoding='utf-8').split(':')[2]
-    val = 1 + 0.9 * (ok)
-    run("xrandr --output DP-4 --gamma %(new)f" % {'new': val}, shell=True, encoding='utf-8')
+    run("xrandr --output DP-4 --gamma %(new)f" % {'new': n}, shell=True, encoding='utf-8')
     return
 
         
