@@ -45,7 +45,7 @@ alias lf='lfub'
 alias cd='nvim_autocd'
 alias nv='internal_nvim'
 alias lookfor='sudo find / -path /mnt/hdd -prune -iname'
-alias setCover='eyeD3 --add-image $2:FRONT_COVER:front $1' #SONG / IMAGE
+#alias setCover='eyeD3 --add-image $2:FRONT_COVER:front $1' #SONG / IMAGE
 alias kanter='nv /mnt/csgo/SteamLibrary/steamapps/common/Counter-Strike\ Global\ Offensive/csgo/cfg/autoexec.cfg'
 alias take='_take'
 
@@ -83,4 +83,8 @@ internal_nvim(){
 _take(){
     mkdir "$@"
     cd "$@"
+}
+
+setCover(){
+    eyeD3 --add-image "$2":FRONT_COVER:front "$1"
 }

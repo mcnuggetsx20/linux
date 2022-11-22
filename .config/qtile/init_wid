@@ -12,7 +12,5 @@ xterm -e 'unimatrix -g=black -s 96' & sleep .8s && transset -n hack 0.5
 
 xrdb ~/.config/xterm/default
 
-blackout &
-
 #transset -n weatherReport 0.75
 #transset -n calendar 0.75

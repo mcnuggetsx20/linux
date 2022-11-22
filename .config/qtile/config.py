@@ -320,7 +320,8 @@ groups = [
 for i in groups:
     keys.extend([
         # mod1 + letter of group = switch to group
-        Key([mod], str(i.position), lazy.group[i.name].toscreen()),
+        #Key([mod], str(i.position), lazy.group[i.name].toscreen()),
+        Key([mod], str(i.position), lazy.function(groupSwitch(i))),
         # mod1 + shift + letter of group = switch to & move focused window to group
         Key([mod, "shift"], str(i.position), lazy.window.togroup(i.name)),
         # Or, use below if you prefer not to switch to that group.

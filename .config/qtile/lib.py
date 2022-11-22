@@ -31,6 +31,9 @@ comp = True
 
 gamma_rules={
         'Minecraft* 1.18.2' :   1.1,
-        'Minecraft* 1.18.2 - Singleplayer' :   1.1,
+        'Minecraft* 1.18.2 - Singleplayer' :   1.2,
         'Counter-Strike: Global Offensive - OpenGL' :   1.9,
 }
+
+bars = True
+walp = True
