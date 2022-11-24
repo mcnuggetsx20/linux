@@ -39,7 +39,6 @@ dlgray = '#434345'
 
 iconPath = '~/.config/qtile/icons/'
 
-curr_gamma = 1
 BLK=False
 
 ################### Hooks #########################
@@ -51,21 +50,14 @@ def autostart():
 
 @hook.subscribe.client_focus
 def newFocus(window):
-    global CSGO, BLK, gamma_rules, curr_gamma
+    global CSGO, BLK
     #qtile.widgets_map['debug'].update(window.cmd_get_position())
     qtile.widgets_map['current window'].update(window.name)
     #qtile.widgets_map['debug'].update(str(curr_gamma))
 
-    if window.name in gamma_rules:
-        qtile.widgets_map['debug'].update('jest')
-        brightness_toggle(gamma_rules[window.name])
-        curr_gamma = gamma_rules[window.name]
+    gammaGaming(window.name)
 
-    elif curr_gamma != 1:
-        brightness_toggle(1)
-        curr_gamma = 1
-
-    elif window.name == 'blackout' and not BLK:
+    if window.name == 'blackout' and not BLK:
         window.cmd_set_position_floating(0,0)
         window.cmd_disable_floating()
         BLK=True
@@ -73,6 +65,8 @@ def newFocus(window):
 @hook.subscribe.client_name_updated
 def nameUpdate(window):
     qtile.widgets_map['current window'].update(window.name)
+
+    gammaGaming(window.name)
 
 @hook.subscribe.client_new
 def func(new_window):
@@ -96,7 +90,7 @@ def func(new_window):
 
 @hook.subscribe.client_killed
 def killed(zombie):
-    global CSGO, gamma_rules
+    global CSGO
     #_id = str(zombie.info()['id'])
     #Popen('rm ' + iconPath + _id + '*', shell=True)
     qtile.widgets_map['current window'].update('None')
@@ -292,9 +286,8 @@ groups = [
         layouts=[gaming_layout], 
         matches = [
             Match(wm_class='csgo_linux64'),
+            Match(title='Minecraft* 1.18.2'),
             #Match(wm_class='hl2_linux'),
-            Match(wm_class='teams'),
-            Match(title='blackout'),
             #Match(wm_class='Steam'), 
         ]
     ),
@@ -329,8 +322,6 @@ for i in groups:
         # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
         #     desc="move focused window to group {}".format(i.name)),
     ])
-
-
 
 ################### Screens and widgets#########################
 

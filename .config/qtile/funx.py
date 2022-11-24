@@ -15,10 +15,13 @@ def vol1(device=None, status=None):
             status = check_output("pactl get-source-volume %s | awk -F ' / ' 'FNR<2 {print  $(NF-1)}'" %mic,shell=True, encoding='utf-8')[:-2]
         else:
             status = check_output("pamixer --get-volume" ,shell=True, encoding='utf-8').split()[0]
-
+    try:
+        status = int(status)
+    except:
+        status = 0
 
     #   =====|----
-    seg1 = (int(status) // 15) * 'I'
+    seg1 = status // 15 * 'I'
     seg2 = ((10 - len(seg1)) * 'I')[:-1]
     return [seg1, seg2, str(status)]
 
@@ -152,7 +155,7 @@ def compswitch(qtile):
     command = 'killall ' * int(comp) + 'picom'
     Popen(command, shell=True)
     comp = not comp
-    qtile.widgets_map['debug'].update(str(comp))
+    #qtile.widgets_map['debug'].update(str(comp))
 
 def walpSwitch(qtile):
     global walp
@@ -163,6 +166,17 @@ def walpSwitch(qtile):
     qtile.screens[0].cmd_set_wallpaper(toSet, 'stretch')
     walp = not walp
 
+def gammaGaming(name):
+    global gamma_rules, curr_gamma
+    if name in gamma_rules:
+        #qtile.widgets_map['debug'].update('jest')
+        brightness_toggle(gamma_rules[name])
+        curr_gamma = gamma_rules[name]
+
+    elif curr_gamma != 1:
+        brightness_toggle(1)
+        curr_gamma = 1
+
 def groupSwitch(group):
     def a(qtile):
         global bars
@@ -172,8 +186,6 @@ def groupSwitch(group):
             bars = not bars
             walpSwitch(qtile)
             compswitch(qtile)
-
-
 
     return a
 
