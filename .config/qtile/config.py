@@ -45,6 +45,7 @@ BLK=False
 @hook.subscribe.startup_once
 def autostart():
     home = os.path.expanduser('~')
+    qtile.groups_map['misc'].cmd_toscreen(1)
     call([home + '/.config/qtile/autostart.sh'])
 
 
@@ -66,7 +67,7 @@ def newFocus(window):
 def nameUpdate(window):
     qtile.widgets_map['current window'].update(window.name)
 
-    gammaGaming(window.name)
+    #gammaGaming(window.name)
 
 @hook.subscribe.client_new
 def func(new_window):
@@ -287,6 +288,7 @@ groups = [
         matches = [
             Match(wm_class='csgo_linux64'),
             Match(title='Minecraft* 1.18.2'),
+            Match(title='LEGO® Star Wars™: The Complete Saga'),
             #Match(wm_class='hl2_linux'),
             #Match(wm_class='Steam'), 
         ]
@@ -935,6 +937,23 @@ screens = [
                 ),
 
                 widget.Spacer(bar.STRETCH),
+
+                widget.TaskList(
+                    parse_text=lambda text: '|' + text, 
+                    max_title_width=100,
+                    borderwidth=0, 
+                    border=black,
+                    icon_size=18, 
+                    txt_floating='',
+                    spacing = 20,
+                    foreground = gray,
+                    txt_minimized='-',
+                    font='IBM Plex Mono Bold',
+                    #padding_y=-4,
+                ),
+
+                widget.Spacer(bar.STRETCH),
+
                 widget.TextBox(
                     text='D',
                     font='Bartek',
