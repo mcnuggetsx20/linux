@@ -242,6 +242,7 @@ floating_layout = layout.Floating(
             Match(title='Straw'),
             Match(wm_class='clementine'),
             Match(wm_class='python3.10'),
+            Match(title='server-console'),
         ]
 )
 
@@ -342,8 +343,8 @@ bar_color2 = solar+'.80'
 
 screens = [
     Screen(
-        wallpaper='/mnt/c/Windows/Web/Wallpaper/ThemeB/img27.jpg',
-        wallpaper_mode='stretch',
+        wallpaper=WALLPAPER,
+        #wallpaper_mode='stretch',
 
         #right1
         right = bar.Bar(
@@ -624,63 +625,63 @@ screens = [
 
                 widget.Spacer(bar.STRETCH),
 
-                widget.TextBox(
-                    text='D',
-                    font='Bartek',
-                    foreground =dlgray,
-                    fontsize=39,
-                    padding = -1,
-                ),
-
-                widget.Image(
-                    filename='/usr/share/icons/Numix/16/places/default-folder.svg',
-                    mouse_callbacks={'Button1' : lazy.spawn('pcmanfm')},
-                    margin_x = 5,
-                    background=dlgray,
-                ),
-
-                widget.Image(
-                    filename='/usr/share/icons/hicolor/16x16/apps/polychromatic.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('polychromatic-controller')},
-                    margin_x = 5,
-                    background=dlgray,
-                ),
-
-                widget.Image(
-                    filename='/usr/share/icons/hicolor/16x16/apps/steam.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('steam')},
-                    margin_x = 5,
-                    background=dlgray,
-                ),
-
-                widget.Image(
-                    filename='/home/mcnuggetsx20/.config/qtile/icons/csgo.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('gtk-launch Counter\ Strike\:\ Global\ Offensive.desktop')},
-                    margin_x = 5,
-                    background=dlgray,
-                ),
-
-                widget.Image(
-                    filename='/home/mcnuggetsx20/hdd/Program-Files/discord_linux/Discord/discord.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('discord')},
-                    margin_x = 5,
-                    background=dlgray,
-                ),
-
-                widget.Image(
-                    filename='/usr/share/icons/hicolor/16x16/apps/brave-desktop.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('brave')},
-                    margin_x = 5,
-                    background=dlgray,
-                ),
-
-                widget.TextBox(
-                    text='E',
-                    font='Bartek',
-                    foreground =dlgray,
-                    fontsize=39,
-                    padding = -1,
-                ),
+#                widget.TextBox(
+#                    text='D',
+#                    font='Bartek',
+#                    foreground =dlgray,
+#                    fontsize=39,
+#                    padding = -1,
+#                ),
+#
+#                widget.Image(
+#                    filename='/usr/share/icons/Numix/16/places/default-folder.svg',
+#                    mouse_callbacks={'Button1' : lazy.spawn('pcmanfm')},
+#                    margin_x = 5,
+#                    background=dlgray,
+#                ),
+#
+#                widget.Image(
+#                    filename='/usr/share/icons/hicolor/16x16/apps/polychromatic.png',
+#                    mouse_callbacks={'Button1' : lazy.spawn('polychromatic-controller')},
+#                    margin_x = 5,
+#                    background=dlgray,
+#                ),
+#
+#                widget.Image(
+#                    filename='/usr/share/icons/hicolor/16x16/apps/steam.png',
+#                    mouse_callbacks={'Button1' : lazy.spawn('steam')},
+#                    margin_x = 5,
+#                    background=dlgray,
+#                ),
+#
+#                widget.Image(
+#                    filename='/home/mcnuggetsx20/.config/qtile/icons/csgo.png',
+#                    mouse_callbacks={'Button1' : lazy.spawn('gtk-launch Counter\ Strike\:\ Global\ Offensive.desktop')},
+#                    margin_x = 5,
+#                    background=dlgray,
+#                ),
+#
+#                widget.Image(
+#                    filename='/home/mcnuggetsx20/hdd/Program-Files/discord_linux/Discord/discord.png',
+#                    mouse_callbacks={'Button1' : lazy.spawn('discord')},
+#                    margin_x = 5,
+#                    background=dlgray,
+#                ),
+#
+#                widget.Image(
+#                    filename='/usr/share/icons/hicolor/16x16/apps/brave-desktop.png',
+#                    mouse_callbacks={'Button1' : lazy.spawn('brave')},
+#                    margin_x = 5,
+#                    background=dlgray,
+#                ),
+#
+#                widget.TextBox(
+#                    text='E',
+#                    font='Bartek',
+#                    foreground =dlgray,
+#                    fontsize=39,
+#                    padding = -1,
+#                ),
 
                 widget.Spacer(bar.STRETCH),
 

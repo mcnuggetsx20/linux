@@ -1,6 +1,6 @@
 #!/bin/sh
 
-picom &
+picom --experimental-backend&
 
 ~/.config/qtile/init_wid &
 

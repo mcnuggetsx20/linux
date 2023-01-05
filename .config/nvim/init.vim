@@ -35,6 +35,8 @@ source $VIMRUNTIME/menu.vim
 
 set viminfo='1000,\"100,:20,%,n~/.config/nvim/viminfo
 
+set splitright
+
 set langmenu=en_US
 set hls
 set is
@@ -89,8 +91,8 @@ set termguicolors
 "set background=light
 "colorscheme desert
 "colorscheme alduin
-colorscheme darcula
-highlight Normal guibg=none
+colorscheme ayu
+"highlight Normal guibg=none
 
 if (has('gui_running'))
     colorscheme darcula
@@ -110,6 +112,7 @@ nnoremap <C-j> :tabprevious <CR>
 nnoremap<C-k> :tabnext <CR>
 nnoremap <C-x> :tabclose <CR>
 tnoremap <Esc> <C-\><C-n>
+nnoremap <C-t> :NERDTreeToggle <bar> :100vs term://bash <CR>
 
 nnoremap <F4> :w <bar> :Shell python -B %.txt <CR>
 autocmd filetype cpp nnoremap <F3> :w <bar> :Shell g++ -std=c++17 -DLOCAL -Wall -Wextra -Wconversion -Wshadow -Wno-sign-conversion -D_GLIBCXX_DEBUG -fno-sanitize-recover=undefined -DAC % -o %< && ./a <CR>

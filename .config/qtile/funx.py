@@ -152,15 +152,15 @@ def wttr(loc):
 
 def compswitch(qtile):
     global comp
-    command = 'killall ' * int(comp) + 'picom'
+    command = 'killall ' * int(comp) + 'picom' + ' --experimental-backend' * int(not comp)
     Popen(command, shell=True)
     comp = not comp
     #qtile.widgets_map['debug'].update(str(comp))
 
 def walpSwitch(qtile):
-    global walp
+    global walp, glx
 
-    toSet = '/mnt/c/Windows/Web/Wallpaper/ThemeB/img27.jpg'
+    toSet = WALLPAPER
     if walp:
         toSet = '/mnt/hdd/zdjecia/wallpaper/black.png'
     qtile.screens[0].cmd_set_wallpaper(toSet, 'stretch')
