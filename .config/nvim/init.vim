@@ -91,7 +91,8 @@ set termguicolors
 "set background=light
 "colorscheme desert
 "colorscheme alduin
-colorscheme ayu
+"colorscheme ayu
+colorscheme darcula
 "highlight Normal guibg=none
 
 if (has('gui_running'))
