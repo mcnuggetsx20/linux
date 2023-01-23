@@ -37,6 +37,8 @@ solar  = '#fdf6e3'
 transp = '#000000.00'
 dlgray = '#434345'
 
+top1color = '190c24'
+
 iconPath = '~/.config/qtile/icons/'
 
 BLK=False
@@ -348,22 +350,22 @@ screens = [
 
         #right1
         right = bar.Bar(
-            margin = [30, 5, 30, 0],
-            background = transp,
+            margin = [500, 5, 550, 0],
+            background = top1color + '.60',
             size=23,
             widgets=[
-                ewidget.StatusNotifier(
-                    highlight_colour=dviolet,
-                    menu_foreground = gray,
-                    #menu_background = dgray,
-                    menu_font = widget_defaults['font'],
-                    menu_fontsize = widget_defaults['fontsize'],
-                    menu_row_height = 11,
-                    icon_size=18,
-                    padding=5,
-                ),
+                #ewidget.StatusNotifier(
+                #    highlight_colour=dviolet,
+                #    menu_foreground = gray,
+                #    #menu_background = dgray,
+                #    menu_font = widget_defaults['font'],
+                #    menu_fontsize = widget_defaults['fontsize'],
+                #    menu_row_height = 11,
+                #    icon_size=18,
+                #    padding=5,
+                #),
 
-                widget.Spacer(500),
+                widget.Spacer(10),
 
                 widget.Image(
                     filename='/usr/share/icons/Numix/32/places/default-folder.svg',
@@ -416,14 +418,15 @@ screens = [
                     mouse_callbacks={'Button1' : lazy.spawn('steam steam://rungameid/21000')},
                 ),
 
-                widget.Spacer(bar.STRETCH),
+                #widget.Spacer(50),
             ],
         ),
 
         #TOP1
         top=bar.Bar(
             margin=[0, 10, 0, 10], #[N, E, S, W]
-            background=solar + '.30',
+            #background=solar + '.30',
+            background = top1color + '.60',
             border_width=0,
             #border_color=orange,
             #background = '#434345',
@@ -433,67 +436,60 @@ screens = [
                     font='White Rabbit', 
                     fontsize=14,
                     highlight_method='line', 
-                    this_current_screen_border= red, 
+                    this_current_screen_border= black, 
                     this_screen_border=red,
                     block_highlight_text_color=ored,
-                    inactive=black,
-                    active=black,
+                    inactive=gray,
+                    active=gray,
                     disable_drag=True,
                     use_mouse_wheel=False,
-                    background =gray,
+                    #background =gray,
                     highlight_color=transp,
                 ),
-                widget.TextBox(
-                    text='B',
-                    font='Bartek',
-                    foreground =gray,
-                    fontsize=39,
-                    padding = -1,
+
+                widget.Spacer(100),
+
+                widget.TaskList(
+                    parse_text=lambda text: '', 
+                    max_title_width=100,
+                    borderwidth=0, 
+                    border=black,
+                    icon_size=18, 
+                    txt_floating='',
+                    spacing = 5,
+                    foreground = gray,
+                    txt_minimized='-',
+                    font='IBM Plex Mono Bold',
+                    padding_y=1,
                 ),
 
                 widget.Spacer(
                     length = bar.STRETCH,
                     #background='#000000.00',
                 ),
-
-                widget.TextBox(
-                    text='A',
-                    font='Bartek',
-                    foreground =gray,
-                    fontsize=39,
-                    padding = -1,
-                ),
-
-                #widget.GenPollText(
-                #    name = 'weather1',
-                #    func = wttr('Wojnów'),
-                #    foreground = gray,
-                #    font='Samsung Sans bold',
-                #    background = dgray,
-                #    update_interval=600,
-                #),
 
                 widget.TextBox(
                     name='current window',
-                    foreground = black,
+                    foreground = gray,
                     font='Samsung Sans Bold',
                     #fontsize=14,
-                    background = gray,
+                    #background = gray,
                     #max_chars=20,
-                ),
-
-                widget.TextBox(
-                    text='B',
-                    font='Bartek',
-                    foreground =gray,
-                    fontsize=39,
-                    padding = -1,
                 ),
 
                 widget.Spacer(
                     length = bar.STRETCH,
                     #background='#000000.00',
                 ),
+
+                widget.GenPollText(
+                    name = 'weather1',
+                    func = wttr('Wojnów'),
+                    foreground = gray,
+                    font='Samsung Sans bold',
+                    update_interval=600,
+                ),
+
 
                 widget.TextBox(
                     text='A',
@@ -511,16 +507,18 @@ screens = [
                     font='Bartek',
                     fontsize=25,
                     mouse_callbacks={'Button1' : lazy.spawn('Straw')},
+                    fmt = '<u> {} </u>'
                 ),
 
                 widget.TextBox(
                     text='Searching...',
                     name='network_name1',
-                    foreground=black,
+                    foreground=dviolet,
                     background =gray,
                     font='Samsung Sans Bold',
                     fontsize = 13,
                     mouse_callbacks={'Button1' : lazy.spawn('Straw')},
+                    fmt = '<u> {} </u>'
                 ),
 
                 widget.TextBox(
@@ -549,12 +547,13 @@ screens = [
                 ),
 
                 widget.Clock(
-                    foreground=black,
+                    foreground=dblue,
                     background =gray,
                     padding=0,
                     font='Samsung Sans Bold',
                     fontsize=13,
                     format="%d.%m.'%y %a",
+                    fmt = '<u> {} </u>'
                 ),
 
                 widget.TextBox(
@@ -699,6 +698,7 @@ screens = [
                     text = ' ' + check_output('uname -r', shell=True, encoding='utf-8').split()[0] + ' ',
                     foreground=gray,
                     background=dgray,
+                    #fmt='<span foreground="#f0af16"> <u> {} </u> </span>'
                 ),
 
                 widget.Spacer(
@@ -786,7 +786,7 @@ screens = [
                 ),
 
                 widget.Net(
-                    format=' {down}↓ {up}↑ ',
+                    format=' {down:6.4f}{down_suffix:<2}↓ {up:6.4f}{up_suffix:<2}↑ ',
                     background=dgray,
                     foreground=gray,
                     prefix='M'

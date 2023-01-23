@@ -5,6 +5,8 @@ Plug 'doums/darcula'
 Plug 'ayu-theme/ayu-vim'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'vim-python/python-syntax'
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
+Plug 'nvim-tree/nvim-web-devicons' " optional, for file icons
 Plug 'preservim/nerdtree'
 call plug#end()
 
@@ -63,14 +65,27 @@ set laststatus=2
 set statusline+=%#keyword#
 set statusline+=\ %{(g:currentmode[mode()])}
 
-set statusline+=%#statusline#
+set statusline+=%#ToDo#
 set statusline+=\ %F\ %=\ 
+
+set statusline+=\%#number#\ 
+
+set statusline+=\%#Cursor#
+set statusline+=\ [\%{&fileencoding?&fileencoding:&encoding}\]\ 
 
 set statusline+=%#number#
 set statusline+=\ %L\ lines\ 
 
 set statusline+=%#string#
 set statusline+=\ %{wordcount().words}\ words\ 
+
+set statusline+=\%#TabLineSel#
+set statusline+=\ %p%%\ 
+
+set statusline+=\%#number#\ 
+
+set statusline+=\%#Substitute#
+set statusline+=\ %l:%c\ 
 
 set statusline+=%#function#
 set statusline+=\ [NVIM]\ 
@@ -85,14 +100,14 @@ set numberwidth=5
 "set guioptions -=T
 "set guioptions-=r
 
-set termguicolors 
+"set termguicolors 
 "colorscheme default
 "let ayucolor="light"
 "set background=light
 "colorscheme desert
 "colorscheme alduin
 "colorscheme ayu
-colorscheme darcula
+colorscheme catppuccin-mocha
 "highlight Normal guibg=none
 
 if (has('gui_running'))
@@ -115,7 +130,7 @@ nnoremap <C-x> :tabclose <CR>
 tnoremap <Esc> <C-\><C-n>
 nnoremap <C-t> :NERDTreeToggle <bar> :100vs term://bash <CR>
 
-nnoremap <F4> :w <bar> :Shell python -B %.txt <CR>
+nnoremap <F4> :w <bar> :NERDTreeToggle <bar> :Shell python -B %.txt <CR>
 autocmd filetype cpp nnoremap <F3> :w <bar> :Shell g++ -std=c++17 -DLOCAL -Wall -Wextra -Wconversion -Wshadow -Wno-sign-conversion -D_GLIBCXX_DEBUG -fno-sanitize-recover=undefined -DAC % -o %< && ./a <CR>
 autocmd filetype javascript nnoremap <F3> :w <bar> :Shell node % <CR>
 autocmd filetype c nnoremap <F3> :w <bar> :Shell gcc -o a % && ./a <CR>
@@ -133,7 +148,7 @@ autocmd BufReadPost *
 function! s:ExecuteInShell(command)
   let command = join(map(split(a:command), 'expand(v:val)'))
   let winnr = bufwinnr('^' . command . '$')
-  silent! execute  winnr < 0 ? 'botright vnew ' . fnameescape(command) : winnr . 'wincmd w'
+  silent! execute  winnr < 0 ? 'botright 80 vnew ' . fnameescape(command) : winnr . 'wincmd w'
   setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap number
   echo 'Execute ' . command . '...'
   silent! execute 'silent %!'. command
@@ -155,6 +170,8 @@ augroup numbertoggle
 augroup END
 
 lua << EOF
+    vim.g.loaded_netrw = 1
+    vim.g.loaded_netrwPlugin = 1
     local nvim_lsp = require'lspconfig'
     vim.lsp.handlers["textDocument/publishDiagnostics"] = function(...) end
 
@@ -171,7 +188,57 @@ lua << EOF
 
     require'lspconfig'.clangd.setup{}
     require'lspconfig'.tsserver.setup{}
+
+    require("catppuccin").setup({
+        flavour = "mocha", -- latte, frappe, macchiato, mocha
+        background = { -- :h background
+            light = "latte",
+            dark = "mocha",
+        },
+        transparent_background = true,
+        show_end_of_buffer = false, -- show the '~' characters after the end of buffers
+        term_colors = false,
+        dim_inactive = {
+            enabled = false,
+            shade = "dark",
+            percentage = 0.15,
+        },
+        no_italic = false, -- Force no italic
+        no_bold = false, -- Force no bold
+        styles = {
+            comments = { "italic" },
+            conditionals = { "italic" },
+            loops = {},
+            functions = {},
+            keywords = {},
+            strings = {},
+            variables = {},
+            numbers = {},
+            booleans = {},
+            properties = {},
+            types = {},
+            operators = {},
+        },
+        color_overrides = {
+            latte = {
+                text = "#cdd6f4";
+            },
+        },
+        custom_highlights = {},
+        integrations = {
+            cmp = true,
+            gitsigns = true,
+            nvimtree = true,
+            telescope = true,
+            notify = false,
+            mini = false,
+            -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
+        },
+    })
+
 EOF
+
+colorscheme catppuccin-frappe
 
 set completeopt=menuone,noselect
 let g:compe = {}
