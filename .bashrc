@@ -9,6 +9,7 @@ export GITHUB_API_TOKEN=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
 GREEN="\[$(tput setaf 2)\]"
 YELLOW="\[$(tput setaf 3)\]"
 BLUE="\[$(tput setaf 4)\]"
+ORANGE="\[$(tput setaf 9)\]"
 RED="\e[31m"
 RESET="\[$(tput sgr0)\]"
 [[ $- != *i* ]] && return
@@ -19,7 +20,7 @@ alias ls='ls --color=auto'
 #the first one is the default, the second one shows the whole directory
 #ZEBY BYL TYLKO TEN JEDEN FOLDER TO MUSI BYC W (DUZE)
 
-PS1="[${YELLOW}\e[1m\u${RESET} \w]: ${BLUE}\t${RESET}\n${GREEN} >$ ${RESET}"
+PS1="[${ORANGE}\e[1m\u${RESET} \w]: ${BLUE}\t${RESET}\n${GREEN} >$ ${RESET}"
 #PS1="[\u \w]`printf "%${COLUMNS}s" "\t" `$PS1"
 #PS1="[\w]${GREEN}$ ${RESET}"
 #PS1='[\u@\h \w]$ '

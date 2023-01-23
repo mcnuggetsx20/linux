@@ -348,80 +348,6 @@ screens = [
         wallpaper=WALLPAPER,
         #wallpaper_mode='stretch',
 
-        #right1
-        right = bar.Bar(
-            margin = [500, 5, 550, 0],
-            background = top1color + '.60',
-            size=23,
-            widgets=[
-                #ewidget.StatusNotifier(
-                #    highlight_colour=dviolet,
-                #    menu_foreground = gray,
-                #    #menu_background = dgray,
-                #    menu_font = widget_defaults['font'],
-                #    menu_fontsize = widget_defaults['fontsize'],
-                #    menu_row_height = 11,
-                #    icon_size=18,
-                #    padding=5,
-                #),
-
-                widget.Spacer(10),
-
-                widget.Image(
-                    filename='/usr/share/icons/Numix/32/places/default-folder.svg',
-                    mouse_callbacks={'Button1' : lazy.spawn('pcmanfm')},
-                ),
-                widget.Spacer(10),
-
-                widget.Image(
-                    filename='/usr/share/icons/hicolor/32x32/apps/polychromatic.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('polychromatic-controller')},
-                ),
-                widget.Spacer(50),
-
-                widget.Image(
-                    filename='/usr/share/icons/hicolor/32x32/apps/steam.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('steam')},
-                    name='steam',
-                ),
-                widget.Spacer(10),
-
-                widget.Image(
-                    filename='/home/mcnuggetsx20/hdd/Program-Files/discord_linux/Discord/discord.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('discord')},
-                ),
-                widget.Spacer(10),
-
-                widget.Image(
-                    filename='/usr/share/icons/hicolor/32x32/apps/brave-desktop.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('brave')},
-                ),
-
-                widget.Spacer(50),
-
-                widget.Image(
-                    filename='/home/mcnuggetsx20/hdd/Program-Files/multimc-pkgbuild/src/multimc-bin-1.6/opt/multimc/icon.svg',
-                    mouse_callbacks={'Button1' : lazy.spawn('multimc')},
-                ),
-
-                widget.Spacer(10),
-
-                widget.Image(
-                    filename='/home/mcnuggetsx20/.config/qtile/icons/csgo.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('steam steam://rungameid/730')},
-                ),
-
-                widget.Spacer(10),
-
-                widget.Image(
-                    filename='~/.local/share/icons/hicolor/32x32/apps/steam_icon_21000.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('steam steam://rungameid/21000')},
-                ),
-
-                #widget.Spacer(50),
-            ],
-        ),
-
         #TOP1
         top=bar.Bar(
             margin=[0, 10, 0, 10], #[N, E, S, W]
@@ -449,19 +375,58 @@ screens = [
 
                 widget.Spacer(100),
 
-                widget.TaskList(
-                    parse_text=lambda text: '', 
-                    max_title_width=100,
-                    borderwidth=0, 
-                    border=black,
-                    icon_size=18, 
-                    txt_floating='',
-                    spacing = 5,
-                    foreground = gray,
-                    txt_minimized='-',
-                    font='IBM Plex Mono Bold',
-                    padding_y=1,
+                widget.Image(
+                    filename='/usr/share/icons/Numix/32/places/default-folder.svg',
+                    mouse_callbacks={'Button1' : lazy.spawn('pcmanfm')},
                 ),
+                widget.Spacer(10),
+
+                widget.Image(
+                    filename='/usr/share/icons/hicolor/32x32/apps/polychromatic.png',
+                    mouse_callbacks={'Button1' : lazy.spawn('polychromatic-controller')},
+                ),
+                widget.Spacer(10),
+
+                widget.Image(
+                    filename='/usr/share/icons/hicolor/32x32/apps/steam.png',
+                    mouse_callbacks={'Button1' : lazy.spawn('steam')},
+                    name='steam',
+                ),
+                widget.Spacer(10),
+
+                widget.Image(
+                    filename='/home/mcnuggetsx20/hdd/Program-Files/discord_linux/Discord/discord.png',
+                    mouse_callbacks={'Button1' : lazy.spawn('discord')},
+                ),
+                widget.Spacer(10),
+
+                widget.Image(
+                    filename='/usr/share/icons/hicolor/32x32/apps/brave-desktop.png',
+                    mouse_callbacks={'Button1' : lazy.spawn('brave')},
+                ),
+
+                widget.Spacer(10),
+
+                widget.Image(
+                    filename='/home/mcnuggetsx20/hdd/Program-Files/multimc-pkgbuild/src/multimc-bin-1.6/opt/multimc/icon.svg',
+                    mouse_callbacks={'Button1' : lazy.spawn('multimc')},
+                ),
+
+                widget.Spacer(10),
+
+                widget.Image(
+                    filename='/home/mcnuggetsx20/.config/qtile/icons/csgo.png',
+                    mouse_callbacks={'Button1' : lazy.spawn('steam steam://rungameid/730')},
+                ),
+
+                widget.Spacer(10),
+
+                widget.Image(
+                    filename='~/.local/share/icons/hicolor/32x32/apps/steam_icon_21000.png',
+                    mouse_callbacks={'Button1' : lazy.spawn('steam steam://rungameid/21000')},
+                ),
+
+                #widget.Spacer(50),
 
                 widget.Spacer(
                     length = bar.STRETCH,

@@ -128,16 +128,16 @@ nnoremap <C-j> :tabprevious <CR>
 nnoremap<C-k> :tabnext <CR>
 nnoremap <C-x> :tabclose <CR>
 tnoremap <Esc> <C-\><C-n>
-nnoremap <C-t> :NERDTreeToggle <bar> :100vs term://bash <CR>
+nnoremap <C-t> :100vs term://bash <CR>
 
-nnoremap <F4> :w <bar> :NERDTreeToggle <bar> :Shell python -B %.txt <CR>
+nnoremap <F4> :w <bar> :Shell python -B %.txt <CR>
 autocmd filetype cpp nnoremap <F3> :w <bar> :Shell g++ -std=c++17 -DLOCAL -Wall -Wextra -Wconversion -Wshadow -Wno-sign-conversion -D_GLIBCXX_DEBUG -fno-sanitize-recover=undefined -DAC % -o %< && ./a <CR>
 autocmd filetype javascript nnoremap <F3> :w <bar> :Shell node % <CR>
 autocmd filetype c nnoremap <F3> :w <bar> :Shell gcc -o a % && ./a <CR>
 autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"
 autocmd BufEnter * silent! lcd %:p:h
 autocmd VimEnter * NERDTree | wincmd p
-autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTree | endif | wincmd p
+autocmd TabNew * if getcmdwintype() == '' | silent NERDTree | endif | wincmd p
 autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
 autocmd BufReadPost *
@@ -221,10 +221,24 @@ lua << EOF
         },
         color_overrides = {
             latte = {
-                text = "#cdd6f4";
+                text = "#cdd6f4",
             },
         },
-        custom_highlights = {},
+
+        highlight_overrides = {
+            frappe = function(frappe)
+                return {
+                    LineNr = { fg = "#656c88" },
+                }
+            end,
+        },
+
+        custom_highlights = function(colors)
+            return {
+                cppAfterColon = { fg = "#ef9f76" },
+            }
+        end,
+
         integrations = {
             cmp = true,
             gitsigns = true,
