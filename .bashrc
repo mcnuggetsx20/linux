@@ -20,7 +20,7 @@ alias ls='ls --color=auto'
 #the first one is the default, the second one shows the whole directory
 #ZEBY BYL TYLKO TEN JEDEN FOLDER TO MUSI BYC W (DUZE)
 
-PS1="[${ORANGE}\e[1m\u${RESET} \w]: ${BLUE}\t${RESET}\n${GREEN} >$ ${RESET}"
+PS1="[${ORANGE}\e[1m\u${RESET} \w]: ${BLUE}\t${RESET}\n${ORANGE} >$ ${RESET}"
 #PS1="[\u \w]`printf "%${COLUMNS}s" "\t" `$PS1"
 #PS1="[\w]${GREEN}$ ${RESET}"
 #PS1='[\u@\h \w]$ '
@@ -49,6 +49,7 @@ alias lookfor='sudo find / -path /mnt/hdd -prune -iname'
 #alias setCover='eyeD3 --add-image $2:FRONT_COVER:front $1' #SONG / IMAGE
 alias kanter='nv /mnt/csgo/SteamLibrary/steamapps/common/Counter-Strike\ Global\ Offensive/csgo/cfg/autoexec.cfg'
 alias take='_take'
+alias picom='/mnt/hdd/Program-Files/picom-pij/build/src/start'
 
 alias nvidia-settings='nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settings'
 

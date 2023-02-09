@@ -8,6 +8,9 @@ Plug 'vim-python/python-syntax'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'nvim-tree/nvim-web-devicons' " optional, for file icons
 Plug 'preservim/nerdtree'
+Plug 'sainnhe/everforest'
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'chriskempson/base16-vim'
 call plug#end()
 
 autocmd BufNewFile *.cpp 0r /mnt/hdd/Program-Files/Vim/ClassicTemplate.txt
@@ -65,12 +68,12 @@ set laststatus=2
 set statusline+=%#keyword#
 set statusline+=\ %{(g:currentmode[mode()])}
 
-set statusline+=%#ToDo#
+set statusline+=%#Folded#
 set statusline+=\ %F\ %=\ 
 
 set statusline+=\%#number#\ 
 
-set statusline+=\%#Cursor#
+set statusline+=\%#Folded#
 set statusline+=\ [\%{&fileencoding?&fileencoding:&encoding}\]\ 
 
 set statusline+=%#number#
@@ -84,7 +87,7 @@ set statusline+=\ %p%%\
 
 set statusline+=\%#number#\ 
 
-set statusline+=\%#Substitute#
+set statusline+=\%#Folded#
 set statusline+=\ %l:%c\ 
 
 set statusline+=%#function#
@@ -100,14 +103,8 @@ set numberwidth=5
 "set guioptions -=T
 "set guioptions-=r
 
-"set termguicolors 
-"colorscheme default
-"let ayucolor="light"
-"set background=light
-"colorscheme desert
-"colorscheme alduin
-"colorscheme ayu
-colorscheme catppuccin-mocha
+set termguicolors
+colorscheme custom
 "highlight Normal guibg=none
 
 if (has('gui_running'))
@@ -129,16 +126,19 @@ nnoremap<C-k> :tabnext <CR>
 nnoremap <C-x> :tabclose <CR>
 tnoremap <Esc> <C-\><C-n>
 nnoremap <C-t> :100vs term://bash <CR>
+inoremap { {}<left>
 
 nnoremap <F4> :w <bar> :Shell python -B %.txt <CR>
-autocmd filetype cpp nnoremap <F3> :w <bar> :Shell g++ -std=c++17 -DLOCAL -Wall -Wextra -Wconversion -Wshadow -Wno-sign-conversion -D_GLIBCXX_DEBUG -fno-sanitize-recover=undefined -DAC % -o %< && ./a <CR>
+autocmd filetype cpp nnoremap <F3> :w <bar> :80vs term://bash -c 'g++ -std=c++17 -DLOCAL -Wall -Wextra -Wconversion -Wshadow -Wno-sign-conversion -D_GLIBCXX_DEBUG -fno-sanitize-recover=undefined -DAC % -o %:r && ./%:r' <bar> start <CR><CR>
 autocmd filetype javascript nnoremap <F3> :w <bar> :Shell node % <CR>
-autocmd filetype c nnoremap <F3> :w <bar> :Shell gcc -o a % && ./a <CR>
+autocmd filetype c nnoremap <F3> :w <bar> :botright 80 vnew <bar> 0read !gcc # -o #:r && ./#:r <CR><CR>
 autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"
 autocmd BufEnter * silent! lcd %:p:h
 autocmd VimEnter * NERDTree | wincmd p
 autocmd TabNew * if getcmdwintype() == '' | silent NERDTree | endif | wincmd p
 autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+autocmd BufRead,BufNewFile * syn match parens /[()]/ | hi parens guifg=red
 
 autocmd BufReadPost *
   \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
@@ -156,7 +156,9 @@ function! s:ExecuteInShell(command)
   silent! redraw
   silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
   silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShell(''' . command . ''')<CR>'
+  normal Go
   echo 'Shell command ' . command . ' executed.'
+
 endfunction
 
 command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
@@ -252,7 +254,7 @@ lua << EOF
 
 EOF
 
-colorscheme catppuccin-frappe
+"colorscheme catppuccin-frappe
 
 set completeopt=menuone,noselect
 let g:compe = {}

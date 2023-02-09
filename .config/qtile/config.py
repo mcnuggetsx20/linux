@@ -40,7 +40,6 @@ dlgray = '#434345'
 top1color = '190c24'
 
 iconPath = '~/.config/qtile/icons/'
-
 BLK=False
 
 ################### Hooks #########################
@@ -89,6 +88,13 @@ def func(new_window):
         new_window.cmd_toggle_floating()
         new_window.cmd_set_position_floating(0, 18)
         new_window.cmd_static(screen=1)
+
+    elif new_window.info()['wm_class'][0] == 'xterm':
+        qtile.widgets_map['debug'].update(new_window.name)
+        new_window.cmd_enable_floating()
+        new_window.cmd_place(0, 100)
+        #for i in range(0, 1000, 3):
+        #    new_window.cmd_set_position_floating(i, 100)
 
 
 @hook.subscribe.client_killed
@@ -215,7 +221,7 @@ all_layouts = [
     layout.MonadThreeCol(
         border_focus=orange, 
         border_width=2, 
-        single_border_width=1, 
+        single_border_width=0, 
         margin=7,
         new_client_position='before_current', 
         change_ratio=0.025,
@@ -426,7 +432,18 @@ screens = [
                     mouse_callbacks={'Button1' : lazy.spawn('steam steam://rungameid/21000')},
                 ),
 
-                #widget.Spacer(50),
+                widget.Spacer(50),
+
+                ewidget.StatusNotifier(
+                    highlight_colour=dviolet,
+                    menu_foreground = gray,
+                    #menu_background = dgray,
+                    menu_font = widget_defaults['font'],
+                    menu_fontsize = widget_defaults['fontsize'],
+                    menu_row_height = 11,
+                    icon_size=18,
+                    padding=5,
+                ),
 
                 widget.Spacer(
                     length = bar.STRETCH,
@@ -900,6 +917,11 @@ screens = [
 
                 widget.TextBox(
                     name='debug',
+                ),
+
+                widget.TextBox(
+                    name = 'pin',
+                    text = './gcloud compute scp mcnuggetsx20@minecraft:/home/swiat.zip ~/Downloads/'
                 ),
 
                 widget.Spacer(bar.STRETCH),

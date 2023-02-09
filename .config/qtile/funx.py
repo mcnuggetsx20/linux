@@ -152,7 +152,9 @@ def wttr(loc):
 
 def compswitch(qtile):
     global comp
-    command = 'killall ' * int(comp) + 'picom' + ' --experimental-backend' * int(not comp)
+    if comp: command = 'killall picom'
+    else: command = '/mnt/hdd/Program-Files/picom-pij/build/src/start &'
+    #command = 'killall ' * int(comp) + 'picom'
     Popen(command, shell=True)
     comp = not comp
     #qtile.widgets_map['debug'].update(str(comp))
@@ -181,11 +183,11 @@ def groupSwitch(group):
     def a(qtile):
         global bars
         qtile.groups_map[group.name].cmd_toscreen()
-        if group.position == 5 or not bars:
-            qtile.cmd_hide_show_bar()
-            bars = not bars
-            walpSwitch(qtile)
-            compswitch(qtile)
+        #if group.position == 5 or not bars:
+        #    qtile.cmd_hide_show_bar()
+        #    bars = not bars
+        #    walpSwitch(qtile)
+        #    compswitch(qtile)
 
     return a
 

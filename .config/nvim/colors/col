@@ -1,0 +1,160 @@
+
+
+SpecialKey     xxx term=bold ctermfg=1 guifg=Blue
+EndOfBuffer    xxx links to NonText
+NonText        xxx term=bold ctermfg=9 gui=bold guifg=Blue
+Directory      xxx term=bold ctermfg=1 guifg=Blue
+ErrorMsg       xxx term=standout ctermfg=15 ctermbg=4 guifg=White guibg=Red
+IncSearch      xxx term=reverse cterm=reverse gui=reverse
+Search         xxx term=reverse ctermfg=0 ctermbg=14 guibg=Yellow
+CurSearch      xxx links to Search
+MoreMsg        xxx term=bold ctermfg=2 gui=bold guifg=SeaGreen
+ModeMsg        xxx term=bold cterm=bold gui=bold
+LineNr         xxx term=underline ctermfg=6 guifg=Brown
+LineNrAbove    xxx cleared
+LineNrBelow    xxx cleared
+CursorLineNr   xxx term=bold cterm=underline ctermfg=6 gui=bold guifg=Brown
+CursorLineSign xxx links to SignColumn
+CursorLineFold xxx links to FoldColumn
+Question       xxx term=standout ctermfg=2 gui=bold guifg=SeaGreen
+StatusLine     xxx term=bold,reverse cterm=bold,reverse gui=bold,reverse
+StatusLineNC   xxx term=reverse cterm=reverse gui=reverse
+VertSplit      xxx term=reverse cterm=reverse gui=reverse
+Title          xxx term=bold ctermfg=5 gui=bold guifg=Magenta
+Visual         xxx term=reverse cterm=reverse guibg=LightGrey
+VisualNOS      xxx term=bold,underline cterm=bold,underline
+                   gui=bold,underline
+WarningMsg     xxx term=standout ctermfg=4 guifg=Red
+WildMenu       xxx term=standout ctermfg=0 ctermbg=14 guifg=Black
+                   guibg=Yellow
+Folded         xxx term=standout ctermfg=1 ctermbg=7 guifg=DarkBlue
+                   guibg=LightGrey
+FoldColumn     xxx term=standout ctermfg=1 ctermbg=7 guifg=DarkBlue
+                   guibg=Grey
+DiffAdd        xxx term=bold ctermbg=9 guibg=LightBlue
+DiffChange     xxx term=bold ctermbg=13 guibg=LightMagenta
+DiffDelete     xxx term=bold ctermfg=9 ctermbg=11 gui=bold guifg=Blue
+                   guibg=LightCyan
+DiffText       xxx term=reverse cterm=bold ctermbg=12 gui=bold guibg=Red
+SignColumn     xxx term=standout ctermfg=1 ctermbg=7 guifg=DarkBlue
+                   guibg=Grey
+Conceal        xxx ctermfg=7 ctermbg=8 guifg=LightGrey guibg=DarkGrey
+SpellBad       xxx term=reverse ctermbg=12 gui=undercurl guisp=Red
+SpellCap       xxx term=reverse ctermbg=9 gui=undercurl guisp=Blue
+SpellRare      xxx term=reverse ctermbg=13 gui=undercurl guisp=Magenta
+SpellLocal     xxx term=underline ctermbg=11 gui=undercurl guisp=DarkCyan
+Pmenu          xxx ctermfg=0 ctermbg=13 guibg=LightMagenta
+PmenuSel       xxx ctermfg=0 ctermbg=7 guibg=Grey
+PmenuSbar      xxx ctermbg=7 guibg=Grey
+PmenuThumb     xxx ctermbg=0 guibg=Black
+TabLine        xxx term=underline cterm=underline ctermfg=0 ctermbg=7
+                   gui=underline guibg=LightGrey
+TabLineSel     xxx term=bold cterm=bold gui=bold
+TabLineFill    xxx term=reverse cterm=reverse gui=reverse
+CursorColumn   xxx term=reverse ctermbg=7 guibg=Grey90
+CursorLine     xxx term=underline cterm=underline guibg=Grey90
+ColorColumn    xxx term=reverse ctermbg=12 guibg=LightRed
+QuickFixLine   xxx links to Search
+StatusLineTerm xxx term=bold,reverse cterm=bold ctermfg=15 ctermbg=2
+                   gui=bold guifg=bg guibg=DarkGreen
+StatusLineTermNC xxx term=reverse ctermfg=15 ctermbg=2 guifg=bg
+                   guibg=DarkGreen
+Cursor         xxx guifg=bg guibg=fg
+lCursor        xxx guifg=bg guibg=fg
+Normal         xxx font=8514oem 14
+MatchParen     xxx term=reverse ctermbg=11 guibg=Cyan
+ToolbarLine    xxx term=underline ctermbg=7 guibg=LightGrey
+ToolbarButton  xxx cterm=bold ctermfg=15 ctermbg=8 gui=bold guifg=White
+                   guibg=Grey40
+Comment        xxx term=bold ctermfg=1 guifg=Blue
+Constant       xxx term=underline ctermfg=4 guifg=Magenta
+Special        xxx term=bold ctermfg=5 guifg=#6a5acd
+Identifier     xxx term=underline ctermfg=3 guifg=DarkCyan
+Statement      xxx term=bold ctermfg=6 gui=bold guifg=Brown
+PreProc        xxx term=underline ctermfg=5 guifg=#6a0dad
+Type           xxx term=underline ctermfg=2 gui=bold guifg=SeaGreen
+Underlined     xxx term=underline cterm=underline ctermfg=5 gui=underline
+                   guifg=SlateBlue
+Ignore         xxx ctermfg=15 guifg=bg
+Error          xxx term=reverse ctermfg=15 ctermbg=12 guifg=White guibg=Red
+Todo           xxx term=standout ctermfg=0 ctermbg=14 guifg=Blue
+                   guibg=Yellow
+String         xxx links to Constant
+Character      xxx links to Constant
+Number         xxx links to Constant
+Boolean        xxx links to Constant
+Float          xxx links to Number
+Function       xxx links to Identifier
+Conditional    xxx links to Statement
+Repeat         xxx links to Statement
+Label          xxx links to Statement
+Operator       xxx links to Statement
+Keyword        xxx links to Statement
+Exception      xxx links to Statement
+Include        xxx links to PreProc
+Define         xxx links to PreProc
+Macro          xxx links to PreProc
+PreCondit      xxx links to PreProc
+StorageClass   xxx links to Type
+Structure      xxx links to Type
+Typedef        xxx links to Type
+Tag            xxx links to Special
+SpecialChar    xxx links to Special
+Delimiter      xxx links to Special
+SpecialComment xxx links to Special
+Debug          xxx links to Special
+helpHeadline   xxx links to Statement
+helpSectionDelim xxx links to PreProc
+helpIgnore     xxx links to Ignore
+helpExample    xxx links to Comment
+helpBar        xxx links to Ignore
+helpStar       xxx links to Ignore
+helpHyperTextJump xxx links to Identifier
+helpHyperTextEntry xxx links to String
+helpBacktick   xxx links to Ignore
+helpNormal     xxx cleared
+helpVim        xxx links to Identifier
+helpOption     xxx links to Type
+helpCommand    xxx links to Comment
+helpHeader     xxx links to PreProc
+helpGraphic    xxx cleared
+helpNote       xxx links to Todo
+helpWarning    xxx links to Todo
+helpDeprecated xxx links to Todo
+helpSpecial    xxx links to Special
+helpLeadBlank  xxx cleared
+helpNotVi      xxx links to Special
+helpComment    xxx links to Comment
+helpConstant   xxx links to Constant
+helpString     xxx links to String
+helpCharacter  xxx links to Character
+helpNumber     xxx links to Number
+helpBoolean    xxx links to Boolean
+helpFloat      xxx links to Float
+helpIdentifier xxx links to Identifier
+helpFunction   xxx links to Function
+helpStatement  xxx links to Statement
+helpConditional xxx links to Conditional
+helpRepeat     xxx links to Repeat
+helpLabel      xxx links to Label
+helpOperator   xxx links to Operator
+helpKeyword    xxx links to Keyword
+helpException  xxx links to Exception
+helpPreProc    xxx links to PreProc
+helpInclude    xxx links to Include
+helpDefine     xxx links to Define
+helpMacro      xxx links to Macro
+helpPreCondit  xxx links to PreCondit
+helpType       xxx links to Type
+helpStorageClass xxx links to StorageClass
+helpStructure  xxx links to Structure
+helpTypedef    xxx links to Typedef
+helpSpecialChar xxx links to SpecialChar
+helpTag        xxx links to Tag
+helpDelimiter  xxx links to Delimiter
+helpSpecialComment xxx links to SpecialComment
+helpDebug      xxx links to Debug
+helpUnderlined xxx links to Underlined
+helpError      xxx links to Error
+helpTodo       xxx links to Todo
+helpURL        xxx links to String

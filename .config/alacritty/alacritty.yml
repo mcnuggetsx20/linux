@@ -1,5 +1,5 @@
 window:
-  opacity: 0.7
+  opacity: 1
 
 font:
   normal:
@@ -30,17 +30,17 @@ key_bindings:
 
 colors:
   primary:
-    background: '#101010' # base3
+    background: '#FFFFFF' # base3
     foreground: '#D0D0D0' # base00
 
   cursor:
     text:   '#fdf6e3' # base3
-    cursor: '#A9DC76' # base00
+    cursor: '#a52a2a' # base00
 
   normal:
     black:   '#000000' # base2
     red:     '#C61717' # red
-    green:   '#A9DC76' # green
+    green:   '#028A42' # green
     yellow:  '#d6bf55' # yellow
     blue:    '#1D72AE' # blue
     magenta: '#C53AF0' # magenta
