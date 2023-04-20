@@ -25,6 +25,7 @@ black  = '#000000'
 swamp  = '#335D03'  
 lime   = '#32CD32'
 green  = '#A9DC76'
+dgreen = '#028A42'
 violet = '#C76BFA'
 dviolet= '#7A05BE'
 dblue  = '#3A69F0'
@@ -222,7 +223,7 @@ all_layouts = [
         border_focus=orange, 
         border_width=2, 
         single_border_width=0, 
-        margin=7,
+        margin=12,
         new_client_position='before_current', 
         change_ratio=0.025,
         min_ratio=0,
@@ -299,7 +300,7 @@ groups = [
             Match(title='Minecraft* 1.18.2'),
             Match(title='LEGO® Star Wars™: The Complete Saga'),
             #Match(wm_class='hl2_linux'),
-            #Match(wm_class='Steam'), 
+            Match(wm_class='Steam'), 
         ]
     ),
     Group(
@@ -354,9 +355,31 @@ screens = [
         wallpaper=WALLPAPER,
         #wallpaper_mode='stretch',
 
+        #LEFT1
+        left=bar.Bar(
+            margin = [0, 0, 1200, 0],
+            background='#000000.00',
+            size=18,
+            border_width=0,
+            border_color=dblue,
+            widgets=[
+                widget.Spacer(50),
+                ewidget.StatusNotifier(
+                    highlight_colour=dviolet,
+                    menu_foreground = gray,
+                    #menu_background = dgray,
+                    menu_font = widget_defaults['font'],
+                    menu_fontsize = widget_defaults['fontsize'],
+                    menu_row_height = 11,
+                    icon_size=18,
+                    padding=5,
+                ),
+            ],
+        ),
+
         #TOP1
         top=bar.Bar(
-            margin=[0, 10, 0, 10], #[N, E, S, W]
+            #margin=[0, 10, 0, 10], #[N, E, S, W]
             #background=solar + '.30',
             background = top1color + '.60',
             border_width=0,
@@ -364,22 +387,6 @@ screens = [
             #background = '#434345',
             #background=dgray,
             widgets=[
-                widget.GroupBox(
-                    font='White Rabbit', 
-                    fontsize=14,
-                    highlight_method='line', 
-                    this_current_screen_border= black, 
-                    this_screen_border=red,
-                    block_highlight_text_color=ored,
-                    inactive=gray,
-                    active=gray,
-                    disable_drag=True,
-                    use_mouse_wheel=False,
-                    #background =gray,
-                    highlight_color=transp,
-                ),
-
-                widget.Spacer(100),
 
                 widget.Image(
                     filename='/usr/share/icons/Numix/32/places/default-folder.svg',
@@ -434,15 +441,20 @@ screens = [
 
                 widget.Spacer(50),
 
-                ewidget.StatusNotifier(
-                    highlight_colour=dviolet,
-                    menu_foreground = gray,
-                    #menu_background = dgray,
-                    menu_font = widget_defaults['font'],
-                    menu_fontsize = widget_defaults['fontsize'],
-                    menu_row_height = 11,
-                    icon_size=18,
-                    padding=5,
+                #widget.Systray(),
+
+                widget.TaskList(
+                    parse_text=lambda text: '|' + text, 
+                    max_title_width=100,
+                    borderwidth=0, 
+                    border=black,
+                    icon_size=18, 
+                    txt_floating='',
+                    spacing = 20,
+                    foreground = gray,
+                    txt_minimized='-',
+                    font='IBM Plex Mono Bold',
+                    #padding_y=-4,
                 ),
 
                 widget.Spacer(
@@ -489,7 +501,6 @@ screens = [
                     font='Bartek',
                     fontsize=25,
                     mouse_callbacks={'Button1' : lazy.spawn('Straw')},
-                    fmt = '<u> {} </u>'
                 ),
 
                 widget.TextBox(
@@ -586,23 +597,33 @@ screens = [
             border_width=0,
             border_color=dblue,
             widgets= [
+                widget.GroupBox(
+                    font='White Rabbit', 
+                    fontsize=14,
+                    highlight_method='line', 
+                    this_current_screen_border= white, 
+                    this_screen_border=red,
+                    block_highlight_text_color=ored,
+                    inactive=gray,
+                    active=gray,
+                    disable_drag=True,
+                    use_mouse_wheel=False,
+                    background =dgray,
+                    highlight_color=transp,
+                ),
+
+                widget.TextBox(
+                    text = '   ',
+                    background=gray,
+                    foreground=black,
+                    padding=-2,
+                    fontsize=16,
+                ),
+
                 widget.Spacer(
                     length=bar_indent,
                 ),
 
-                widget.TaskList(
-                    parse_text=lambda text: '|' + text, 
-                    max_title_width=100,
-                    borderwidth=0, 
-                    border=black,
-                    icon_size=18, 
-                    txt_floating='',
-                    spacing = 20,
-                    foreground = gray,
-                    txt_minimized='-',
-                    font='IBM Plex Mono Bold',
-                    #padding_y=-4,
-                ),
 
                 widget.Spacer(bar.STRETCH),
 
@@ -666,14 +687,30 @@ screens = [
 
                 widget.Spacer(bar.STRETCH),
 
-                widget.Systray(),
+                widget.TextBox(
+                    text = '   ',
+                    foreground=black,
+                    background=dgreen,
+                ),
+
+                widget.TextBox(
+                    name = 'current_resolution',
+                    mouse_callbacks = {'Button1' : resSwitch},
+                    text = ' @3440x1440 ',
+                    background=dgray,
+                    foreground=gray,
+                ),
+
+                widget.Spacer(
+                   length=12,
+                ),
 
                 widget.TextBox(
                     text = 'C',
                     font='Bartek',
                     fontsize=30,
                     foreground=black,
-                    background=dviolet,
+                    background=dgreen,
                 ),
 
                 widget.TextBox(
@@ -689,7 +726,7 @@ screens = [
                 widget.TextBox(
                     text='  ',
                     font='mononoki',
-                    background=dviolet,
+                    background=gray,
                     foreground=black,
                 ),
 
@@ -707,7 +744,7 @@ screens = [
                 widget.TextBox(
                     text='  ',
                     font='mononoki',
-                    background=dviolet,
+                    background=gray,
                     foreground=black,
                 ),
 
@@ -725,7 +762,7 @@ screens = [
                 widget.TextBox(
                     text = '  ',
                     foreground = black,
-                    background = dviolet,
+                    background = gray,
                     font = 'Font Awesome 6 Free Regular',
                 ),
 
@@ -745,7 +782,7 @@ screens = [
                 widget.TextBox(
                     text = '   ',
                     foreground = black,
-                    background = dviolet,
+                    background = gray,
                 ),
 
                 widget.GenPollText(
@@ -762,7 +799,7 @@ screens = [
                 
                 widget.TextBox(
                     text='   ' ,
-                    background = dviolet,
+                    background = gray,
                     foreground = black,
                     padding=-2,
                 ),
@@ -781,7 +818,7 @@ screens = [
                 widget.TextBox(
                     text = '  ',
                     name = 'MicIcon1',
-                    background=dviolet,
+                    background=gray,
                     foreground=black,
                     font = 'mononoki',
                 ),
@@ -790,7 +827,7 @@ screens = [
                     name = 'mic_level1',
                     text=' ' + vol1(device='mic')[0],
                     background=dgray,
-                    foreground=green,
+                    foreground=gray,
                     font = 'Ubuntu Bold',
                     fontsize=12,
                 ),
@@ -813,7 +850,7 @@ screens = [
                 widget.TextBox(
                     name='mic_number1',
                     text = vol1(device='mic')[2]+'%',
-                    foreground=violet,
+                    foreground=ored,
                     background=dgray,
                 ),
 
@@ -830,7 +867,7 @@ screens = [
                 widget.TextBox(
                     text = ' ' + ChangeAudioDevice(True) + ' ',
                     name = 'AudioDeviceIndicator1',
-                    background=dviolet,
+                    background=gray,
                     foreground=black,
                     font = 'mononoki',
                 ),
@@ -862,7 +899,7 @@ screens = [
                 widget.TextBox(
                     name='vol_number1',
                     text = vol1(device='else')[2]+'%',
-                    foreground=violet,
+                    foreground=ored,
                     background=dgray,
                 ),
 
@@ -1003,7 +1040,7 @@ screens = [
                 ),
             ],
 
-            size=18),
+            size=20),
         ),
     
 

@@ -49,7 +49,8 @@ alias lookfor='sudo find / -path /mnt/hdd -prune -iname'
 #alias setCover='eyeD3 --add-image $2:FRONT_COVER:front $1' #SONG / IMAGE
 alias kanter='nv /mnt/csgo/SteamLibrary/steamapps/common/Counter-Strike\ Global\ Offensive/csgo/cfg/autoexec.cfg'
 alias take='_take'
-alias picom='/mnt/hdd/Program-Files/picom-pij/build/src/start'
+#alias picom='/mnt/hdd/Program-Files/picom-pij/build/src/start'
+alias mk='gcc -o main main.c -lX11 -Wextra -Wall'
 
 alias nvidia-settings='nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settings'
 
@@ -87,6 +88,3 @@ _take(){
     cd "$@"
 }
 
-setCover(){
-    eyeD3 --add-image "$2":FRONT_COVER:front "$1"
-}

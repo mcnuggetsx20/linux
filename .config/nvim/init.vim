@@ -129,16 +129,14 @@ nnoremap <C-t> :100vs term://bash <CR>
 inoremap { {}<left>
 
 nnoremap <F4> :w <bar> :Shell python -B %.txt <CR>
-autocmd filetype cpp nnoremap <F3> :w <bar> :80vs term://bash -c 'g++ -std=c++17 -DLOCAL -Wall -Wextra -Wconversion -Wshadow -Wno-sign-conversion -D_GLIBCXX_DEBUG -fno-sanitize-recover=undefined -DAC % -o %:r && ./%:r' <bar> start <CR><CR>
+autocmd filetype cpp nnoremap <F3> :w <bar> :80vs term://bash -c 'g++ -std=c++17 -DLOCAL -Wall -Wextra -Wconversion -Wshadow -Wno-sign-conversion -D_GLIBCXX_DEBUG -fno-sanitize-recover=undefined -DAC % -o %:r && ./%:r' <bar> 0 <bar> start <CR><CR>
+autocmd filetype c nnoremap <F3> :w <bar> :80vs term://bash -c 'gcc % -o %:r && ./%:r' <bar> 0 <bar> start <CR><CR>
 autocmd filetype javascript nnoremap <F3> :w <bar> :Shell node % <CR>
-autocmd filetype c nnoremap <F3> :w <bar> :botright 80 vnew <bar> 0read !gcc # -o #:r && ./#:r <CR><CR>
 autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"
 autocmd BufEnter * silent! lcd %:p:h
 autocmd VimEnter * NERDTree | wincmd p
 autocmd TabNew * if getcmdwintype() == '' | silent NERDTree | endif | wincmd p
 autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-
-autocmd BufRead,BufNewFile * syn match parens /[()]/ | hi parens guifg=red
 
 autocmd BufReadPost *
   \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
@@ -250,10 +248,46 @@ lua << EOF
             mini = false,
             -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
         },
+
+        require'nvim-treesitter.configs'.setup {
+          -- A list of parser names, or "all" (the four listed parsers should always be installed)
+          ensure_installed = { "c", "vim", "python", "help" },
+
+          -- Install parsers synchronously (only applied to `ensure_installed`)
+          sync_install = false,
+
+          -- Automatically install missing parsers when entering buffer
+          -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+          auto_install = false,
+
+          disable = {"vim"},
+
+          -- List of parsers to ignore installing (for "all")
+          ignore_install = { "javascript" },
+
+          ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
+          -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
+
+          highlight = {
+            enable = true,
+
+            -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
+            -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
+            -- the name of the parser)
+            -- list of language that will be disabled
+
+            -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+            -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+            -- Using this option may slow down your editor, and you may see some duplicate highlights.
+            -- Instead of true it can also be a list of languages
+            additional_vim_regex_highlighting = false,
+          },
+        }
     })
 
 EOF
 
+autocmd BufRead,BufNewFile * syn match parens /[()]/ | hi parens guifg=red
 "colorscheme catppuccin-frappe
 
 set completeopt=menuone,noselect

@@ -1,4 +1,4 @@
-from subprocess import check_output, run, Popen
+from subprocess import check_output, run, Popen, CalledProcessError
 from lib import *
 from re import split as sp
 from libqtile import qtile
@@ -91,9 +91,12 @@ def ChangeAudioDevice(init=False):
         return a
 
     else:
-        curr = check_output('pacmd list | grep "active port: <analog-output"', shell=True, encoding='utf-8')
-        curr = sp('\t|\n', curr)[1]
-        return device_indicators[ int( 'headphones' in curr) ]
+        try:
+            curr = check_output('pacmd list | grep "active port: <analog-output"', shell=True, encoding='utf-8')
+            curr = sp('\t|\n', curr)[1]
+            return device_indicators[ int( 'headphones' in curr) ]
+        except CalledProcessError:
+            return device_indicators[0]
 
 
 def fanSpeed(ok):
@@ -111,7 +114,7 @@ def DiskSpace():
 
 def brightness_toggle(n):
     #status = check_output("xrandr --current --verbose | grep Gamma", shell=True, encoding='utf-8').split(':')[2]
-    run("xrandr --output DP-4 --gamma %(new)f" % {'new': n}, shell=True, encoding='utf-8')
+    run("xrandr --output DP-2 --gamma %(new)f" % {'new': n}, shell=True, encoding='utf-8')
     return
 
         
@@ -137,7 +140,7 @@ def network_current():
     st.append('None')
 
     current_net_dev = network_devices[st[1].split('-')[-1]]
-    qtile.widgets_map['network_device1'].update(' ' + current_net_dev)
+    qtile.widgets_map['network_device1'].update(current_net_dev + ' ')
     qtile.widgets_map['network_name1'].update(' ' + st[0])
     #qtile.widgets_map['network_device2'].update(' ' + current_net_dev)
     #qtile.widgets_map['network_name2'].update(' ' + st[0])
@@ -152,8 +155,7 @@ def wttr(loc):
 
 def compswitch(qtile):
     global comp
-    if comp: command = 'killall picom'
-    else: command = '/mnt/hdd/Program-Files/picom-pij/build/src/start &'
+    command = 'killall ' * comp + 'picom'
     #command = 'killall ' * int(comp) + 'picom'
     Popen(command, shell=True)
     comp = not comp
@@ -191,4 +193,16 @@ def groupSwitch(group):
 
     return a
 
+def resSwitch():
+    global RES
+    if RES: command = RES_CUSTOM
+    else: command = RES_NORMAL
+
+    RES = not RES
+
+    run(command, shell=True)
+    run(RES_SECONDARY_SCREEN, shell=True)
+    run(DPI_COMMAND, shell=True)
+
+    qtile.widgets_map['current_resolution'].update(command[55:67])
 

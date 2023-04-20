@@ -68,7 +68,7 @@ hi ToolbarButton cterm=bold ctermfg=15 ctermbg=8 gui=bold guifg=White guibg=Grey
 hi Comment term=bold ctermfg=1 guifg=Blue
 hi Constant term=underline ctermfg=4 guifg=Magenta
 hi Special term=bold ctermfg=5 guifg=#6a5acd
-hi Identifier term=underline ctermfg=3 guifg=DarkCyan
+hi Identifier term=underline ctermfg=3 guifg=Black
 hi Statement term=bold ctermfg=6 gui=bold guifg=Brown
 hi PreProc term=underline ctermfg=5 guifg=#6a0dad
 hi Type term=underline ctermfg=2 gui=bold guifg=SeaGreen
@@ -76,12 +76,14 @@ hi Underlined term=underline cterm=underline ctermfg=5 gui=underline guifg=Slate
 hi Ignore ctermfg=15 guifg=bg
 hi Error term=reverse ctermfg=15 ctermbg=12 guifg=White guibg=Red
 hi Todo term=standout ctermfg=0 ctermbg=14 guifg=Blue guibg=Yellow
+hi Function term=underline ctermfg=3 guifg=DarkCyan
+hi Delimiter guifg=Red
+
 hi link String Constant
 hi link Character Constant
 hi link Number Constant
 hi link Boolean Constant
 hi link Float Number
-hi link Function Identifier
 hi link Conditional Statement
 hi link Repeat Statement
 hi link Label Statement
@@ -385,3 +387,53 @@ hi! link shSpecial String
 hi! link shCommandSub NormalFg
 hi! link shDerefSpecial NormalFg
 hi! link shOperator NormalFg
+
+" nvim-treesitter
+hi! link TSAnnotation PreProc
+hi! link TSAttribute PreProc
+hi! link TSBoolean Keyword
+hi! link TSCharacter Character
+hi! link TSComment Comment
+hi! link TSConstructor Function
+hi! link TSConditional Keyword
+hi! link TSConstant Constant
+hi! link TSConstBuiltin Keyword
+hi! link TSConstMacro cMacroName
+hi! link TSError codeError
+hi! link TSException Keyword
+hi! link TSField InstanceField
+hi! link TSFloat Number
+hi! link TSFunction Function
+hi! link TSFuncBuiltin Normal
+hi! link TSFuncMacro cMacroName
+hi! link TSInclude Keyword
+hi! link TSKeyword Keyword
+hi! link TSKeywordFunction Keyword
+hi! link TSLabel Normal
+hi! link TSMethod Function
+hi! link TSNamespace cDataStructure
+hi! link TSNone Normal
+hi! link TSNumber Number
+hi! link TSOperator Normal
+hi! link TSParameter Function
+hi! link TSParameterReference Function
+hi! link TSProperty TSField
+hi! link TSPunctDelimiter Normal
+hi! link TSPunctBracket Normal
+hi! link TSPunctSpecial Keyword
+hi! link TSRepeat Keyword
+hi! link TSString String
+hi! link TSStringRegex Number
+hi! link TSStringEscape Keyword
+hi! link TSTag htmlTag
+hi! link TSTagDelimiter htmlTag
+hi! link TSText Normal
+hi! link TSLiteral Normal
+hi! link TSURI markdownLinkText
+hi! link TSNote CodeInfo
+hi! link TSWarning CodeWarning
+hi! link TSDanger CodeError
+hi! link TSType Normal
+hi! link TSTypeBuiltin Keyword
+hi! link TSVariable Normal
+hi! link TSVariableBuiltin Keyword
