@@ -8,9 +8,11 @@ alias download='wget -P "$DIR" --content-disposition --quiet --show-progress "$U
 DIR=/mnt/hdd/Program-Files/discord_linux
 URL='https://discord.com/api/download?platform=linux&format=tar.gz'
 
-#retrieve the latest remote version
+#retrieve versions
 LATEST=$(curl -sIL "$URL" | grep location | awk -F "/" '{print $(NF-1)}')
 LOCAL=$(exa --oneline "$DIR" | grep .tar.gz | awk -F "" '{for(i=9; i<=NF-7;++i) printf $i}')
+
+#get the number of entries in $DIR
 LENGTH=$(exa --oneline "$DIR" | wc -l)
 
 
