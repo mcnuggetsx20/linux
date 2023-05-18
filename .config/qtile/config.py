@@ -301,6 +301,7 @@ groups = [
             Match(title='LEGO® Star Wars™: The Complete Saga'),
             #Match(wm_class='hl2_linux'),
             Match(wm_class='Steam'), 
+            Match(wm_class='steam'), 
         ]
     ),
     Group(
@@ -314,6 +315,7 @@ groups = [
             margin_on_single=[10,50,10,50],
             margin=[10,25,10,25],
             ),
+        layout.Max(border_width=0, border_focus='#000000', margin=[0, 0, 0, 0]),
         ],
         matches = [
             Match(wm_class='discord'),

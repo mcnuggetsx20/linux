@@ -1,0 +1,43 @@
+#!/bin/bash
+
+#make aliases work
+shopt -s expand_aliases
+alias unpack='tar -xf "$DIR"/discord*.tar.gz -C "$DIR"'
+alias download='wget -P "$DIR" --content-disposition --quiet --show-progress "$URL"'
+
+DIR=/mnt/hdd/Program-Files/discord_linux
+URL='https://discord.com/api/download?platform=linux&format=tar.gz'
+
+#retrieve the latest remote version
+LATEST=$(curl -sIL "$URL" | grep location | awk -F "/" '{print $(NF-1)}')
+LOCAL=$(exa --oneline "$DIR" | grep .tar.gz | awk -F "" '{for(i=9; i<=NF-7;++i) printf $i}')
+LENGTH=$(exa --oneline "$DIR" | wc -l)
+
+
+echo ------------------
+echo Latest: "$LATEST"
+echo Current: "$LOCAL"
+echo ------------------
+
+if [ "$LOCAL" == "$LATEST" ]; then
+    echo Current version is up to date
+
+    if [ "$LENGTH" == "1" ]; then
+        echo Unpacking
+        unpack
+    fi
+    exit 1
+
+elif [ "$LOCAL" == "" ]; then
+    printf "No version found\nInstalling"
+
+else
+    printf "A newer version available\nUpdating"
+fi
+echo
+
+rm -rf "$DIR"/*
+download; unpack
+exit 1
+
+

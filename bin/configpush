@@ -5,6 +5,7 @@ USR=/home/mcnuggetsx20
 DATE=$(date "+%d %b %Y %H:%M:%S")
 
 cp /bin/configpush ${DEST}/bin
+cp /bin/update-discord ${DEST}/bin
 cp /bin/nvim_client_python ${DEST}/bin
 cp -r ${USR}/.xinitrc ${DEST}/
 cp -r ${USR}/.config/qtile ${DEST}/.config

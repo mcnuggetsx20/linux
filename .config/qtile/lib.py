@@ -32,7 +32,7 @@ gamma_rules={
         'Minecraft* 1.18.2 - Singleplayer' :   1.2,
         'Minecraft* 1.19.2 - Singleplayer' :   1.2,
         'Minecraft* 1.19.2 - Multiplayer (3rd-party Server)' :   1.2,
-        'Counter-Strike: Global Offensive - OpenGL' :   1.65,
+        'Counter-Strike: Global Offensive - OpenGL' :   1.55,
 }
 
 WALLPAPER = '/mnt/hdd/zdjecia/wallpaper/green.png'
