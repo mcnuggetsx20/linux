@@ -1,0 +1,21 @@
+#!/bin/python
+
+import argparse
+import subprocess
+
+parser = argparse.ArgumentParser(description='Jezeli uzyjesz [-s] oraz [-m] naraz to zadziala tylko [-s]')
+parser.add_argument('-m', '--monitor', type=int, metavar='', help='ktory monitor (full)')
+parser.add_argument('-s', '--selection', action='store_true', help='selection screenshot')
+args = parser.parse_args()
+
+monitors=[
+        '+0+0',
+        '+1920+0',
+        ]
+
+if args.selection:
+    subprocess.run('maim -s ~/Pictures/shot.png; xclip -selection clipboard -t image/png -i ~/Pictures/shot.png', shell=True)
+
+elif type(args.monitor)!=None:
+    subprocess.run('maim -g 1920x1080' + monitors[args.monitor-1] + ' ~/Pictures/shot.png; xclip -selection clipboard -t image/png -i ~/Pictures/shot.png', shell=True)
+
