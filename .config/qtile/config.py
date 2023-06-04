@@ -100,7 +100,7 @@ def func(new_window):
 
 @hook.subscribe.client_killed
 def killed(zombie):
-    global CSGO
+    global CSGO, curr_gamma
     #_id = str(zombie.info()['id'])
     #Popen('rm ' + iconPath + _id + '*', shell=True)
     qtile.widgets_map['current window'].update('None')
@@ -142,8 +142,8 @@ keys = [
     #Key([],    'XF86MonBrightnessDown', lazy.function(brightness_toggle())),
 
     #Volume Control
-    Key([],    'XF86AudioRaiseVolume', lazy.function(volumechange(True))),
-    Key([],    'XF86AudioLowerVolume', lazy.function(volumechange(False))),
+    Key([],    'XF86AudioRaiseVolume', lazy.spawn('pamixer -i 5')),
+    Key([],    'XF86AudioLowerVolume', lazy.spawn('pamixer -d 5')),
     Key([],    'XF86AudioMute', lazy.spawn('pulsemixer --toggle-mute')),
 
     Key([sup], 'XF86AudioRaiseVolume', lazy.function(mic_vol_change(True))),
@@ -223,12 +223,24 @@ all_layouts = [
         border_focus=orange, 
         border_width=2, 
         single_border_width=0, 
-        margin=12,
+        margin=150,
         new_client_position='before_current', 
         change_ratio=0.025,
         min_ratio=0,
-        ratio=0.53,
-        single_margin=[5, 277, 10, 300],
+        ratio=0.48,
+        single_margin=[5, 477, 10, 500],
+    ),
+
+    layout.MonadThreeCol(
+        border_focus=orange, 
+        border_width=2, 
+        single_border_width=0, 
+        margin=0,
+        new_client_position='before_current', 
+        change_ratio=0.025,
+        min_ratio=0,
+        ratio=0.48,
+        single_margin=0,
     ),
 
     layout.Max(border_width=0, border_focus='#000000', margin=[0, 0, 0, 0]),
@@ -744,8 +756,8 @@ screens = [
                 ),
 
                 widget.TextBox(
-                    text='  ',
-                    font='mononoki',
+                    text='   ',
+                    #font='mononoki',
                     background=gray,
                     foreground=black,
                 ),
@@ -867,11 +879,11 @@ screens = [
                 ),
 
                 widget.TextBox(
-                    text = ' ' + ChangeAudioDevice(True) + ' ',
+                    text = ' ' + ChangeAudioDevice(True) + '  ',
                     name = 'AudioDeviceIndicator1',
                     background=gray,
                     foreground=black,
-                    font = 'mononoki',
+                    #font = 'mononoki',
                 ),
 
                 widget.TextBox(
