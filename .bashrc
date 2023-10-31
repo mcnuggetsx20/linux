@@ -28,6 +28,7 @@ PS1="[${ORANGE}\e[1m\u${RESET} \w]: ${BLUE}\t${RESET}\n${ORANGE} >$ ${RESET}"
 #set -o vi
 
 alias qconf='nv ~/.config/qtile/config.py'
+alias uconf='nv ~/.config/qtile/res_config'
 alias gdr='cd /mnt/hdd/programming'
 alias hdd='cd /mnt/hdd'
 alias term='sudo vim ~/.Xresources'
@@ -36,7 +37,7 @@ alias pacinstall='sudo pacman -S'
 alias pacclear='sudo pacman -Scc'
 alias pacremove='sudo pacman -Rns'
 alias pacrefresh='sudo pacman -Syy'
-alias pacupgrade='sudo pacman -Syyu'
+alias pacupgrade='sudo pacman -Syyu --noconfirm; sudo pacman -Scc --noconfirm'
 alias oi='cd ~/hdd/programming/oi_2021'
 alias pconf='gvim /home/mcnuggetsx20/.config/qpanel/panelrc.py'
 alias pcom='nv ~/.config/picom/picom.conf &'
@@ -47,14 +48,21 @@ alias cd='nvim_autocd'
 alias nv='internal_nvim'
 alias lookfor='sudo find / -path /mnt/hdd -prune -iname'
 #alias setCover='eyeD3 --add-image $2:FRONT_COVER:front $1' #SONG / IMAGE
-alias kanter='nv /mnt/csgo/SteamLibrary/steamapps/common/Counter-Strike\ Global\ Offensive/csgo/cfg/autoexec.cfg'
+alias kanter='nv /mnt/b/SteamLibrary/steamapps/common/Counter-Strike\ Global\ Offensive/game/csgo/cfg/autoexec.cfg'
 alias take='_take'
 #alias picom='/mnt/hdd/Program-Files/picom-pij/build/src/start'
 alias mk='gcc -o main main.c -lX11 -Wextra -Wall'
-
+#alias usbstick='dd bs=4M if=$1 of=$2 conv=fsync oflag=direct status=progress' #iso / device
 alias nvidia-settings='nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settings'
+alias fetch='fastfetch'
+alias speed='xset r rate 200 90'
+alias discord='/mnt/hdd/Program-Files/discord_linux/Discord/Discord'
 
 bind "set completion-ignore-case on"
+
+function usbstick (){
+    dd bs=4M if=${1} of=${2} conv=fsync oflag=direct status=progress
+}
 
 function evim (){
     urxvt -e vim $1 &

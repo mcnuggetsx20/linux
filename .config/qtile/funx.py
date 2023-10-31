@@ -3,6 +3,7 @@ from lib import *
 from re import split as sp
 from libqtile import qtile
 
+cmd_output = lambda command: check_output(command, shell=True, encoding='utf-8').split()[0]
 
 def dbg(text):
     call('echo ' + text + ' >> /home/mcnuggetsx20/.config/qtile/debug', shell=True)
@@ -33,14 +34,14 @@ def volumechange(ok):
         else:
             val = -5
 
-        run('pulsemixer --change-volume ' + str(val), shell=True) #change
-        status = check_output('pamixer --get-volume', shell=True, encoding='utf-8').split()[0]
+        status = int(check_output('pamixer --get-volume', shell=True, encoding='utf-8').split()[0]) + val
+        run(f'pamixer --set-volume {status}', shell=True) #change
 
-        a = vol1(status=status)
+        #a = vol1(status=status)
 
-        qtile.widgets_map['vol_level1'].update(' ' + a[0])
-        qtile.widgets_map['vol_rest1'].update(a[1])
-        qtile.widgets_map['vol_number1'].update(a[2]+'%')
+        #qtile.widgets_map['vol_level1'].update(' ' + a[0])
+        #qtile.widgets_map['vol_rest1'].update(a[1])
+        #qtile.widgets_map['vol_number1'].update(a[2]+'%')
 
         #qtile.widgets_map['vol_level2'].update(' ' + a[0])
         #qtile.widgets_map['vol_rest2'].update(a[1])
@@ -71,20 +72,25 @@ def mic_vol_change(ok):
 
 
 def ChangeAudioDevice(init=False):
-    global devices, device_indicators
+    global sinks, device_indicators, cmd_output
 
 
     def a(qtile):
-        curr = check_output('pacmd list | grep "active port: <analog-output"', shell=True, encoding='utf-8')
-        curr = sp('\t|\n', curr)[1]
+        #curr = check_output('pacmd list | grep "active port: <analog-output"', shell=True, encoding='utf-8')
+        #curr = sp('\t|\n', curr)[1]
 
-        desired = 'headphones' not in curr
+        #desired = 'headphones' not in curr
 
-        run('pactl set-sink-port ' + devices[0] +' ' + ports[ int(desired) ], shell=True)
+        #run('pactl set-sink-port ' + devices[0] +' ' + ports[ int(desired) ], shell=True)
 
-        desired = device_indicators[ int( 'headphones' not in curr) ]
+        #desired = device_indicators[ int( 'headphones' not in curr) ]
 
-        qtile.widgets_map['AudioDeviceIndicator1'].update(' '+ desired +' ')
+        current = cmd_output('pactl get-default-sink')
+        ind = not sinks.index(current)
+
+        run(f'pactl set-default-sink {sinks[ind]}', shell=True)
+
+        qtile.widgets_map['AudioDeviceIndicator1'].update(' '+ device_indicators[ind] +' ')
         #qtile.widgets_map['AudioDeviceIndicator2'].update(' ' + desired + ' ')
 
     if not init:
@@ -109,17 +115,29 @@ def fanSpeed(ok):
 
 
 def DiskSpace():
-    return ' ' + check_output('df -h --output=source,used,size | grep "nvme0n1p2\|sdb1\|sda1" | awk \'{printf $2 "/" $3 " "}\'', shell=True, encoding='utf-8')[:-1] + ' '
+    return ' ' + check_output('df -h --output=source,used,size | grep "nvme0n1p1\|nvme0n1p4\|sda1" | awk \'{printf $2 "/" $3 " "}\'', shell=True, encoding='utf-8')[:-1] + ' '
 
 
 def brightness_toggle(n):
     #status = check_output("xrandr --current --verbose | grep Gamma", shell=True, encoding='utf-8').split(':')[2]
-    run("xrandr --output DP-2 --gamma %(new)f" % {'new': n}, shell=True, encoding='utf-8')
+    run("xrandr --output DP-4 --gamma %(new)f" % {'new': n}, shell=True, encoding='utf-8')
     return
 
         
 def screenshot(qtile):
-    screen=qtile.current_screen.index
+    screen=int(qtile.current_screen.index)
+    monitor_list = check_output("xrandr --query | grep ' connected '",shell=True, encoding='utf-8').split('\n')
+
+    desired_res = None
+
+    for i in monitor_list:
+        if 'None' in i: continue
+        if not screen and 'primary' in i:
+           # print(i.split()[3])
+            desired_res = i.split()[3]
+        elif screen and 'primary' not in i:
+            #print(i.split()[2])
+            desired_res = i.split()[2]
 
     monitors=[
             '+0+0',
@@ -131,7 +149,7 @@ def screenshot(qtile):
             '1080x1920',
     ]
 
-    Popen('maim -g ' + resolutions[ int(screen) ] + monitors[ int(screen) ] + ' ~/Pictures/shot.png; xclip -selection clipboard -t image/png -i ~/Pictures/shot.png', shell=True)
+    Popen(f'maim -g {desired_res} ~/Pictures/shot.png; xclip -selection clipboard -t image/png -i ~/Pictures/shot.png', shell=True)
 
 
 def network_current():
@@ -142,6 +160,7 @@ def network_current():
     current_net_dev = network_devices[st[1].split('-')[-1]]
     qtile.widgets_map['network_device1'].update(current_net_dev + ' ')
     qtile.widgets_map['network_name1'].update(' ' + st[0])
+
     #qtile.widgets_map['network_device2'].update(' ' + current_net_dev)
     #qtile.widgets_map['network_name2'].update(' ' + st[0])
     return ''
@@ -193,15 +212,30 @@ def groupSwitch(group):
 
     return a
 
-def resSwitch():
+def resSwitch(qtile):
     global RES
-    if RES: command = RES_CUSTOM
-    else: command = RES_NORMAL
+    offset = [0,0]
+    config = config_class()
+
+    with open('/home/mcnuggetsx20/.config/qtile/res_config') as f:
+        for i in f.read().split('\n')[:-1]:
+            temp = i.split('=')
+            setattr(config, temp[0], temp[1])
+
+    if RES: 
+        if config.SCALE_TO != config.RES_DEFAULT:
+            res_list_custom = list(map(int, config.SCALE_TO.split('x')))
+            res_list_default = list(map(int, config.RES_DEFAULT.split('x')))
+            offset[0] = (res_list_default[0] - res_list_custom[0]) // 2
+            offset[1] = (res_list_default[1] - res_list_custom[1]) // 2
+
+        command = f'nvidia-settings -a CurrentMetaMode="DP-4: 3440x1440_100 @{config.RES_CUSTOM} +0+0 {{ViewPortIn={config.RES_CUSTOM}, ViewPortOut={config.SCALE_TO}+{offset[0]}+{offset[1]}, ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off}}"'
+    else: command = 'nvidia-settings -a CurrentMetaMode="DP-4: 3440x1440_100 @3440x1440 +0+0 {ViewPortIn=3440x1440, ViewPortOut=3440x1440+0+0, ForceCompositionPipeline=On, ForceFullCompositionPipeline=On}"'
 
     RES = not RES
 
     run(command, shell=True)
-    run(RES_SECONDARY_SCREEN, shell=True)
+    run(RES_SECONDARY, shell=True)
     run(DPI_COMMAND, shell=True)
 
     qtile.widgets_map['current_resolution'].update(command[55:67])

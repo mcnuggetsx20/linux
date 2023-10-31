@@ -1,0 +1,34 @@
+#!/bin/env python
+
+from libqtile.command.client import InteractiveCommandClient
+from subprocess import check_output
+from sys import stdin
+
+cmd = lambda command: check_output(command, shell=True, encoding='utf-8').split()[0]
+get_volume = lambda: cmd('pamixer --get-volume')
+ICC = InteractiveCommandClient()
+
+event = ''
+#VOLUME = get_volume()
+GUARD = False
+
+while True:
+    inp = stdin.read(1)
+    event += inp
+    if inp != '\n': continue
+    if 'server' in event: GUARD = False; event = "'new'" #manipulation
+    if "'new'" not in event: event = ''; continue
+    if GUARD: GUARD = False; event = '';continue
+
+    volume = get_volume()
+    GUARD = True
+    ICC.widget['vol_number1'].update(f'{volume}%')
+    event = ''
+
+
+
+
+
+
+
+

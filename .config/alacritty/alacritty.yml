@@ -4,10 +4,10 @@ window:
 font:
   normal:
     family: JetBrains Mono Nerd Font
-    style: Medium
+    style: Regular
 
   bold:
-    family: JetBrainsMono NF 
+    family: Jetbrains Mono Nerd Font
     style: Bold
 
   italic:
@@ -22,7 +22,7 @@ font:
     x: 0
     y: 1
 
-  size: 10.5
+  size: 9.5
 
 key_bindings:
   - {key: Equals, mods: Control, action: IncreaseFontSize}
@@ -30,7 +30,7 @@ key_bindings:
 
 colors:
   primary:
-    background: '#FFFFFF' # base3
+    background: '#FDF6e3' # base3
     foreground: '#D0D0D0' # base00
 
   cursor:

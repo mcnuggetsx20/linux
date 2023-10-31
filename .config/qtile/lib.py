@@ -1,5 +1,5 @@
 
-devices = [
+sinks = [
     "alsa_output.pci-0000_00_1f.3.analog-stereo",
     "alsa_output.pci-0000_01_00.1.hdmi-stereo",
 ]
@@ -31,11 +31,14 @@ colors = {
 gamma_rules={
         'Minecraft* 1.18.2 - Singleplayer' :   1.2,
         'Minecraft* 1.19.2 - Singleplayer' :   1.2,
+        'Minecraft* 1.19.3 - Singleplayer' :   1.2,
         'Minecraft* 1.19.2 - Multiplayer (3rd-party Server)' :   1.2,
-        'Counter-Strike: Global Offensive - OpenGL' :   1.55,
+        'Counter-Strike: Global Offensive - OpenGL' :   1.4,
+        'League of Legends (TM) Client':    1.0,
 }
 
-WALLPAPER = '/mnt/hdd/zdjecia/wallpaper/green.png'
+WALLPAPER1 = '/mnt/hdd/zdjecia/wallpaper/uuu.png'
+WALLPAPER2 = '/mnt/hdd/zdjecia/wallpaper/jager.png'
 
 curr_gamma = 1
 
@@ -43,11 +46,20 @@ comp = True
 bars = True
 walp = True
 
-RES_CUSTOM = '2010x1440'
+RES_CUSTOM = '2560x1440'
+RES_NORMAL = '3440x1440'
+SCALE = False
+
+RES_SECONDARY = '1920x1080'
 
 RES = True
-RES_CUSTOM = 'nvidia-settings -a CurrentMetaMode="DP-2: 3440x1440_100 @' + RES_CUSTOM + ' +0+0 {ViewPortIn=' + RES_CUSTOM + ', ViewPortOut=2010x1440+715+0, ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off}"'
-RES_NORMAL = 'nvidia-settings -a CurrentMetaMode="DP-2: 3440x1440_100 @3440x1440 +0+0 {ViewPortIn=3440x1440, ViewPortOut=3440x1440+0+0, ForceCompositionPipeline=On, ForceFullCompositionPipeline=On}"'
-RES_SECONDARY_SCREEN = 'xrandr --output HDMI-0 --mode 1920x1080 --rate 75 --right-of DP-2 --rotate left'
+#RES_CUSTOM = f'nvidia-settings -a CurrentMetaMode="DP-4: 3440x1440_100 @{RES_CUSTOM} +0+0 {{ViewPortIn={RES_CUSTOM}, ViewPortOut={[RES_CUSTOM, RES_NORMAL][SCALE]}+0+0, ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off}}"'
+#RES_NORMAL = 'nvidia-settings -a CurrentMetaMode="DP-4: 3440x1440_100 @3440x1440 +0+0 {ViewPortIn=3440x1440, ViewPortOut=3440x1440+0+0, ForceCompositionPipeline=On, ForceFullCompositionPipeline=On}"'
+RES_SECONDARY= f'xrandr --output HDMI-0 --mode {RES_SECONDARY} --rate 75 --right-of DP-4 --rotate left'
+#RES_SECONDARY=f'xrandr --output HDMI-0 --off'
 DPI_COMMAND = 'xrandr --dpi 96'
+
+class config_class():
+    def __init__(self):
+        return
 

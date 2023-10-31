@@ -19,7 +19,7 @@ from lib import *
 from subprocess import call, Popen
 import os
 
-orange = '#F0Af16'
+orange = '#E3963E'
 ored   = '#F77B53'
 black  = '#000000'
 swamp  = '#335D03'  
@@ -37,6 +37,9 @@ dred   = '#6b1015'
 solar  = '#fdf6e3'
 transp = '#000000.00'
 dlgray = '#434345'
+ocean = '#3d4f51'
+yellow='#FFBF00'
+magenta='#00eed6'
 
 top1color = '190c24'
 
@@ -129,7 +132,7 @@ this_dir = '/home/mcnuggetsx20/.config/qtile/'
 
 keys = [
     #My stuff
-    Key([sup], 'b', lazy.spawn('brave')),
+    Key([sup], 'b', lazy.spawn('brave --password-store=basic')),
     Key([mod], 'p', lazy.spawn("dmenu_run -sb '" + green + "' -nf '" + violet + "' -sf '" + black + "' -nb '" + black + "'")),
     Key([sup], 'f', lazy.spawn('pcmanfm')),
     Key([sup], 'm', lazy.spawn(terminal + ' -e htop')),
@@ -138,6 +141,7 @@ keys = [
     Key([sup], 'p', lazy.spawn('feh /mnt/hdd/zdjecia/plan_lekcji.png')),
     Key([sup], 'q', lazy.spawn('sh power_menu')),
     Key([sup], 'c', lazy.function(compswitch)),
+    Key([sup], 'r', lazy.function(resSwitch)),
     #Key([sup], 't', lazy.function(change)),
     #Key([],    'XF86MonBrightnessDown', lazy.function(brightness_toggle())),
 
@@ -223,12 +227,12 @@ all_layouts = [
         border_focus=orange, 
         border_width=2, 
         single_border_width=0, 
-        margin=[100, 200, 100, 200],
+        margin=75,
         new_client_position='before_current', 
         change_ratio=0.025,
         min_ratio=0,
         ratio=0.48,
-        single_margin=[5, 477, 10, 500],
+        single_margin=[20, 1400, 20, 80],
     ),
 
     layout.MonadThreeCol(
@@ -314,10 +318,13 @@ groups = [
             #Match(wm_class='hl2_linux'),
             Match(wm_class='Steam'), 
             Match(wm_class='steam'), 
+            Match(wm_class='leagueclientux.exe'),
+            Match(title='Wine System Tray'),
         ]
     ),
     Group(
         name='misc',
+        #name='6',
         position=6,
         layouts=[layout.Columns(
             num_columns=1,
@@ -366,254 +373,100 @@ bar_color2 = solar+'.80'
 
 screens = [
     Screen(
-        wallpaper=WALLPAPER,
-        #wallpaper_mode='stretch',
+        wallpaper=WALLPAPER1,
+        wallpaper_mode='fill',
+        #RIGHT1
+        #right=bar.Bar(
+        #    margin = [0, 0, 1300, 0],
+        #    background=solar + '.00',
+        #    size=18,
+        #    border_width=0,
+        #    widgets=[
+        #        ewidget.StatusNotifier(
+        #            highlight_colour=dviolet,
+        #            menu_foreground = gray,
+        #            #menu_background = dgray,
+        #            menu_font = widget_defaults['font'],
+        #            menu_fontsize = widget_defaults['fontsize'],
+        #            menu_row_height = 11,
+        #            icon_size=18,
+        #            padding=5,
+        #        ),
+        #    ],
+        #),
 
         #LEFT1
-        left=bar.Bar(
-            margin = [0, 0, 1200, 0],
-            background='#000000.00',
-            size=18,
-            border_width=0,
-            border_color=dblue,
-            widgets=[
-                widget.Spacer(50),
-                ewidget.StatusNotifier(
-                    highlight_colour=dviolet,
-                    menu_foreground = gray,
-                    #menu_background = dgray,
-                    menu_font = widget_defaults['font'],
-                    menu_fontsize = widget_defaults['fontsize'],
-                    menu_row_height = 11,
-                    icon_size=18,
-                    padding=5,
-                ),
-            ],
-        ),
+        #left=bar.Bar(
+        #    margin = [0, 0, 1230, 0],
+        #    background=solar + '.20',
+        #    size=18,
+        #    border_width=0,
+        #    widgets=[
 
-        #TOP1
+        #        widget.Image(
+        #            filename='/usr/share/icons/hicolor/32x32/apps/polychromatic.png',
+        #            mouse_callbacks={'Button1' : lazy.spawn('polychromatic-controller')},
+        #        ),
+        #        widget.Spacer(10),
+
+        #        widget.Image(
+        #            filename='/usr/share/icons/hicolor/32x32/apps/steam.png',
+        #            mouse_callbacks={'Button1' : lazy.spawn('steam')},
+        #            name='steam',
+        #        ),
+        #        widget.Spacer(10),
+
+        #        widget.Image(
+        #            filename='/home/mcnuggetsx20/hdd/Program-Files/discord_linux/Discord/discord.png',
+        #            mouse_callbacks={'Button1' : lazy.spawn('discord')},
+        #        ),
+        #        widget.Spacer(10),
+
+        #        widget.Image(
+        #            filename='/usr/share/icons/hicolor/32x32/apps/brave-desktop.png',
+        #            mouse_callbacks={'Button1' : lazy.spawn('brave')},
+        #        ),
+
+        #        widget.Spacer(10),
+
+        #        widget.Image(
+        #            filename='/home/mcnuggetsx20/hdd/Program-Files/multimc-pkgbuild/src/multimc-bin-1.6/opt/multimc/icon.svg',
+        #            mouse_callbacks={'Button1' : lazy.spawn('multimc')},
+        #        ),
+
+        #        widget.Spacer(10),
+
+        #        widget.Image(
+        #            filename='/home/mcnuggetsx20/.config/qtile/icons/csgo.png',
+        #            mouse_callbacks={'Button1' : lazy.spawn('steam steam://rungameid/730')},
+        #        ),
+
+        #        widget.Spacer(10),
+
+        #        widget.Image(
+        #            filename='~/.local/share/icons/hicolor/32x32/apps/steam_icon_21000.png',
+        #            mouse_callbacks={'Button1' : lazy.spawn('steam steam://rungameid/21000')},
+        #        ),
+
+        #        widget.Image(
+        #            filename='/usr/share/lol-for-linux-installer/lol-for-linux-installer.png',
+        #            mouse_callbacks={'Button1' : lazy.spawn('lol-for-linux-installer')},
+        #        ),
+        #    ],
+        #),
+
+        #top1
         top=bar.Bar(
-            #margin=[0, 10, 0, 10], #[N, E, S, W]
-            #background=solar + '.30',
-            background = top1color + '.60',
-            border_width=0,
-            #border_color=orange,
-            #background = '#434345',
-            #background=dgray,
-            widgets=[
-
-                widget.Image(
-                    filename='/usr/share/icons/Numix/32/places/default-folder.svg',
-                    mouse_callbacks={'Button1' : lazy.spawn('pcmanfm')},
-                ),
-                widget.Spacer(10),
-
-                widget.Image(
-                    filename='/usr/share/icons/hicolor/32x32/apps/polychromatic.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('polychromatic-controller')},
-                ),
-                widget.Spacer(10),
-
-                widget.Image(
-                    filename='/usr/share/icons/hicolor/32x32/apps/steam.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('steam')},
-                    name='steam',
-                ),
-                widget.Spacer(10),
-
-                widget.Image(
-                    filename='/home/mcnuggetsx20/hdd/Program-Files/discord_linux/Discord/discord.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('discord')},
-                ),
-                widget.Spacer(10),
-
-                widget.Image(
-                    filename='/usr/share/icons/hicolor/32x32/apps/brave-desktop.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('brave')},
-                ),
-
-                widget.Spacer(10),
-
-                widget.Image(
-                    filename='/home/mcnuggetsx20/hdd/Program-Files/multimc-pkgbuild/src/multimc-bin-1.6/opt/multimc/icon.svg',
-                    mouse_callbacks={'Button1' : lazy.spawn('multimc')},
-                ),
-
-                widget.Spacer(10),
-
-                widget.Image(
-                    filename='/home/mcnuggetsx20/.config/qtile/icons/csgo.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('steam steam://rungameid/730')},
-                ),
-
-                widget.Spacer(10),
-
-                widget.Image(
-                    filename='~/.local/share/icons/hicolor/32x32/apps/steam_icon_21000.png',
-                    mouse_callbacks={'Button1' : lazy.spawn('steam steam://rungameid/21000')},
-                ),
-
-                widget.Spacer(50),
-
-                #widget.Systray(),
-
-                widget.TaskList(
-                    parse_text=lambda text: '|' + text, 
-                    max_title_width=100,
-                    borderwidth=0, 
-                    border=black,
-                    icon_size=18, 
-                    txt_floating='',
-                    spacing = 20,
-                    foreground = gray,
-                    txt_minimized='-',
-                    font='IBM Plex Mono Bold',
-                    #padding_y=-4,
-                ),
-
-                widget.Spacer(
-                    length = bar.STRETCH,
-                    #background='#000000.00',
-                ),
-
-                widget.TextBox(
-                    name='current window',
-                    foreground = gray,
-                    font='Samsung Sans Bold',
-                    #fontsize=14,
-                    #background = gray,
-                    #max_chars=20,
-                ),
-
-                widget.Spacer(
-                    length = bar.STRETCH,
-                    #background='#000000.00',
-                ),
-
-                widget.GenPollText(
-                    name = 'weather1',
-                    func = wttr('Wojnów'),
-                    foreground = gray,
-                    font='Samsung Sans bold',
-                    update_interval=600,
-                ),
-
-
-                widget.TextBox(
-                    text='A',
-                    font='Bartek',
-                    foreground =gray,
-                    fontsize=39,
-                    padding = -1,
-                ),
-
-                widget.TextBox(
-                    name='network_device1',
-                    background =gray,
-                    #background=dviolet,
-                    foreground=dviolet,
-                    font='Bartek',
-                    fontsize=25,
-                    mouse_callbacks={'Button1' : lazy.spawn('Straw')},
-                ),
-
-                widget.TextBox(
-                    text='Searching...',
-                    name='network_name1',
-                    foreground=dviolet,
-                    background =gray,
-                    font='Samsung Sans Bold',
-                    fontsize = 13,
-                    mouse_callbacks={'Button1' : lazy.spawn('Straw')},
-                    fmt = '<u> {} </u>'
-                ),
-
-                widget.TextBox(
-                    text='B',
-                    font='Bartek',
-                    foreground =gray,
-                    fontsize=39,
-                    padding = -1,
-                ),
-
-                widget.TextBox(
-                    text='A',
-                    font='Bartek',
-                    foreground =gray,
-                    fontsize=39,
-                    padding = -1,
-                ),
-                
-
-                widget.TextBox(
-                    text='  ',
-                    font='mononoki',
-                    fontsize=14,
-                    background =gray,
-                    foreground=dblue,
-                ),
-
-                widget.Clock(
-                    foreground=dblue,
-                    background =gray,
-                    padding=0,
-                    font='Samsung Sans Bold',
-                    fontsize=13,
-                    format="%d.%m.'%y %a",
-                    fmt = '<u> {} </u>'
-                ),
-
-                widget.TextBox(
-                    text='B',
-                    font='Bartek',
-                    foreground =gray,
-                    fontsize=39,
-                    padding = -1,
-                ),
-
-                widget.TextBox(
-                    text='A',
-                    font='Bartek',
-                    foreground =gray,
-                    fontsize=39,
-                    padding = -1,
-                ),
-
-                widget.TextBox(
-                    text='',
-                    font='Samsung Sans Light',
-                    fontsize=16,
-                    foreground=ored,
-                    background =gray,
-                    #background=green,
-                ),
-
-                widget.Clock(
-                    foreground=black,
-                    background =gray,
-                    #background=bar_color2,
-                    padding=0,
-                    format=" %H:%M:%S  ",
-                    font='Samsung Sans Bold',
-                    fontsize=13,
-                ),
-
-            ], 
-            size=20,
-        ),
-
-        #BOTTOM1
-        bottom=bar.Bar(
             #margin=[0, 0, 0, 0], #[N, E, S, W]
             #background='#1b1919.90',
-            background=solar + '.30',
-            size=18,
+            background=black,
+            size=20,
             border_width=0,
             border_color=dblue,
             widgets= [
                 widget.GroupBox(
-                    font='White Rabbit', 
-                    fontsize=14,
+                    #font='White Rabbit', 
+                    fontsize=12,
                     highlight_method='line', 
                     this_current_screen_border= white, 
                     this_screen_border=red,
@@ -634,120 +487,131 @@ screens = [
                     fontsize=16,
                 ),
 
-                widget.Spacer(
-                    length=bar_indent,
-                ),
+                widget.Spacer(12),
 
 
-                widget.Spacer(bar.STRETCH),
-
-#                widget.TextBox(
-#                    text='D',
-#                    font='Bartek',
-#                    foreground =dlgray,
-#                    fontsize=39,
-#                    padding = -1,
-#                ),
-#
-#                widget.Image(
-#                    filename='/usr/share/icons/Numix/16/places/default-folder.svg',
-#                    mouse_callbacks={'Button1' : lazy.spawn('pcmanfm')},
-#                    margin_x = 5,
-#                    background=dlgray,
-#                ),
-#
-#                widget.Image(
-#                    filename='/usr/share/icons/hicolor/16x16/apps/polychromatic.png',
-#                    mouse_callbacks={'Button1' : lazy.spawn('polychromatic-controller')},
-#                    margin_x = 5,
-#                    background=dlgray,
-#                ),
-#
-#                widget.Image(
-#                    filename='/usr/share/icons/hicolor/16x16/apps/steam.png',
-#                    mouse_callbacks={'Button1' : lazy.spawn('steam')},
-#                    margin_x = 5,
-#                    background=dlgray,
-#                ),
-#
-#                widget.Image(
-#                    filename='/home/mcnuggetsx20/.config/qtile/icons/csgo.png',
-#                    mouse_callbacks={'Button1' : lazy.spawn('gtk-launch Counter\ Strike\:\ Global\ Offensive.desktop')},
-#                    margin_x = 5,
-#                    background=dlgray,
-#                ),
-#
-#                widget.Image(
-#                    filename='/home/mcnuggetsx20/hdd/Program-Files/discord_linux/Discord/discord.png',
-#                    mouse_callbacks={'Button1' : lazy.spawn('discord')},
-#                    margin_x = 5,
-#                    background=dlgray,
-#                ),
-#
-#                widget.Image(
-#                    filename='/usr/share/icons/hicolor/16x16/apps/brave-desktop.png',
-#                    mouse_callbacks={'Button1' : lazy.spawn('brave')},
-#                    margin_x = 5,
-#                    background=dlgray,
-#                ),
-#
-#                widget.TextBox(
-#                    text='E',
-#                    font='Bartek',
-#                    foreground =dlgray,
-#                    fontsize=39,
-#                    padding = -1,
-#                ),
-
-                widget.Spacer(bar.STRETCH),
+                #widget.Spacer(-400),
 
                 widget.TextBox(
-                    text = '   ',
-                    foreground=black,
-                    background=dgreen,
-                ),
-
-                widget.TextBox(
-                    name = 'current_resolution',
-                    mouse_callbacks = {'Button1' : resSwitch},
-                    text = ' @3440x1440 ',
-                    background=dgray,
-                    foreground=gray,
-                ),
-
-                widget.Spacer(
-                   length=12,
-                ),
-
-                widget.TextBox(
-                    text = 'C',
+                    text='A',
                     font='Bartek',
-                    fontsize=30,
-                    foreground=black,
-                    background=dgreen,
+                    foreground =dgray,
+                    fontsize=39,
+                    padding = -1,
+                ),
+                widget.GenPollText(
+                    max_chars=60,
+                    name = 'weather1',
+                    func = wttr('Wojnów'),
+                    font='csgofont',
+                    fontsize = 15,
+                    update_interval=600,
+                    background = dgray,
+                    foreground = gray,
+                ),
+                widget.TextBox(
+                    text='B',
+                    font='Bartek',
+                    foreground =dgray,
+                    fontsize=39,
+                    padding = -1,
+                ),
+
+
+                widget.TextBox(
+                    text='A',
+                    font='Bartek',
+                    foreground =dgray,
+                    fontsize=39,
+                    padding = -1,
                 ),
 
                 widget.TextBox(
-                    text = ' ' + check_output('uname -r', shell=True, encoding='utf-8').split()[0] + ' ',
-                    foreground=gray,
-                    background=dgray,
-                    #fmt='<span foreground="#f0af16"> <u> {} </u> </span>'
+                    name='network_device1',
+                    background =dgray,
+                    #background=dviolet,
+                    foreground=violet,
+                    font='Bartek',
+                    fontsize=25,
+                    mouse_callbacks={'Button1' : lazy.spawn('Straw')},
                 ),
 
-                widget.Spacer(
-                   length=12,
+                widget.TextBox(
+                    text='Searching...',
+                    name='network_name1',
+                    foreground=gray,
+                    background =dgray,
+                    font='csgofont',
+                    fontsize = 15,
+                    mouse_callbacks={'Button1' : lazy.spawn('Straw')},
+                    #fmt = '<u> {} </u>'
                 ),
+
+                widget.TextBox(
+                    text='B',
+                    font='Bartek',
+                    foreground =dgray,
+                    fontsize=39,
+                    padding = -1,
+                ),
+
+                ewidget.StatusNotifier(
+                    highlight_colour=dviolet,
+                    menu_foreground = gray,
+                    #menu_background = dgray,
+                    menu_font = widget_defaults['font'],
+                    menu_fontsize = widget_defaults['fontsize'],
+                    menu_row_height = 11,
+                    icon_size=18,
+                    padding=5,
+                ),
+
+                widget.TextBox(
+                    text = '| ',
+                ),
+
+                widget.TaskList(
+                    parse_text=lambda text: '|' + text, 
+                    max_title_width=1000,
+                    borderwidth=0, 
+                    border=black,
+                    icon_size=18, 
+                    txt_floating='',
+                    spacing = 20,
+                    foreground = gray,
+                    background = black,
+                    txt_minimized='-',
+                    font='csgofont',
+                    fontsize=15,
+                    #padding_y=-4,
+                ),
+
+                #widget.Spacer(-1200),
+                widget.Spacer(bar.STRETCH),
+
+                widget.TextBox(
+                    name='current window',
+                    foreground = gray,
+                    font='Samsung Sans Bold',
+                    #fontsize=14,
+                    #background = gray,
+                    #max_chars=20,
+                ),
+
+                widget.Spacer(bar.STRETCH),
+
                 widget.TextBox(
                     text='  ',
                     font='mononoki',
-                    background=gray,
+                    background=dblue,
                     foreground=black,
                 ),
 
                 widget.CPU(
                     foreground=gray, 
-                    background=dgray,
-                    format=' {load_percent}% ', 
+                    background=dblue,
+                    markup=True,
+                    format='<span background="#312d2d"> {load_percent}% </span>', 
                     update_interval=1.0,
                 ),
 
@@ -758,14 +622,15 @@ screens = [
                 widget.TextBox(
                     text='   ',
                     #font='mononoki',
-                    background=gray,
+                    background=red,
                     foreground=black,
                 ),
 
                 widget.NvidiaSensors(
                     foreground=gray, 
-                    background=dgray,
-                    format=' {temp}°C {fan_speed} ',
+                    background=red,
+                    markup=True,
+                    format='<span background="#312d2d"> {temp}°C {fan_speed} </span>',
                     update_interval = 1,
                     threshold=70,
                 ),
@@ -776,17 +641,17 @@ screens = [
                 widget.TextBox(
                     text = '  ',
                     foreground = black,
-                    background = gray,
+                    background = yellow,
                     font = 'Font Awesome 6 Free Regular',
                 ),
 
                 widget.Memory(
                     name = 'memory',
                     foreground=gray, 
-                    background=dgray,
-                    format=' {MemUsed:.0f} MB ',
+                    background=yellow,
+                    markup=True,
+                    format='<span background="#312d2d"> {MemUsed:.0f} MB </span>',
                     update_interval = 1,
-                    font='IBM Plex Mono Medium',
                 ),
 
                 widget.Spacer(
@@ -796,15 +661,21 @@ screens = [
                 widget.TextBox(
                     text = '   ',
                     foreground = black,
-                    background = gray,
+                    background = dgreen,
                 ),
 
                 widget.GenPollText(
                     name= 'disk space',
                     func = DiskSpace,
-                    background = dgray,
+                    background = dgreen,
                     foreground = gray,
                     update_interval = 1,
+                    markup = True,
+                    fmt='<span background="#312d2d">{}</span>',
+                    scroll=True,
+                    width=70,
+                    scroll_delay=1,
+                    scroll_interval=0.05,
                 ),
 
                 widget.Spacer(
@@ -819,8 +690,9 @@ screens = [
                 ),
 
                 widget.Net(
-                    format=' {down:6.4f}{down_suffix:<2}↓ {up:6.4f}{up_suffix:<2}↑ ',
-                    background=dgray,
+                    markup=True,
+                    format='<span background="#312d2d"> {down:6.4f}{down_suffix:<2}↓ {up:6.4f}{up_suffix:<2}↑ </span>',
+                    background=gray,
                     foreground=gray,
                     prefix='M'
                 ),
@@ -830,58 +702,9 @@ screens = [
                 ),
 
                 widget.TextBox(
-                    text = '  ',
-                    name = 'MicIcon1',
-                    background=gray,
-                    foreground=black,
-                    font = 'mononoki',
-                ),
-
-                widget.TextBox(
-                    name = 'mic_level1',
-                    text=' ' + vol1(device='mic')[0],
-                    background=dgray,
-                    foreground=gray,
-                    font = 'Ubuntu Bold',
-                    fontsize=12,
-                ),
-
-                widget.TextBox(
-                    name = 'mic_rest1',
-                    text=vol1(device='mic')[1],
-                    font = 'Ubuntu Bold',
-                    fontsize=12,
-                    foreground=black,
-                    background=dgray,
-                ),
-
-                widget.TextBox(
-                    text='(',
-                    foreground=green,
-                    background=dgray,
-                ),
-
-                widget.TextBox(
-                    name='mic_number1',
-                    text = vol1(device='mic')[2]+'%',
-                    foreground=ored,
-                    background=dgray,
-                ),
-
-                widget.TextBox(
-                    text=') ',
-                    foreground=green,
-                    background=dgray,
-                ),
-
-                widget.Spacer(
-                   length=12,
-                ),
-
-                widget.TextBox(
                     text = ' ' + ChangeAudioDevice(True) + '  ',
                     name = 'AudioDeviceIndicator1',
-                    background=gray,
+                    background=ored,
                     foreground=black,
                     #font = 'mononoki',
                 ),
@@ -907,29 +730,66 @@ screens = [
                 widget.TextBox(
                     text='(',
                     foreground=green,
-                    background=dgray,
+                    background=ored,
+                    markup = True,
+                    fmt = '<span background="#312d2d">{}</span>',
                 ),
 
                 widget.TextBox(
                     name='vol_number1',
                     text = vol1(device='else')[2]+'%',
                     foreground=ored,
-                    background=dgray,
+                    background=ored,
+                    markup = True,
+                    fmt = '<span background="#312d2d">{}</span>',
                 ),
 
                 widget.TextBox(
                     text=') ',
                     foreground=green,
-                    background=dgray,
+                    background=ored,
+                    markup = True,
+                    fmt = '<span background="#312d2d">{}</span>',
                 ),
 
                 widget.Spacer(
                    length=12,
                 ),
 
+                widget.TextBox(
+                    text='  ',
+                    font='mononoki',
+                    fontsize=14,
+                    background =dgray,
+                    foreground=dblue,
+                ),
 
-                widget.Spacer(
-                    length=bar_indent,
+                widget.Clock(
+                    foreground=gray,
+                    background =dgray,
+                    padding=0,
+                    format="%d.%m.'%y %a ",
+                    #fmt = '<u> {} </u>'
+                    font='Samsung Sans Bold',
+                ),
+
+                widget.Spacer(12),
+
+                widget.TextBox(
+                    text='',
+                    font='Samsung Sans Light',
+                    fontsize=16,
+                    foreground=ored,
+                    background =dgray,
+                    #background=green,
+                ),
+
+                widget.Clock(
+                    foreground=gray,
+                    background =dgray,
+                    format=" %H:%M:%S ",
+                    font='Samsung Sans Bold',
+                    fontsize=13,
                 ),
 
                 widget.GenPollText(
@@ -941,7 +801,7 @@ screens = [
 
     ),
     Screen(
-        wallpaper='/mnt/hdd/zdjecia/wallpaper/cool.jpg',
+        wallpaper=WALLPAPER2,
         wallpaper_mode='fill',
 
         #TOP2
@@ -976,20 +836,6 @@ screens = [
                 ),
 
                 widget.Spacer(bar.STRETCH),
-
-                widget.TaskList(
-                    parse_text=lambda text: '|' + text, 
-                    max_title_width=100,
-                    borderwidth=0, 
-                    border=black,
-                    icon_size=18, 
-                    txt_floating='',
-                    spacing = 20,
-                    foreground = gray,
-                    txt_minimized='-',
-                    font='IBM Plex Mono Bold',
-                    #padding_y=-4,
-                ),
 
                 widget.Spacer(bar.STRETCH),
 
