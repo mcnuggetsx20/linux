@@ -1,9 +1,15 @@
 from subprocess import check_output, run, Popen, CalledProcessError
 from lib import *
 from re import split as sp
+from re import search
 from libqtile import qtile
 
 cmd_output = lambda command: check_output(command, shell=True, encoding='utf-8').split()[0]
+
+def findClass(_class):
+    for i in gamma_classes:
+        if i in _class: return gamma_classes[i]
+    return 0
 
 def dbg(text):
     call('echo ' + text + ' >> /home/mcnuggetsx20/.config/qtile/debug', shell=True)
@@ -189,12 +195,19 @@ def walpSwitch(qtile):
     qtile.screens[0].cmd_set_wallpaper(toSet, 'stretch')
     walp = not walp
 
-def gammaGaming(name):
+def gammaGaming(window):
+    name = window.name
+    _class = findClass(window.info()['wm_class'][0])
     global gamma_rules, curr_gamma
     if name in gamma_rules:
         #qtile.widgets_map['debug'].update('jest')
         brightness_toggle(gamma_rules[name])
         curr_gamma = gamma_rules[name]
+
+    if _class:
+        brightness_toggle(_class)
+        curr_gamma = _class
+
 
     elif curr_gamma != 1:
         brightness_toggle(1)

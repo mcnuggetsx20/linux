@@ -133,7 +133,7 @@ nnoremap <F4> :w <bar> :Shell python -B %.txt <CR>
 autocmd filetype cpp nnoremap <F3> :w <bar> :80vs term://bash -c 'g++ -std=c++17 -DLOCAL -Wall -Wextra -Wconversion -Wshadow -Wno-sign-conversion -D_GLIBCXX_DEBUG -fno-sanitize-recover=undefined -DAC % -o %:r && ./%:r' <bar> 0 <bar> start <CR><CR>
 autocmd filetype c nnoremap <F3> :w <bar> :80vs term://bash -c 'gcc % -o %:r && ./%:r' <bar> 0 <bar> start <CR><CR>
 autocmd filetype javascript nnoremap <F3> :w <bar> :Shell node % <CR>
-autocmd filetype java nnoremap <F3> :w <bar> :Shell java % <CR>
+autocmd filetype java nnoremap <F3> :w <bar> Shell javac % && java % <cr>
 autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"
 autocmd BufEnter * silent! lcd %:p:h
 autocmd VimEnter * NERDTree | wincmd p

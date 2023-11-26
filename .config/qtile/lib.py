@@ -29,12 +29,12 @@ colors = {
 
 
 gamma_rules={
-        'Minecraft* 1.18.2 - Singleplayer' :   1.2,
-        'Minecraft* 1.19.2 - Singleplayer' :   1.2,
-        'Minecraft* 1.19.3 - Singleplayer' :   1.2,
-        'Minecraft* 1.19.2 - Multiplayer (3rd-party Server)' :   1.2,
         'Counter-Strike: Global Offensive - OpenGL' :   1.4,
         'League of Legends (TM) Client':    1.0,
+}
+
+gamma_classes={
+        'Minecraft' : 1.2,
 }
 
 WALLPAPER1 = '/mnt/hdd/zdjecia/wallpaper/uuu.png'

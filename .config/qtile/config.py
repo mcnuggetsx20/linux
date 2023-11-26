@@ -61,7 +61,7 @@ def newFocus(window):
     qtile.widgets_map['current window'].update(window.name)
     #qtile.widgets_map['debug'].update(str(curr_gamma))
 
-    gammaGaming(window.name)
+    gammaGaming(window)
 
     if window.name == 'blackout' and not BLK:
         window.cmd_set_position_floating(0,0)
@@ -339,6 +339,7 @@ groups = [
         matches = [
             Match(wm_class='discord'),
             Match(wm_class='python3.10'),
+            Match(wm_class='caprine'),
         ],
     ),
 ]
