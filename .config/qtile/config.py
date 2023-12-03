@@ -162,7 +162,7 @@ keys = [
     Key([sup], 'bracketleft', lazy.spawn('Straw')),
 
     Key([sup], 'a', lazy.function(ChangeAudioDevice(False))),
-    Key([mod, 'shift'], 's', lazy.spawn('screenshot -s')),
+    Key([mod, 'shift'], 's', lazy.spawn('/home/mcnuggetsx20/.local/bin/screenshot -s')),
     Key([], 'Print', lazy.function(screenshot)),
     Key([],    'XF86HomePage', lazy.spawn('brave')),
     Key([mod], 't', lazy.window.toggle_floating()),

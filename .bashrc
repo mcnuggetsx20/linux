@@ -5,6 +5,7 @@
 # If not running interactively, don't do anything
 
 export GITHUB_API_TOKEN=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
+export PATH="$PATH:/home/mcnuggetsx20/.local/bin"
 
 GREEN="\[$(tput setaf 2)\]"
 YELLOW="\[$(tput setaf 3)\]"
@@ -37,7 +38,7 @@ alias pacinstall='sudo pacman -S'
 alias pacclear='echo y | sudo pacman -Scc; sudo pacman -Scc --noconfirm'
 alias pacremove='sudo pacman -Rns'
 alias pacrefresh='sudo pacman -Syy'
-alias pacupgrade='configpush; sudo pacman -Syyu --noconfirm; sudo pacman -Scc --noconfirm; echo y | sudo pacman -Scc; echo'
+alias pacupgrade='configpush; sudo pacman -Syyu --noconfirm; sudo pacman -Scc --noconfirm; echo y | sudo pacman -Scc; echo; speed'
 alias oi='cd ~/hdd/programming/oi_2021'
 alias pconf='gvim /home/mcnuggetsx20/.config/qpanel/panelrc.py'
 alias pcom='nv ~/.config/picom/picom.conf &'

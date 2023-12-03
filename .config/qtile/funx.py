@@ -131,32 +131,8 @@ def brightness_toggle(n):
 
         
 def screenshot(qtile):
-    screen=int(qtile.current_screen.index)
-    monitor_list = check_output("xrandr --query | grep ' connected '",shell=True, encoding='utf-8').split('\n')
-
-    desired_res = None
-
-    for i in monitor_list:
-        if 'None' in i: continue
-        if not screen and 'primary' in i:
-           # print(i.split()[3])
-            desired_res = i.split()[3]
-        elif screen and 'primary' not in i:
-            #print(i.split()[2])
-            desired_res = i.split()[2]
-
-    monitors=[
-            '+0+0',
-            '+3440+1440',
-    ]
-
-    resolutions=[
-            '3440x1440',
-            '1080x1920',
-    ]
-
-    Popen(f'maim -g {desired_res} ~/Pictures/shot.png; xclip -selection clipboard -t image/png -i ~/Pictures/shot.png', shell=True)
-
+    #screen=int(qtile.current_screen.index)
+    qtile.spawn(f"/home/mcnuggetsx20/.local/bin/screenshot -m {int(qtile.current_screen.index)}")
 
 def network_current():
     st = check_output("nmcli -t connection show --active | awk -F ':' '{print $1 " + '"\\n"' + " $(NF-1)}'", shell=True, encoding='utf-8').split('\n')[:-1]
