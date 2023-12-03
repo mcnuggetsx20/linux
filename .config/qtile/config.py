@@ -232,7 +232,7 @@ all_layouts = [
         change_ratio=0.025,
         min_ratio=0,
         ratio=0.48,
-        single_margin=[20, 1400, 20, 80],
+        single_margin=[40, 50, 20, 50],
     ),
 
     layout.MonadThreeCol(
