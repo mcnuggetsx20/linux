@@ -8,14 +8,19 @@ parser.add_argument('-m', '--monitor', type=int, metavar='', help='ktory monitor
 parser.add_argument('-s', '--selection', action='store_true', help='selection screenshot')
 args = parser.parse_args()
 
-monitors=[
-        '+0+0',
-        '+1920+0',
-        ]
-
 if args.selection:
     subprocess.run('maim -s ~/Pictures/shot.png; xclip -selection clipboard -t image/png -i ~/Pictures/shot.png', shell=True)
 
 elif type(args.monitor)!=None:
-    subprocess.run('maim -g 1920x1080' + monitors[args.monitor-1] + ' ~/Pictures/shot.png; xclip -selection clipboard -t image/png -i ~/Pictures/shot.png', shell=True)
+    monitor_list = subprocess.check_output("xrandr --query | grep ' connected '",shell=True, encoding='utf-8').split('\n')[:-1]
+    for i in monitor_list:
+        if 'None' in i: continue
+        if not args.monitor and 'primary' in i:
+            desired_res = i.split()[3]
+
+        elif args.monitor and 'primary' not in i:
+            desired_res = i.split()[2]
+
+    #subprocess.run('maim -g 1920x1080' + monitors[args.monitor-1] + ' ~/Pictures/shot.png; xclip -selection clipboard -t image/png -i ~/Pictures/shot.png', shell=True)
+    subprocess.run(f'maim -g {desired_res} ~/Pictures/shot.png; xclip -selection clipboard -t image/png -i ~/Pictures/shot.png', shell=True)
 
