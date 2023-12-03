@@ -8,6 +8,8 @@ cp /bin/configpush ${DEST}/bin
 cp /bin/update-discord ${DEST}/bin
 cp /bin/nvim_client_python ${DEST}/bin
 cp /bin/screenshot ${DEST}/bin
+cp /bin/aur ${DEST}/bin
+
 cp -r ${USR}/.xinitrc ${DEST}/
 cp -r ${USR}/.config/qtile ${DEST}/.config
 cp -r ${USR}/.config/alacritty ${DEST}/.config

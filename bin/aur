@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#git clone https://aur.archlinux.org/$1.git; cd $1; makepkg -si; '
+
+BASE=$(pwd)
+DEST=/mnt/hdd/Program-Files/
+
+cd $DEST
+rm -rf $1
+git clone https://aur.archlinux.org/$1.git
+cd $1
+makepkg -si
+cd $BASE
+
+
+
+
+
+

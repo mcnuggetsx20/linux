@@ -60,6 +60,13 @@ alias discord='/mnt/hdd/Program-Files/discord_linux/Discord/Discord'
 
 bind "set completion-ignore-case on"
 
+function gitpush(){
+    DATE=$(date "+%d %b %Y %H:%M:%S")
+    git add -A
+    git commit -m "${DATE}"
+    git push
+}
+
 function usbstick (){
     dd bs=4M if=${1} of=${2} conv=fsync oflag=direct status=progress
 }
