@@ -28,18 +28,19 @@ if [ "$LOCAL" == "$LATEST" ]; then
         echo Unpacking
         unpack
     fi
-    exit 1
-
-elif [ "$LOCAL" == "" ]; then
-    printf "No version found\nInstalling"
-
 else
-    printf "A newer version available\nUpdating"
-fi
-echo
+    if [ "$LOCAL" == "" ]; then
+        printf "No version found\nInstalling"
+    else
+        printf "A newer version available\nUpdating"
+        rm -rf "$DIR"/*
+    fi
 
-rm -rf "$DIR"/*
-download; unpack
+    echo
+    download
+    unpack
+fi
+
 discord &
 exit 1
 

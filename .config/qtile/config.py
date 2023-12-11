@@ -248,6 +248,17 @@ all_layouts = [
     ),
 
     layout.Max(border_width=0, border_focus='#000000', margin=[0, 0, 0, 0]),
+    layout.Columns(
+        border_focus=orange, 
+        border_normal='#000000',
+        border_width=2, 
+        single_border_width=0, 
+        margin=0,
+        new_client_position='before_current', 
+        min_ratio=0,
+        single_margin=0,
+        num_columns=3,
+    ),
 ]
 floating_layout = layout.Floating(
         border_width=0,
@@ -280,14 +291,14 @@ gaming_layout = layout.Floating(
 groups = [
     Group(
         #name='', 
-        name='home',
+        name='master',
         position=1, 
         layouts=all_layouts
     ),
 
     Group(
         #name='', 
-        name='web',
+        name='slave',
         position=2, 
         layouts=all_layouts
     ),
@@ -308,7 +319,7 @@ groups = [
         
     Group(
         #name='', 
-        name='gaming',
+        name='noobzone',
         position=5, 
         layouts=[gaming_layout], 
         matches = [
@@ -490,9 +501,6 @@ screens = [
 
                 widget.Spacer(12),
 
-
-                #widget.Spacer(-400),
-
                 widget.TextBox(
                     text='A',
                     font='Bartek',
@@ -500,16 +508,18 @@ screens = [
                     fontsize=39,
                     padding = -1,
                 ),
+
                 widget.GenPollText(
-                    max_chars=60,
-                    name = 'weather1',
-                    func = wttr('Wojnów'),
-                    font='csgofont',
-                    fontsize = 15,
-                    update_interval=600,
+                    name= 'keyboard battery',
+                    func = keyboard_battery,
                     background = dgray,
                     foreground = gray,
+                    update_interval = 5,
+                    markup = True,
+                    #fmt='<span background="#312d2d">{}</span>',
+                    width=35,
                 ),
+
                 widget.TextBox(
                     text='B',
                     font='Bartek',
@@ -518,6 +528,7 @@ screens = [
                     padding = -1,
                 ),
 
+                #widget.Spacer(-400),
 
                 widget.TextBox(
                     text='A',
@@ -831,12 +842,18 @@ screens = [
                     name='debug',
                 ),
 
-                widget.TextBox(
-                    name = 'pin',
-                    text = './gcloud compute scp mcnuggetsx20@minecraft:/home/swiat.zip ~/Downloads/'
-                ),
-
                 widget.Spacer(bar.STRETCH),
+
+                widget.GenPollText(
+                    max_chars=60,
+                    name = 'weather1',
+                    func = wttr('Wojnów'),
+                    font='csgofont',
+                    fontsize = 15,
+                    update_interval=600,
+                    background = dgray,
+                    foreground = gray,
+                ),
 
                 widget.Spacer(bar.STRETCH),
 

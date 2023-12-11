@@ -229,3 +229,5 @@ def resSwitch(qtile):
 
     qtile.widgets_map['current_resolution'].update(command[55:67])
 
+def keyboard_battery(): return cmd_output("upower --show-info /org/freedesktop/UPower/devices/battery_hid_dco2co26o0fo94oba_battery | grep percentage | awk -F ' ' '{print $2}'")
+

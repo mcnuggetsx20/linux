@@ -6,6 +6,7 @@ DATE=$(date "+%d %b %Y %H:%M:%S")
 
 cp /home/mcnuggetsx20/.local/bin/* ${DEST}/bin
 
+cp /etc/default/grub ${DEST}/
 cp -r ${USR}/.xinitrc ${DEST}/
 cp -r ${USR}/.config/qtile ${DEST}/.config
 cp -r ${USR}/.config/alacritty ${DEST}/.config

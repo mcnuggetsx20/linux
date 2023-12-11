@@ -134,6 +134,7 @@ autocmd filetype cpp nnoremap <F3> :w <bar> :80vs term://bash -c 'g++ -std=c++17
 autocmd filetype c nnoremap <F3> :w <bar> :80vs term://bash -c 'gcc % -o %:r && ./%:r' <bar> 0 <bar> start <CR><CR>
 autocmd filetype javascript nnoremap <F3> :w <bar> :Shell node % <CR>
 autocmd filetype java nnoremap <F3> :w <bar> Shell javac % && java % <cr>
+autocmd filetype html nnoremap <F3> :w <bar> !brave --password-store=basic % <cr>
 autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"
 autocmd BufEnter * silent! lcd %:p:h
 autocmd VimEnter * NERDTree | wincmd p
