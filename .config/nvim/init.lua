@@ -1,0 +1,6 @@
+require("core.plugins")
+require("core.plugin_config")
+require("core.keymaps")
+require("core.statusline")
+require("core.functions")
+require("core.base_options")
