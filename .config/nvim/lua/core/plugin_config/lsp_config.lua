@@ -1,6 +1,6 @@
 require("mason").setup()
 require("mason-lspconfig").setup({
-  ensure_installed = { "lua_ls", "pyright", "jdtls"}
+  ensure_installed = { "lua_ls", "pyright", "jdtls", "clangd"}
 })
 
 local on_attach = function(_, _)
@@ -38,6 +38,18 @@ require("lspconfig").pyright.setup {
 }
 
 require("lspconfig").jdtls.setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+      Lua = {
+        diagnostics = {
+          globals = {'vim'},
+        },
+      },
+    },
+}
+
+require("lspconfig").clangd.setup {
     on_attach = on_attach,
     capabilities = capabilities,
     settings = {
