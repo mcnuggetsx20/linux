@@ -515,7 +515,6 @@ screens = [
                     background = dgray,
                     foreground = gray,
                     update_interval = 5,
-                    markup = True,
                     #fmt='<span background="#312d2d">{}</span>',
                     width=35,
                 ),
