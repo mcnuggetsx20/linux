@@ -46,6 +46,7 @@ alias urxvt='urxvt -lsp 4'
 alias pb='python -B'
 alias lf='lfub'
 alias cd='nvim_autocd'
+alias vim='internal_nvim'
 alias nv='internal_nvim'
 alias lookfor='sudo find / -path /mnt/hdd -prune -iname'
 #alias setCover='eyeD3 --add-image $2:FRONT_COVER:front $1' #SONG / IMAGE
