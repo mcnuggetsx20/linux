@@ -1,0 +1,63 @@
+[colors.bright]
+black = "#5b6268"
+blue = "#D88A00"
+cyan = "#28E8DD"
+green = "#4db5bd"
+magenta = "#811a74"
+red = "#da8548"
+white = "#dfdfdf"
+yellow = "#ecbe7b"
+
+[colors.cursor]
+cursor = "#a52a2a"
+text = "#fdf6e3"
+
+[colors.normal]
+black = "#000000"
+blue = "#1D72AE"
+cyan = "#C76BFA"
+green = "#028A42"
+magenta = "#C53AF0"
+red = "#C61717"
+white = "#FDF2CF"
+yellow = "#d6bf55"
+
+[colors.primary]
+background = "#FDF6e3"
+foreground = "#D0D0D0"
+
+[font]
+size = 9.5
+
+[font.bold]
+family = "JetBrainsMonoNL NFP"
+style = "Bold"
+
+[font.bold_italic]
+family = "JetBrainsMonoNL NFP"
+style = "Bold Italic"
+
+[font.italic]
+family = "JetBrainsMonoNL NFP"
+style = "Italic"
+
+[font.normal]
+family = "JetBrainsMonoNL NFP"
+style = "Regular"
+
+[font.offset]
+x = 0
+y = 1
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Equals"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Minus"
+mods = "Control"
+
+[window]
+opacity = 0.9

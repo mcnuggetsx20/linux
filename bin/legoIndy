@@ -1,0 +1,13 @@
+#!/bin/bash
+
+export PROTON_LOG=1
+export PROTON_USE_WINED3D=1 
+export PROTON_NO_ESYNC=1
+
+export WINEPREFIX="/home/mcnuggetsx20/.steam/steam/steamapps/compatdata/2901181201/pfx"
+export WINEDEBUG=+all
+
+export STEAM_COMPAT_DATA_PATH="/home/mcnuggetsx20/.steam/steam/steamapps/compatdata/2901181201"
+export STEAM_COMPAT_CLIENT_INSTALL_PATH="/home/mcnuggetsx20/.steam/steam"
+
+/home/mcnuggetsx20/.steam/steam/compatibilitytools.d/GE-Proton8-25/proton run /mnt/b/Lego\ Indiana\ Jones/LEGOIndy.exe 

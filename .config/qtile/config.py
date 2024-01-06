@@ -788,7 +788,7 @@ screens = [
 
                 widget.TextBox(
                     text='',
-                    font='Samsung Sans Light',
+                    font='JetBrainsMonoNL NFP',
                     fontsize=16,
                     foreground=ored,
                     background =dgray,
