@@ -93,6 +93,11 @@ def func(new_window):
         new_window.cmd_set_position_floating(0, 18)
         new_window.cmd_static(screen=1)
 
+    elif new_window.name == 'JAVA_LAB':
+        new_window.cmd_enable_floating()
+        new_window.toGroup(1);
+        new_window.cmd_place(2440, 1000);
+
     elif new_window.info()['wm_class'][0] == 'xterm':
         qtile.widgets_map['debug'].update(new_window.name)
         new_window.cmd_enable_floating()
@@ -133,7 +138,8 @@ this_dir = '/home/mcnuggetsx20/.config/qtile/'
 keys = [
     #My stuff
     Key([sup], 'b', lazy.spawn('brave --password-store=basic')),
-    Key([mod], 'p', lazy.spawn("dmenu_run -sb '" + green + "' -nf '" + violet + "' -sf '" + black + "' -nb '" + black + "'")),
+    #Key([mod], 'p', lazy.spawn("dmenu_run -sb '" + green + "' -nf '" + violet + "' -sf '" + black + "' -nb '" + black + "'")),
+    Key([mod], 'p', lazy.spawn(f'dmenu_run -sb {gray} -nf {orange} -sf {black} -nb {dgray} -c -l 30')),
     Key([sup], 'f', lazy.spawn('pcmanfm')),
     Key([sup], 'm', lazy.spawn(terminal + ' -e htop')),
     Key([mod], 'e', lazy.to_screen(1)),
@@ -945,4 +951,4 @@ reconfigure_screens = True
 # focus, should we respect this or not? 
 auto_minimize = False
 
-wmname = "QTile"
+wmname ="LG3D"
