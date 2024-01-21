@@ -139,7 +139,7 @@ keys = [
     #My stuff
     Key([sup], 'b', lazy.spawn('brave --password-store=basic')),
     #Key([mod], 'p', lazy.spawn("dmenu_run -sb '" + green + "' -nf '" + violet + "' -sf '" + black + "' -nb '" + black + "'")),
-    Key([mod], 'p', lazy.spawn(f'dmenu_run -sb {gray} -nf {orange} -sf {black} -nb {dgray} -c -l 30')),
+    Key([mod], 'p', lazy.spawn(f'dmenu_run -sb {gray} -nf {orange} -sf {black} -nb "#1d1b1b" -c -l 30')),
     Key([sup], 'f', lazy.spawn('pcmanfm')),
     Key([sup], 'm', lazy.spawn(terminal + ' -e htop')),
     Key([mod], 'e', lazy.to_screen(1)),

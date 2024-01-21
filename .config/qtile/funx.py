@@ -96,7 +96,7 @@ def ChangeAudioDevice(init=False):
 
         run(f'pactl set-default-sink {sinks[ind]}', shell=True)
 
-        qtile.widgets_map['AudioDeviceIndicator1'].update(' '+ device_indicators[ind] +' ')
+        qtile.widgets_map['AudioDeviceIndicator1'].update(' '+ device_indicators[ind] +'  ')
         #qtile.widgets_map['AudioDeviceIndicator2'].update(' ' + desired + ' ')
 
     if not init:
