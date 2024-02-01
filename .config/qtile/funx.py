@@ -8,7 +8,8 @@ cmd_output = lambda command: check_output(command, shell=True, encoding='utf-8')
 
 def findClass(_class):
     for i in gamma_classes:
-        if i in _class: return gamma_classes[i]
+        if i in _class: 
+            return gamma_classes[i]
     return 0
 
 def dbg(text):
@@ -183,7 +184,6 @@ def gammaGaming(window):
     if _class:
         brightness_toggle(_class)
         curr_gamma = _class
-
 
     elif curr_gamma != 1:
         brightness_toggle(1)
