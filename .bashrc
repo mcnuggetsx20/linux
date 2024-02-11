@@ -6,6 +6,7 @@
 
 export GITHUB_API_TOKEN=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
 export PATH="$PATH:/home/mcnuggetsx20/.local/bin"
+export PATH="$PATH:/home/mcnuggetsx20/Desktop"
 
 GREEN="\[$(tput setaf 2)\]"
 YELLOW="\[$(tput setaf 3)\]"
@@ -34,11 +35,11 @@ alias gdr='cd /mnt/hdd/programming'
 alias hdd='cd /mnt/hdd'
 alias term='sudo vim ~/.Xresources'
 alias l='exa --group-directories-first --icons -lagBh'
-alias pacinstall='sudo pacman -S'
+alias pacs='sudo pacman -S'
 alias pacclear='echo y | sudo pacman -Scc; sudo pacman -Scc --noconfirm'
-alias pacremove='sudo pacman -Rns'
-alias pacrefresh='sudo pacman -Syy'
-alias pacupgrade='configpush; sudo pacman -Syyu --noconfirm; sudo pacman -Scc --noconfirm; echo y | sudo pacman -Scc; echo; speed'
+alias pacrm='sudo pacman -Rns'
+alias pacr='sudo pacman -Syy'
+alias pacu='configpush; sudo pacman -Syyu --noconfirm; sudo pacman -Scc --noconfirm; echo y | sudo pacman -Scc; echo; speed'
 alias oi='cd ~/hdd/programming/oi_2021'
 alias pconf='gvim /home/mcnuggetsx20/.config/qpanel/panelrc.py'
 alias pcom='nv ~/.config/picom/picom.conf &'
@@ -59,6 +60,9 @@ alias nvidia-settings='nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settin
 alias fetch='fastfetch'
 alias speed='xset r rate 200 90'
 alias discord='/mnt/hdd/Program-Files/discord_linux/Discord/Discord'
+
+alias janek='xrandr --output DP-4 --mode 1920x1080 --rate 144 --primary'
+alias janektv='xrandr --output HDMI-0 --mode 1920x1080 --rate 60 --right-of DP-4 --rotate normal'
 
 bind "set completion-ignore-case on"
 

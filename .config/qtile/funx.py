@@ -218,8 +218,8 @@ def resSwitch(qtile):
             offset[0] = (res_list_default[0] - res_list_custom[0]) // 2
             offset[1] = (res_list_default[1] - res_list_custom[1]) // 2
 
-        command = f'nvidia-settings -a CurrentMetaMode="DP-4: 3440x1440_100 @{config.RES_CUSTOM} +0+0 {{ViewPortIn={config.RES_CUSTOM}, ViewPortOut={config.SCALE_TO}+{offset[0]}+{offset[1]}, ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off}}"'
-    else: command = 'nvidia-settings -a CurrentMetaMode="DP-4: 3440x1440_100 @3440x1440 +0+0 {ViewPortIn=3440x1440, ViewPortOut=3440x1440+0+0, ForceCompositionPipeline=On, ForceFullCompositionPipeline=On}"'
+        command = f'nvidia-settings -a CurrentMetaMode="DP-4: {config.RES_DEFAULT}_{config.RATE} @{config.RES_CUSTOM} +0+0 {{ViewPortIn={config.RES_CUSTOM}, ViewPortOut={config.SCALE_TO}+{offset[0]}+{offset[1]}, ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off}}"'
+    else: command = f'nvidia-settings -a CurrentMetaMode="DP-4: {config.RES_DEFAULT}_{config.RATE} @{config.RES_DEFAULT} +0+0 {{ViewPortIn={config.RES_DEFAULT}, ViewPortOut={config.RES_DEFAULT}+0+0, ForceCompositionPipeline=On, ForceFullCompositionPipeline=On}}"'
 
     RES = not RES
 
