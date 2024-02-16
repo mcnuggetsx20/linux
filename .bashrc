@@ -55,7 +55,7 @@ alias kanter='nv /mnt/b/SteamLibrary/steamapps/common/Counter-Strike\ Global\ Of
 alias take='_take'
 #alias picom='/mnt/hdd/Program-Files/picom-pij/build/src/start'
 alias mk='gcc -o main main.c -lX11 -Wextra -Wall'
-#alias usbstick='dd bs=4M if=$1 of=$2 conv=fsync oflag=direct status=progress' #iso / device
+alias usbstick='dd bs=4M if=$1 of=$2 conv=fsync oflag=direct status=progress' #iso / device
 alias nvidia-settings='nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settings'
 alias fetch='fastfetch'
 alias speed='xset r rate 200 90'
