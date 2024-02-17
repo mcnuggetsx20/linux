@@ -37,7 +37,7 @@ gamma_classes={
         'Minecraft' : 1.2,
 }
 
-WALLPAPER1 = '/mnt/hdd/zdjecia/wallpaper/uuu.png'
+WALLPAPER1 = '/mnt/hdd/zdjecia/wallpaper/cieszyn.png'
 WALLPAPER2 = '/mnt/hdd/zdjecia/wallpaper/jager.png'
 
 curr_gamma = 1

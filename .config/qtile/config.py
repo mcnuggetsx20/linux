@@ -234,7 +234,7 @@ all_layouts = [
         border_focus=orange, 
         border_width=2, 
         single_border_width=0, 
-        margin=75,
+        margin=40,
         new_client_position='before_current', 
         change_ratio=0.025,
         min_ratio=0,
@@ -476,7 +476,7 @@ screens = [
 
         #top1
         top=bar.Bar(
-            #margin=[0, 0, 0, 0], #[N, E, S, W]
+            margin=[3, 0, 0, 0], #[N, E, S, W]
             #background='#1b1919.90',
             background='#1D0B00.00',
             size=20,
@@ -522,7 +522,7 @@ screens = [
                     background = dgray,
                     foreground = gray,
                     update_interval = 5,
-                    #fmt='<span background="#312d2d">{}</span>',
+                    fmt='<span background="#312d2d">{}</span>',
                     width=35,
                 ),
 
