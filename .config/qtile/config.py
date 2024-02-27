@@ -40,6 +40,7 @@ dlgray = '#434345'
 ocean = '#3d4f51'
 yellow='#FFBF00'
 magenta='#00eed6'
+purple='#7D3C98'
 
 top1color = '190c24'
 
@@ -234,7 +235,7 @@ all_layouts = [
         border_focus=orange, 
         border_width=2, 
         single_border_width=0, 
-        margin=40,
+        margin=[30, 40, 40, 40],
         new_client_position='before_current', 
         change_ratio=0.025,
         min_ratio=0,
@@ -476,10 +477,10 @@ screens = [
 
         #top1
         top=bar.Bar(
-            margin=[3, 0, 0, 0], #[N, E, S, W]
+            margin=[4, 10, 0, 10], #[N, E, S, W]
             #background='#1b1919.90',
-            background='#1D0B00.00',
-            size=20,
+            background='635A4C',
+            size=25,
             border_width=0,
             border_color=dblue,
             widgets= [
@@ -506,34 +507,9 @@ screens = [
                     fontsize=16,
                 ),
 
-                widget.Spacer(12),
-
-                widget.TextBox(
-                    text='A',
-                    font='Bartek',
-                    foreground =dgray,
-                    fontsize=39,
-                    padding = -1,
-                ),
-
-                widget.GenPollText(
-                    name= 'keyboard battery',
-                    func = keyboard_battery,
-                    background = dgray,
-                    foreground = gray,
-                    update_interval = 5,
-                    fmt='<span background="#312d2d">{}</span>',
-                    width=35,
-                ),
-
-                widget.TextBox(
-                    text='B',
-                    font='Bartek',
-                    foreground =dgray,
-                    fontsize=39,
-                    padding = -1,
-                ),
-
+                widget.Spacer(
+                    length = 12
+                    ),
                 #widget.Spacer(-400),
 
                 widget.TextBox(
@@ -596,8 +572,8 @@ screens = [
                     icon_size=18, 
                     txt_floating='',
                     spacing = 20,
-                    foreground = gray,
-                    background = '#000000.00',
+                    foreground = dgray,
+                    background = '#99876A.00',
                     txt_minimized='-',
                     font='csgofont',
                     fontsize=15,
@@ -617,6 +593,24 @@ screens = [
                 ),
 
                 widget.Spacer(bar.STRETCH),
+
+                widget.TextBox(
+                    text = '  ',
+                    font='mononoki',
+                    background=purple,
+                    foreground=black,
+                ),
+
+                widget.GenPollText(
+                    name= 'keyboard battery',
+                    func = keyboard_battery,
+                    background = purple,
+                    foreground = gray,
+                    update_interval = 5,
+                    fmt='<span background="#312d2d"> {} </span>',
+                ),
+
+                widget.Spacer(12),
 
                 widget.TextBox(
                     text='  ',
