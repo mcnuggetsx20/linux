@@ -4,7 +4,7 @@ DEST=/mnt/hdd/dokumenty/repos/linux-pc
 USR=/home/mcnuggetsx20
 DATE=$(date "+%d %b %Y %H:%M:%S")
 
-cp /home/mcnuggetsx20/.local/bin/* ${DEST}/bin
+cp /home/mcnuggetsx20/bin/* ${DEST}/bin
 
 cp /etc/default/grub ${DEST}/
 cp -r ${USR}/.xinitrc ${DEST}/

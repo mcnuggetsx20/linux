@@ -16,7 +16,7 @@ from libqtile.command.client import InteractiveCommandClient
 from qtile_extras import widget as ewidget
 from funx import *
 from lib import *
-from subprocess import call, Popen
+from subprocess import call, Popen, check_output
 import os
 
 orange = '#E3963E'
@@ -856,6 +856,16 @@ screens = [
                 ),
 
                 widget.Spacer(bar.STRETCH),
+
+                widget.GenPollText(
+                    name='gpu_util',
+                    func = lambda : "GPU UTIL: " + check_output(commands.GPU_UTIL_COMMAND, shell=True, encoding='utf-8')[:-1] + '%',
+                    font='csgofont',
+                    fontsize = 15,
+                    update_interval=2,
+                    background = dgray,
+                    foreground = gray,
+                ),
 
                 widget.TextBox(
                     text='D',

@@ -1,3 +1,13 @@
+class config_class():
+    def __init__(self):
+        return
+
+class command_list():
+    GPU_UTIL_COMMAND = "nvidia-smi -q -d UTILIZATION | grep Gpu | awk \"{print \$3}\""
+
+
+    def __init__(self):
+        return
 
 sinks = [
     "ladspa_output.mbeq_1197.mbeq",
@@ -34,7 +44,7 @@ gamma_rules={
 }
 
 gamma_classes={
-        'Minecraft' : 1.2,
+        'Minecraft' : 1.0,
 }
 
 WALLPAPER1 = '/mnt/hdd/zdjecia/wallpaper/cieszyn.png'
@@ -59,7 +69,5 @@ RES_SECONDARY= f'xrandr --output HDMI-0 --mode {RES_SECONDARY} --rate 75 --right
 #RES_SECONDARY=f'xrandr --output HDMI-0 --off'
 DPI_COMMAND = 'xrandr --dpi 96'
 
-class config_class():
-    def __init__(self):
-        return
+commands = command_list()
 
