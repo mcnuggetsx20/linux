@@ -39,7 +39,7 @@ colors = {
 
 
 gamma_rules={
-        'Counter-Strike: Global Offensive - OpenGL' :   1.4,
+        'Counter-Strike 2' :   1.4,
         'League of Legends (TM) Client':    1.0,
 }
 

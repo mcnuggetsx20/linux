@@ -9,7 +9,8 @@ function ExecuteToWindow(command)
   end
 
   local output = vim.fn.systemlist(command) --output komendy
-  vim.cmd('botright 80 vnew') --tworzenie okna
+  --vim.cmd('botright 80 vnew') --tworzenie okna
+  vim.cmd('bel 10 new') --tworzenie okna
 
   local winnr = vim.api.nvim_get_current_win() --po poprzedniej komendzie wjechalismy do nowego okna
   local bufnr = vim.api.nvim_win_get_buf(winnr) --zdobywanie bufora w tym nowym oknie
@@ -23,7 +24,7 @@ function ExecuteToWindow(command)
   vim.api.nvim_buf_set_name(bufnr, buf_title) --zmiana nazwy bufora
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, output) --wstawienie wyniku komendy do okna
 
-  vim.cmd('wincmd h')
+  vim.cmd('wincmd k')
 end
 
 vim.cmd('command! -complete=shellcmd -nargs=+ Shell call v:lua.ExecuteToWindow(<q-args>)')
@@ -39,7 +40,7 @@ function custom_action()
       vim.cmd("silent Shell python -B " .. current_file)
 
   elseif file_type == 'java' then
-      vim.cmd("silent Shell javac " .. current_file .. " && java " .. current_file)
+      vim.cmd("silent Shell javac -d class " .. current_file .. " && java " .. current_file)
     --nnoremap <F3> :w <bar> Shell javac % && java % <cr>
 
   else

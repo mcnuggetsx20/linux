@@ -129,6 +129,11 @@ _G.packer_plugins = {
     path = "/home/mcnuggetsx20/.local/share/nvim/site/pack/packer/start/friendly-snippets",
     url = "https://github.com/rafamadriz/friendly-snippets"
   },
+  ["lspsaga.nvim"] = {
+    loaded = true,
+    path = "/home/mcnuggetsx20/.local/share/nvim/site/pack/packer/start/lspsaga.nvim",
+    url = "https://github.com/glepnir/lspsaga.nvim"
+  },
   ["mason-lspconfig.nvim"] = {
     loaded = true,
     path = "/home/mcnuggetsx20/.local/share/nvim/site/pack/packer/start/mason-lspconfig.nvim",
@@ -139,10 +144,20 @@ _G.packer_plugins = {
     path = "/home/mcnuggetsx20/.local/share/nvim/site/pack/packer/start/mason.nvim",
     url = "https://github.com/williamboman/mason.nvim"
   },
+  nerdtree = {
+    loaded = true,
+    path = "/home/mcnuggetsx20/.local/share/nvim/site/pack/packer/start/nerdtree",
+    url = "https://github.com/preservim/nerdtree"
+  },
   ["nvim-cmp"] = {
     loaded = true,
     path = "/home/mcnuggetsx20/.local/share/nvim/site/pack/packer/start/nvim-cmp",
     url = "https://github.com/hrsh7th/nvim-cmp"
+  },
+  ["nvim-jdtls"] = {
+    loaded = true,
+    path = "/home/mcnuggetsx20/.local/share/nvim/site/pack/packer/start/nvim-jdtls",
+    url = "https://github.com/mfussenegger/nvim-jdtls"
   },
   ["nvim-lsp-installer"] = {
     loaded = true,
@@ -159,6 +174,16 @@ _G.packer_plugins = {
     path = "/home/mcnuggetsx20/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
     url = "https://github.com/nvim-treesitter/nvim-treesitter"
   },
+  ["nvim-web-devicons"] = {
+    loaded = true,
+    path = "/home/mcnuggetsx20/.local/share/nvim/site/pack/packer/start/nvim-web-devicons",
+    url = "https://github.com/nvim-tree/nvim-web-devicons"
+  },
+  ["onedarkpro.nvim"] = {
+    loaded = true,
+    path = "/home/mcnuggetsx20/.local/share/nvim/site/pack/packer/start/onedarkpro.nvim",
+    url = "https://github.com/olimorris/onedarkpro.nvim"
+  },
   ["packer.nvim"] = {
     loaded = true,
     path = "/home/mcnuggetsx20/.local/share/nvim/site/pack/packer/start/packer.nvim",
@@ -168,6 +193,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/mcnuggetsx20/.local/share/nvim/site/pack/packer/start/papercolor-theme",
     url = "https://github.com/NLKNguyen/papercolor-theme"
+  },
+  ["rust-tools.nvim"] = {
+    loaded = true,
+    path = "/home/mcnuggetsx20/.local/share/nvim/site/pack/packer/start/rust-tools.nvim",
+    url = "https://github.com/simrat39/rust-tools.nvim"
   },
   ["vim-solarized8"] = {
     loaded = true,

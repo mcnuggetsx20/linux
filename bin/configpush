@@ -13,7 +13,7 @@ cp -r ${USR}/.config/alacritty ${DEST}/.config
 cp -r ${USR}/.config/nvim ${DEST}/.config
 cp -r ${USR}/.bashrc ${DEST}
 cp -r ${USR}/.bash_profile ${DEST}
-cp -r /mnt/hdd/zdjecia/wallpaper ${DEST}
+#cp -r /mnt/hdd/zdjecia/wallpaper ${DEST}
 #cp -r ${USR}/.config/qpanel ${DEST}/.config
 
 cd $DEST

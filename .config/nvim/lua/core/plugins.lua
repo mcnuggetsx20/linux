@@ -33,7 +33,8 @@ return require('packer').startup(function(use)
         'williamboman/mason-lspconfig.nvim',
         'neovim/nvim-lspconfig',
         'williamboman/nvim-lsp-installer',
-
+        'mfussenegger/nvim-jdtls',
+        'simrat39/rust-tools.nvim',
     }
 
     -- completion

@@ -1,6 +1,6 @@
 --jakis wygladzik ni
 vim.o.termguicolors = true
-vim.cmd [[colorscheme gruvbox]]
+vim.cmd [[colorscheme custom]]
 
 --bazyczne ustawienia
 LANG = 'en_US'
@@ -28,7 +28,7 @@ vim.o.guicursor="n:blinkon100,i:hor15-blinkon100"
 
 --jakies luzne autocmd
 vim.cmd [[autocmd BufEnter * silent! lcd %:p:h]]
-vim.cmd [[autocmd BufNewFile *.cpp 0r /home/mcnuggetsx20/.config/ClassicTemplate.txt]]
+vim.cmd [[autocmd BufNewFile *.cpp 0r /home/mcnuggetsx20/.config/nvim/templates/CppTemplate]]
 vim.cmd [[autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"]]
 vim.cmd [[autocmd VimEnter * NERDTree | wincmd p]]
 vim.cmd [[autocmd TabNew * if getcmdwintype() == '' | silent NERDTree | endif | wincmd p]]

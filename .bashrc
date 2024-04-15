@@ -12,6 +12,7 @@ GREEN="\[$(tput setaf 2)\]"
 YELLOW="\[$(tput setaf 3)\]"
 BLUE="\[$(tput setaf 4)\]"
 ORANGE="\[$(tput setaf 9)\]"
+DARK_VIOLET="\[$(tput setaf 13)\]"
 RED="\e[31m"
 RESET="\[$(tput sgr0)\]"
 [[ $- != *i* ]] && return
@@ -22,13 +23,14 @@ alias ls='ls --color=auto'
 #the first one is the default, the second one shows the whole directory
 #ZEBY BYL TYLKO TEN JEDEN FOLDER TO MUSI BYC W (DUZE)
 
-PS1="[${ORANGE}\e[1m\u${RESET} \w]: ${BLUE}\t${RESET}\n${ORANGE} >$ ${RESET}"
+PS1="[${DARK_VIOLET}\e[1m\u${RESET} \w]: ${BLUE}\t${RESET}\n${GREEN} >$ ${RESET}"
 #PS1="[\u \w]`printf "%${COLUMNS}s" "\t" `$PS1"
 #PS1="[\w]${GREEN}$ ${RESET}"
 #PS1='[\u@\h \w]$ '
 
 #set -o vi
 
+#aliasy
 alias qconf='nv ~/.config/qtile/config.py'
 alias uconf='nv ~/.config/qtile/res_config'
 alias gdr='cd /mnt/hdd/programming'
@@ -60,9 +62,11 @@ alias nvidia-settings='nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settin
 alias fetch='fastfetch'
 alias speed='xset r rate 200 90'
 alias discord='/mnt/hdd/Program-Files/discord_linux/Discord/Discord'
+alias s!='sudo !!'
 
 alias janek='xrandr --output DP-4 --mode 1920x1080 --rate 144 --primary'
 alias janektv='xrandr --output HDMI-0 --mode 1920x1080 --rate 60 --right-of DP-4 --rotate normal'
+##########################
 
 bind "set completion-ignore-case on"
 
@@ -109,3 +113,4 @@ _take(){
     cd "$@"
 }
 
+. "$HOME/.cargo/env"
