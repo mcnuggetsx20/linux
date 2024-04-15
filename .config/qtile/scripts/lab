@@ -1,0 +1,6 @@
+#!/bin/python
+from subprocess import Popen
+from libqtile import qtile
+this_dir = '/home/mcnuggetsx20/.config/qtile/'
+
+

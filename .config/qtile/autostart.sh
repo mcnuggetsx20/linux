@@ -2,7 +2,7 @@
 
  pulseaudio-equalizer enable
 
-(pactl subscribe &) | (/home/mcnuggetsx20/.config/qtile/audio &)
+(pactl subscribe &) | (/home/mcnuggetsx20/.config/qtile/scripts/audio &)
 
 xinput --set-prop "Microsoft Microsoft® Nano Transceiver v2.0 Mouse" "Coordinate Transformation Matrix" 1.7 0 0 0 1.7 0 0 0 1
 
